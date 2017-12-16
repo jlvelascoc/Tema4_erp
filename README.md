@@ -13,4 +13,4 @@ Version 1.0.0
             Este fichero contiene el constructor de StoreHouse creado a través de un patrón Singleton.
         Creado el fichero test.js
             Este fichero contien diferentes funciones que comprueban el funcionamiento de los diferntes objetos.
-        Creado el fichero storehouse.html
+    Creado el fichero storehouse.html
