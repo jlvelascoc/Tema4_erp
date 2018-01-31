@@ -83,7 +83,7 @@
 
     Object.defineProperty(this, 'images', {   //Permite ver _images
       get: function () {
-        return _images.toString();
+        return _images;
       }
     });
 
@@ -92,7 +92,7 @@
     this.addImage = function (url) {
       //Controlamos que url no pueda ser vacio y que no exista ya
       if (!url) throw new EmptyValueException("url");
-      if (getIndexImage(url) !== -1) throw new ExistingValueException("image", url);
+      if (getImageIndex(url) !== -1) throw new ExistingValueException("image", url);
       _images.push(url);
 
       return _images.length; //numero de imagenes que hay
@@ -110,9 +110,9 @@
     this.removeImage = function (url) {
       //Controlamos que index no pueda ser vacio y que la imagen existe en el array
       if (!url) throw new EmptyValueException("url");
-      if (getIndexImage(url) === -1) throw new NonExistingValueException("image", url);
+      if (getImageIndex(url) === -1) throw new NonExistingValueException("image", url);
 
-      this.removeImageIndex(getIndexImage(url));
+      this.removeImageIndex(getImageIndex(url));
     }
 
     //Metodos privados
@@ -120,16 +120,11 @@
     function getImageIndex(url) {
       var index;
 
-      index = _images.find(function (image) {
-        if (image == url) {
-          return 1;
-        }
-        else {
-          return -1;
-        }
-
-        return index;
+      index = _images.findIndex(function (image) {
+        return (image = url);
       });
+
+      return index;
     }
   } //Fin del constructor Product
   Product.prototype = {};
@@ -231,7 +226,7 @@
         return _toms.toString();
       },
       set: function (value) {
-        _toms.push(value);
+        _toms = value;
       }
     });
   }//Fin del constructor Drums

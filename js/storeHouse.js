@@ -45,7 +45,7 @@ var StoreHouse = (function () {
           return {
             next: function () {
               return (nextIndex < _categories.length) ?
-                {value: _categories[nextIndex++].category, done: false} :
+                {value: _categories[nextIndex++], done: false} :
                 {done: true};
             }
           }
@@ -208,7 +208,7 @@ var StoreHouse = (function () {
           return {
             next: function () {
               return (nextIndex < _shops.length) ?
-                {value: _shops[nextIndex++].shop, done: false} :
+                {value: _shops[nextIndex++], done: false} :
                 {done: true};
             }
           }
@@ -323,7 +323,7 @@ var StoreHouse = (function () {
       }
 
       /**
-       * Este metodo nos devuelve un iterador con el numero de serie de los
+       * Este metodo nos devuelve un iterador con los
        * productos y su stock en una tienda determinada
        * @param shop Objeto Shop
        * @param type  Tipo de producto (opcional)
@@ -347,7 +347,7 @@ var StoreHouse = (function () {
             if (type !== undefined){//Si nos pasan el tipo de producto, filtramos por él
               while (nextIndex < _shops[index].products.length && value == null){
                 if(nextIndex < _shops[index].products.length && sameType(_shops[index].products.serialNumber, type)){
-                  value = {product: _shops[index].products[nextIndex].serialNumber,
+                  value = {product: getProduct(_shops[index].products[nextIndex].serialNumber),
                            stock: _shops[index].products[nextIndex].stock}
                 }
                 nextIndex++; //Incrementamos el indice para obtener el siguiente
@@ -362,12 +362,84 @@ var StoreHouse = (function () {
             }
             else { //Sin tipo de producto devolvemos todos los de la tienda
               return (nextIndex < _shops[index].products.length) ?
-                {value: {product: _shops[index].products[nextIndex].serialNumber, stock: _shops[index].products[nextIndex++].stock}, done: false} :
+                {value: {product: getProduct(_shops[index].products[nextIndex].serialNumber), stock: _shops[index].products[nextIndex++].stock}, done: false} :
                 {done: true};
             }
           }
         }
       }//Fin del metodo getShopProducts
+
+      /**
+       * Este metodo nos devuelve un iterador con las
+       * categorias de los productos de una tienda determinada
+       * @param shop Objeto Shop
+       * @param type  Tipo de producto (opcional)
+       * @returns {{next: next}}  Iterador
+       */
+      this.getShopCategories = function (shop, type) {
+        if (!shop) throw new EmptyValueException(); //Comprobamos que shop no está vacio
+        //Controlamos que shop es una instancia de Shop
+        if (!(shop instanceof Shop)) throw new WrongValueException("Shop");
+
+        //Obtenemos la posicion de la tienda
+        var index = getShopIndex(shop);
+        if (index === -1) throw new NonExistingShopException(shop.name); //Si la tienda no existe lanzamos excepcion
+
+        var nextIndex = 0;
+        return {
+          next: function () {
+            //En esta variable añadiremos el producto y el stock para devolverlo. Ademas tambien nos sirve de
+            //condicion de salida para el bucle
+            var value = null;
+            if (type !== undefined){//Si nos pasan el tipo de producto, filtramos por él
+              while (nextIndex < _shops[index].products.length && value == null){
+                if(nextIndex < _shops[index].products.length && sameType(_shops[index].products.serialNumber, type)){
+                  value = getCategory(_shops[index].products[nextIndex].serialNumber);
+                }
+                nextIndex++; //Incrementamos el indice para obtener el siguiente
+              }
+              if(value !== null){ //Devolvemos el producto
+                return {value: value, done: false};
+              }
+
+              if(nextIndex >= _shops[index].products.length){
+                return {done: true};
+              }
+            }
+            else { //Sin tipo de producto devolvemos todos los de la tienda
+              return (nextIndex < _shops[index].products.length) ?
+                {value: getCategory(_shops[index].products[nextIndex++].serialNumber), done: false} :
+                {done: true};
+            }
+          }
+        }
+      }//Fin del metodo getShopCategories
+
+      /**
+       * Este metodo devuelve la suma de los stocks en todas
+       * las tiendas de un determinado producto
+       * @param serialNumber
+       * @returns {number}
+       */
+      this.getGlobalStock = function (serialNumber) {
+        var stock = 0;
+        var index;
+
+        for(let i = 0; i < _shops.length; i++){
+          index = _shops[i].products.findIndex(function (product) {
+            return product.serialNumber == serialNumber;
+          });
+
+          if(index != -1){
+            stock +=  _shops[i].products[index].stock;
+          }
+          else{
+            stock = 0;
+          }
+        }
+
+        return stock;
+      }//Fin del metodo getGlobalStock
 
       /**
        * Propiedad defaultCategory
@@ -533,6 +605,50 @@ var StoreHouse = (function () {
 
         //Comprobamos que el objeto es del tipo deseado
         return (_categories[i - 1].products[j - 1] instanceof type);
+      }
+
+      /**
+       * Este metodo devuelve un producto del almacen
+       * @param prodseruct Objeto Product
+       * @returns {boolean} True si lo encuentra, false si no.
+       */
+      function getProduct(serialNumber) {
+        //Variable para saber si se encuentra. Sirve como condicion de salida del bucle
+        var exist = false;
+
+        //Recorremos los productos categoria a categoria
+        for(var i = 0; i < _categories.length && !exist; i++){
+          for(var j = 0; j < _categories[i].products.length && !exist; j++){
+            //Comparamos el serialnumber. Si son iguales cambiamos la condicion para salir del bucle
+            if (_categories[i].products[j].serialNumber === serialNumber){
+              exist = true;
+            }
+          }
+        }
+
+        return _categories[i-1].products[j-1];
+      }
+
+      /**
+       * Este metodo devuelve una categoria del almacen
+       * @param prodseruct Objeto Product
+       * @returns {boolean} True si lo encuentra, false si no.
+       */
+      function getCategory(serialNumber) {
+        //Variable para saber si se encuentra. Sirve como condicion de salida del bucle
+        var exist = false;
+
+        //Recorremos los productos categoria a categoria
+        for(var i = 0; i < _categories.length && !exist; i++){
+          for(var j = 0; j < _categories[i].products.length && !exist; j++){
+            //Comparamos el serialnumber. Si son iguales cambiamos la condicion para salir del bucle
+            if (_categories[i].products[j].serialNumber === serialNumber){
+              exist = true;
+            }
+          }
+        }
+
+        return _categories[i-1];
       }
     } //Fin del constructor StoreHouse
     StoreHouse.prototype = {};
