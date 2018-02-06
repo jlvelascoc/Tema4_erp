@@ -121,7 +121,7 @@
       var index;
 
       index = _images.findIndex(function (image) {
-        return (image = url);
+        return (image == url);
       });
 
       return index;

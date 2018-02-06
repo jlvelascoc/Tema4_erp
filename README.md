@@ -43,3 +43,16 @@ Version 2.0.0
 
     Modificado el fichero storehouse.html
         Se ha creado la estructura básica de una web compuesta de header, main y footer.
+        
+Version 3.0.0
+
+    Modificado fichero layout.js
+        Modificada funcion shopProductPopulate.
+        Modificada funcion hideShopProductPopulate.
+        Modificada funcion createProduct.
+        Modificada funcion getProductInfo.
+        Creada la funcion productCarousel.
+        Creada la funcion closeWindow.
+        Creada la funcion closeAllWindows.
+        
+    Modificado fichero mis_estilos.css

@@ -77,34 +77,14 @@ function init() {
 
   //Añadimos las imagenes a los productos
   fenderJB.addImage("img/fender.png");
-  fenderJB.addImage("img/fender-1.png");
-  fenderJB.addImage("img/fender-2.png");
-  fenderJB.addImage("img/fender-3.png");
   cortArt.addImage("img/cort.png");
-  cortArt.addImage("img/cort-1.png");
-  cortArt.addImage("img/cort-2.png");
   rickenbacker.addImage("img/rickenbacker.png");
-  rickenbacker.addImage("img/rickenbacker-1.png");
-  rickenbacker.addImage("img/rickenbacker-2.png");
   pearl.addImage("img/pearl.png");
-  pearl.addImage("img/pearl-1.png");
-  pearl.addImage("img/pearl-2.png");
   mapex.addImage("img/mapex.png");
-  mapex.addImage("img/mapex-1.png");
-  mapex.addImage("img/mapex-2.png");
-  mapex.addImage("img/mapex-3.png");
   yamaha.addImage("img/yamaha.png");
-  yamaha.addImage("img/yamaha-1.png");
-  yamaha.addImage("img/yamaha-2.png");
   markbass.addImage("img/markbass.png");
-  markbass.addImage("img/markbass-1.png");
-  markbass.addImage("img/markbass-2.png");
   marshall.addImage("img/marshall.png");
-  marshall.addImage("img/marshall-1.png");
-  marshall.addImage("img/marshall-2.png");
   ashdown.addImage("img/ashdown.png");
-  ashdown.addImage("img/ashdown-1.png");
-  ashdown.addImage("img/ashdown-2.png");
 
   //Añadimos los productos al almacen
   try {
@@ -204,7 +184,7 @@ function initPopulate() {
   var divShops = document.createElement("section");  //Contenedor donde agruparemos las tiendas
   var header = document.getElementsByTagName("header")[0].firstElementChild; //Cogemos la cabecera
   var button; //Boton para mostrar la info de todos los productos
-  var divMargen, divShop, src, h2, imagen;  //Elementos para cada tienda
+  var divShop, src, h2, imagen;  //Elementos para cada tienda
   var objectShop;   //tienda
 
   var shops = StoreHouse.getInstance().shops;
@@ -213,13 +193,11 @@ function initPopulate() {
 
   while (shop.done !== true) {
     objectShop = shop.value.shop;
-    divMargen = document.createElement("div");
-    divMargen.className = "col-sm-4 margen";
 
     //Creamos el div de la tienda
     divShop = document.createElement("div");
     divShop.id = "t" + i;
-    divShop.className = "panel panel-default tienda";
+    divShop.className = "col-sm-6 panel panel-default tienda";
 
     //Creamos y añadimos la imagen
     src = document.createAttribute("src");
@@ -238,20 +216,11 @@ function initPopulate() {
     //Creamos un evento onclick
     divShop.addEventListener("click", callShopPopulate(objectShop));
 
-    divMargen.appendChild(divShop);
-    divShops.appendChild(divMargen);  //Añadimos la tienda
+    divShops.appendChild(divShop);  //Añadimos la tienda
 
     shop = shops.next();
     i++;
   }
-
-  //Creamos el boton Cerrar todas las ventanas
-  button = document.createElement("button");
-  button.innerHTML = "Cerrar todas las ventanas";
-  button.id = "cerrarTodo";
-  button.className = "btn pull-right";
-  button.addEventListener("click", closeAllWindows);
-  header.appendChild(button);
 
   //Creamos el boton Mostrar todos los productos
   button = document.createElement("button");
@@ -261,15 +230,20 @@ function initPopulate() {
   button.addEventListener("click", globalProductPopulate);
   header.appendChild(button);
 
+  //Creamos el boton Cerrar todas las ventanas
+  button = document.createElement("button");
+  button.innerHTML = "Cerrar todas las ventanas";
+  button.id = "cerrarTodo";
+  button.className = "btn pull-right";
+  button.addEventListener("click", closeAllWindow);
+  header.appendChild(button);
+
   //Añadimos la seccion al contenedor principal
   divShops.id = "tiendas";
   divShops.className = "panel-body";
   main.appendChild(divShops);
 
   main.setAttribute("class", "col-sm-12");
-
-  //Cerramos las ventanas de productos que haya abiertas
-  closeAllWindows();
 }
 
 /**
@@ -334,8 +308,6 @@ function shopsMenusPopulate(shopName) {
  */
 function shopPopulate(data) {
   console.log("shopPopulate");
-  //Cerramos las ventanas de productos que haya abiertas
-  closeAllWindows();
 
   var main = document.getElementById("main"); //Cogemos el main
   var divProducts = document.createElement("section");  //Contenedor donde agruparemos los productos
@@ -451,66 +423,27 @@ function productCategoryShopPopulate(category) {
 }
 
 /**
- * Esta función muestra la información de un producto en una ventana nueva
+ * Esta función muestra la información de un producto
  * @param index Numero del id del elemento html
  * @param product Objeto producto.
  */
 function productShopPopulate(index, product) {
   console.log("productShopPopulate");
-
-  //Cogemos los botones
-  var button = document.getElementById("btnShow" + index);
-  var button2 = document.getElementById("btnHide" + index);
-  var i, description, divProduct;
-
-  //Cambiamos los displays para cambiar los botones
-  button.style.display = "none";
-  button2.style.display = "block";
+  var i, description, divProduct, button;
 
   //Creamos la nueva ventana y la añadimos al array
   ventanas.push(window.open("producto.html", product.name, "toolbar=no,scrollbars=no,resizable=no,top=200,left=500,width=500,height=500"));
 
-  //Escribimos la información en la ventana
-  i = ventanas.length - 1;
-  ventanas[i].onload = function () {
-    var main = ventanas[i].document.body.getElementsByTagName("main")[0];
+  index = ventanas.length - 1;
+  ventanas[index].onload = function () {
+    var main = ventanas[index].document.body.getElementsByTagName("main")[0];
     main.appendChild(productCarousel(product));
     main.appendChild(getProductInfo(product));
   }
 
-  //Añadimos un evento que se ejecuta justo antes de cerrar la ventana
-  ventanas[i].addEventListener("beforeunload", callHideProductShopPopulate(index));
-  ventanas[i].onunload = checkOpened;
+  ventanas[index].onbeforeunload = checkOpenWindows;
 
   document.getElementById("cerrarTodo").style.display = "block";
-}
-
-/**
- * Esta función cambia los displays de los botones al cerrar una ventana
- * @param index Numero del id del elemento html.
- */
-function hideProductShopPopulate(index) {
-  console.log("hideProductShopPopulate");
-
-  //Cogemos los botones
-  var button = document.getElementById("btnShow" + index);
-  var button2 = document.getElementById("btnHide" + index);
-  var opened = false;
-
-  //Cambiamos los displays para mostrar un boton y ocultar otro
-  button.style.display = "block";
-  button2.style.display = "none";
-
-  //Comprobamos si queda alguna ventana abierta para saber si mantenemos visible el boton "cerrar todo"
-  for (let i = 0; i < ventanas.length && !opened; i++) {
-    if (!ventanas[i].closed) {
-      opened = true;
-    }
-  }
-
-  if (!opened) {
-    document.getElementById("cerrarTodo").style.display = "none";
-  }
 }
 
 /**
@@ -561,7 +494,7 @@ function globalProductPopulate() {
 
 /*Funciones privadas*/
 /**
- * Esta funcion llama a la funcion shopPopulate y la devuelve
+ * Esta funcion permite llama a la funcion shopPopulate y la devuelve
  * @param shop Objeto Shop
  * @returns {Function} Funcion shopPopulate
  */
@@ -572,7 +505,7 @@ function callShopPopulate(shop) {
 }
 
 /**
- * Esta funcion llama a la funcion productsCategoryShopPopulate y la devuelve
+ * Esta funcion permite llama a la funcion productsCategoryShopPopulate y la devuelve
  * @param category Objeto Category
  * @returns {Function} Funcion productsCategoryShopPopulate
  */
@@ -583,24 +516,13 @@ function callProductsCategoryShopPopulate(category) {
 }
 
 /**
- * Esta funcion llama a la funcion productShopPopulate y la devuelve
+ * Esta funcion permite llama a la funcion productShopPopulate y la devuelve
  * @param index
  * @returns {Function} Función productShopPopulate
  */
 function callProductShopPopulate(index, product) {
   return function () {
     productShopPopulate(index, product);
-  }
-}
-
-/**
- * Esta funcion permite llama a la funcion HideProductShopPopulate y la devuelve
- * @param index
- * @returns {Function} Función HideProductShopPopulate
- */
-function callHideProductShopPopulate(index, name) {
-  return function () {
-    hideProductShopPopulate(index, name);
   }
 }
 
@@ -646,7 +568,7 @@ function removeCategoriesMenu() {
 
 function removeButton() {
   var header = document.getElementsByTagName("header")[0].firstElementChild;
-  var button = header.getElementsByTagName("button")[1];
+  var button = header.getElementsByTagName("button")[0];
 
   if (button instanceof Node) {   //Comprobamos si ya existia
     header.removeChild(button);    //Si existe lo borramos
@@ -800,31 +722,27 @@ function getProductInfo(product) {
  * @returns {HTMLDivElement | *} Elemento div
  */
 function createProduct(product, cont) {
-  var divProduct, divMargen, divImg, img, src, h3, description, button, button2;
-
-  divMargen = document.createElement("div");
-  divMargen.className = "col-sm-3 col-md-4  margen";
+  var divProduct;  //Div para un producto
+  var img, src, h3, description, button;
 
   //Creamos el div para el producto
   divProduct = document.createElement("div");
   divProduct.id = "p" + cont;
-  divProduct.className = "panel panel-default producto";
-  divMargen.appendChild(divProduct);
-
-  //Creamos y añadimos un titulo
-  h3 = document.createElement("h3");
-  h3.className = "text-center";
-  h3.innerHTML = product.name;
-  divProduct.appendChild(h3);
+  divProduct.className = "col-sm-3 col-md-4 panel panel-default producto";
 
   //Creamos y añadimos la imagen
-  divImg = document.createElement("div");
+  src = document.createAttribute("src");
+  src.value = product.images[0];
   img = document.createElement("img");
-  img.setAttribute("src", product.images[0]);
-  img.className = "center-block img-responsive imgProducto";
-  divImg.appendChild(img);
-  divImg.className = "divImg";
-  divProduct.appendChild(divImg);
+  img.setAttributeNode(src);
+  img.className = "center-block img-responsive imgTienda";
+  divProduct.appendChild(img);
+
+  //Creamos y añadimos un titulo
+  h3 = document.createElement("h2");
+  h3.className = "panel-footer text-center";
+  h3.innerHTML = product.name;
+  divProduct.appendChild(h3);
 
   //Creamos y añadimos un boton
   button = document.createElement("button");
@@ -834,39 +752,24 @@ function createProduct(product, cont) {
   button.addEventListener("click", callProductShopPopulate(cont, product));
   divProduct.appendChild(button);
 
-  //Creamos y añadimos un segundo boton
-  button2 = document.createElement("button");
-  button2.innerHTML = "Ocultar información";
-  button2.id = "btnHide" + cont;
-  button2.className = "btn center-block hideBtn";
-  button2.addEventListener("click", callCloseWindow(product.name));
-  divProduct.appendChild(button2);
-
-  return divMargen;
+  return divProduct;
 }
 
-/**
- * Esta función crea un slider con las imagenes de un producto
- * @param product Objeto Product
- * @returns {Element} Devuelve el slider
- */
 function productCarousel(product) {
-  var items = product.images.length; //Numero de imagenes existentes del prodcuto
+  var length = product.images.length;
   var container = document.createElement("div");
   var carousel = document.createElement("div");
   var ol = document.createElement("ol");
   var li, div, img, a, span;
 
-  //Creamos una lista con tantos items como imagenes haya
-  for (let i = 0; i < items; i++) {
+  for (let i = 0; i < length; i++) {
     li = document.createElement("li");
     li.setAttribute("data-target", "#myCarousel");
     li.setAttribute("data-slide-to", i);
     ol.appendChild(li);
 
-    //Creamos un div que contendra a la imagen
     div = document.createElement("div");
-    if (i == 0) { //Al primero le añadimos la clase active
+    if (i == 0) {
       div.setAttribute("class", "item active");
       li.setAttribute("class", "active");
     }
@@ -884,7 +787,6 @@ function productCarousel(product) {
   carousel.setAttribute("class", "carousel-inner");
   container.appendChild(carousel);
 
-  //Creamos los enlaces para navegar por las imágenes
   a = document.createElement("a");
   a.setAttribute("class", "left carousel-control");
   a.setAttribute("href", "#myCarousel");
@@ -911,41 +813,19 @@ function productCarousel(product) {
   return container;
 }
 
-/**
- * Esta función cierra todas la ventanas que se encuentren abiertas.
- */
-function closeAllWindows() {
-  console.log("closeAllWindows");
-
-  for (let i = 0; i < ventanas.length; i++) {
+function closeAllWindow() {
+  for(let i = 0; i < ventanas.length; i++){
     ventanas[i].close();
   }
 
-  //Borramos las referencias del array
-  ventanas.splice(0, ventanas.length);
+  document.getElementById("cerrarTodo").style.display = "none";
 }
 
-/**
- * Esta función cierra una ventana.
- * @param name Nombre de la ventana a cerrar.
- */
-function closeWindow(name) {
-  //Recopilamos la posicion de la ventana en el array.
-  var i = ventanas.findIndex(function (a) {
-    return a.name == name;
-  });
+function checkOpenWindows(index) {
+  ventanas.splice(index, 1);
 
-  ventanas[i].close();
-}
-
-/**
- * Esta funcion llama a la funcion closeWindow y la devuelve
- * @param name Nombre de la ventana
- * @returns {Function} Función closeWindow
- */
-function callCloseWindow(name) {
-  return function () {
-    closeWindow(name);
+  if(ventanas.length == 0){
+    document.getElementById("cerrarTodo").style.display = "none";
   }
 }
 
