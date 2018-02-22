@@ -22,6 +22,12 @@ function init() {
   var musiReal = new Shop("Decibelios");
   var guitarCenter = new Shop("Garcia Cid");
 
+  //Añadimos la imagens de cada una
+  danubioAzul.image = "tienda1.png";
+  laLira.image = "tienda2.png";
+  musiReal.image = "tienda3.png";
+  guitarCenter.image = "tienda4.png";
+
   //Añadimos las tiendas al almacen
   try {
     console.log(storeHouse.addShop(danubioAzul));
@@ -34,9 +40,9 @@ function init() {
   }
 
   //Creamos tres categorias
-  var cuerda = new Category("Cuerda", "Guitarras y bajos");
-  var percusion = new Category("Percusion", "Instrumentos de percusion");
-  var amplificadores = new Category("Amplificadores", "Amplificadores de todos los instrumentos");
+  var cuerda = new Category("Cuerda", "Guitarras y bajos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!");
+  var percusion = new Category("Percusion", "Instrumentos de percusion Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!");
+  var amplificadores = new Category("Amplificadores", "Amplificadores de todos los instrumentos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!");
 
   //Añadimos las categorias al almacen
   try {
@@ -49,15 +55,15 @@ function init() {
   }
 
   //Creamos los productos
-  var fenderJB = new Bass("Fender jazzbass", 500, 4, "passive");
-  var cortArt = new Bass("Cort artisan", 450, "active");
-  var rickenbacker = new Bass("Rickenbacker", 150, 5, "active");
-  var pearl = new Drums("Pearl reference pure", 800, "acoustic");
-  var mapex = new Drums("Mapex Armory", 650, "acoustic");
-  var yamaha = new Drums("Yamaha e-drums", 480, "electronic");
-  var markbass = new Amplifier("Markbass mk210", 600, 300, "transistors");
-  var marshall = new Amplifier("Marshall MG100", 300, 150, "transistors");
-  var ashdown = new Amplifier("Ashdown EVO 115", 250, 150, "transistors");
+  var fenderJB = new Bass("Fender jazzbass", 500, 4, "pasiva");
+  var cortArt = new Bass("Cort artisan", 450, "activa");
+  var rickenbacker = new Bass("Rickenbacker", 150, 5, "activa");
+  var pearl = new Drums("Pearl reference pure", 800, "acustica");
+  var mapex = new Drums("Mapex Armory", 650, "acustica");
+  var yamaha = new Drums("Yamaha e-drums", 480, "electronica");
+  var markbass = new Amplifier("Markbass mk210", 600, 300, "transistores");
+  var marshall = new Amplifier("Marshall MG100", 300, 150, "transistores");
+  var ashdown = new Amplifier("Ashdown EVO 115", 250, 150, "transistores");
 
   //Añadimos una descripción a los productos
   fenderJB.description = "Cuerpo de fresno americano, Mástil de arce canadiense, Diapasón de arce, 20 trastes, Escala: 864mm, Ancho de la cejilla: 38mm, Alma de doble acción, Pastillas de bobina simple Roswell JBA Alnico-5 vintage de estilo JB, 2 controles de volumen y 1 de tono, Herrajes de cromo deluxe, Clavijas de afinación PB-style clásicas, Cuerdas D'addario 045-100, Color: Natural de alto brillo.";
@@ -193,37 +199,60 @@ function initPopulate() {
 
   //Borramos el contenido de main si existe
   clearMain();
-  //Borramos el menu de tiendas si existe
-  removeShopsMenu();
   //Borramos el de categorias si existe
   removeCategoriesMenu();
-  //Borramos el boton mostrar todo si existe
-  removeButton();
+
+  //Si el menu no existe lo creamos
+  if (document.getElementById("menuPrincipal") == null) {
+    principalMenuPopulate("Tiendas");
+  }
+  else {//Si existe lo borramos
+    removeMenu();
+    principalMenuPopulate("Tiendas");
+  }
 
   var main = document.getElementById("main"); //Cogemos el contenedor principal
-  var divShops = document.createElement("section");  //Contenedor donde agruparemos las tiendas
+  var section = document.createElement("section");  //Contenedor donde agruparemos las tiendas
   var header = document.getElementsByTagName("header")[0].firstElementChild; //Cogemos la cabecera
-  var button; //Boton para mostrar la info de todos los productos
-  var divMargen, divShop, src, h2, imagen;  //Elementos para cada tienda
+  var button; //Boton para mostrar cerrar las ventanas
+  var col, divShop, divButtons, divPanel, src, h2, imagen, row;  //Elementos para cada tienda
   var objectShop;   //tienda
 
   var shops = StoreHouse.getInstance().shops;
   var shop = shops.next();
   var i = 0;
 
+  button = document.createElement("button");
+  button.setAttribute("type", "buttom");
+  button.setAttribute("class", "btn btn-lg center-block new private");
+  button.setAttribute("data-toggle", "modal");
+  button.setAttribute("data-target", "#insertShop");
+  button.addEventListener("click", modalInsertShop);
+  button.innerHTML = "Insertar tienda";
+  section.appendChild(button);
+
   while (shop.done !== true) {
+    //Creamos una fila cada 3 productos
+    if (i % 3 == 0) {
+      row = document.createElement("div");
+      row.className = "row";
+      section.appendChild(row);
+    }
     objectShop = shop.value.shop;
-    divMargen = document.createElement("div");
-    divMargen.className = "col-sm-4 margen";
+    col = document.createElement("div");
+    col.className = "col-sm-4 margen";
+
+    divPanel = document.createElement("div");
+    divPanel.setAttribute("class", "panel panel-default");
 
     //Creamos el div de la tienda
     divShop = document.createElement("div");
     divShop.id = "t" + i;
-    divShop.className = "panel panel-default tienda";
+    divShop.className = "tienda";
 
     //Creamos y añadimos la imagen
     src = document.createAttribute("src");
-    src.value = "img/tienda" + i + ".png";
+    src.value = "img/"+ objectShop.image;
     imagen = document.createElement("img")
     imagen.setAttributeNode(src);
     imagen.className = "imgTienda";
@@ -238,52 +267,166 @@ function initPopulate() {
     //Creamos un evento onclick
     divShop.addEventListener("click", callShopPopulate(objectShop));
 
-    divMargen.appendChild(divShop);
-    divShops.appendChild(divMargen);  //Añadimos la tienda
+    divPanel.appendChild(divShop);
+    col.appendChild(divPanel);
+
+    if(i != 0){ //si la tienda no es la de por defecto
+      //Creamos los botones eliminar, añadir y modificar tienda
+      divButtons = document.createElement("div");
+      divButtons.setAttribute("class", "buttons");
+
+      button = document.createElement("button");
+      button.setAttribute("class", "btn remove private");
+      button.innerHTML = "Eliminar";
+      button.addEventListener("click", callRemoveShop(objectShop));
+      divButtons.appendChild(button);
+
+      button = document.createElement("button");
+      button.setAttribute("class", "btn add private");
+      button.setAttribute("data-toggle", "modal");
+      button.setAttribute("data-target", "#addProduct");
+      button.innerHTML = "Añadir Producto";
+      button.addEventListener("click", callModalAddProductInShop(objectShop));
+      divButtons.appendChild(button);
+
+      button = document.createElement("button");
+      button.setAttribute("class", "btn set private");
+      button.setAttribute("data-toggle", "modal");
+      button.setAttribute("data-target", "#setShop");
+      button.innerHTML = "Modificar";
+      button.addEventListener("click", callModalEditShop(objectShop));
+      divButtons.appendChild(button);
+
+      divPanel.appendChild(divButtons);
+    }
+
+    row.appendChild(col); //Añadimos la columna a la fila
 
     shop = shops.next();
     i++;
   }
 
-  //Creamos el boton Cerrar todas las ventanas
-  button = document.createElement("button");
-  button.innerHTML = "Cerrar todas las ventanas";
-  button.id = "cerrarTodo";
-  button.className = "btn pull-right";
-  button.addEventListener("click", closeAllWindows);
-  header.appendChild(button);
+  //Si los botones no existen los creamos
+  if (document.getElementById("signUp") == null) {
+    //Boton iniciar sesion
+    button = document.createElement("button");
+    button.innerHTML = "Iniciar Sesion";
+    button.id = "signUp";
+    button.className = "btn pull-right";
+    button.setAttribute("data-toggle", "modal");
+    button.setAttribute("data-target", "#logIn");
+    button.addEventListener("click", modalLogIn);
+    header.appendChild(button);
 
-  //Creamos el boton Mostrar todos los productos
-  button = document.createElement("button");
-  button.innerHTML = "Mostrar todos los productos";
-  button.id = "mostrarTodo";
-  button.className = "btn pull-right";
-  button.addEventListener("click", globalProductPopulate);
-  header.appendChild(button);
+    //Boton cerrar sesion
+    button = document.createElement("button");
+    button.innerHTML = "Cerrar Sesion";
+    button.id = "signOff";
+    button.className = "btn pull-right private";
+    button.addEventListener("click", logOut);
+    header.appendChild(button);
+
+    //Creamos el boton Cerrar todas las ventanas
+    button = document.createElement("button");
+    button.innerHTML = "Cerrar todas las ventanas";
+    button.id = "cerrarTodo";
+    button.className = "btn pull-right";
+    button.addEventListener("click", closeAllWindows);
+    header.appendChild(button);
+  }
 
   //Añadimos la seccion al contenedor principal
-  divShops.id = "tiendas";
-  divShops.className = "panel-body";
-  main.appendChild(divShops);
+  section.id = "tiendas";
+  main.appendChild(section);
 
   main.setAttribute("class", "col-sm-12");
 
   //Cerramos las ventanas de productos que haya abiertas
   closeAllWindows();
+
+  //Si estamos logueados mostramos las funciones ocultas
+  if(checkCookie()){
+    showButtons();
+  }
+}
+
+/**
+ * Esta funcion crea el menu para navegar entre las distintas secciones del almacen (tiendas, categorias, productos)
+ * @param nameSection
+ */
+function principalMenuPopulate(nameSection) {
+  console.log("principalMenuPopulate");
+
+  //Recogemos los elementos padre
+  var nav = document.getElementById("menu1");
+  var contenedor = nav.firstElementChild;
+  var div = document.createElement("div");
+  var ul, liP, li, a, span;
+
+  //Creamos la estructura del menu principal
+  ul = document.createElement("ul");
+  ul.setAttribute("class", "nav nav-tabs");
+
+  liP = document.createElement("li");
+  liP.setAttribute("class", "dropdown");
+
+  a = document.createElement("a");
+  a.innerHTML = nameSection;
+  a.setAttribute("id", "itemDDown");
+  a.setAttribute("href", "javascript:;");
+  a.setAttribute("class", "dropdown-toggle");
+  a.setAttribute("data-toggle", "dropdown");
+
+  span = document.createElement("span");
+  span.setAttribute("class", "caret");
+
+  a.appendChild(span);
+  liP.appendChild(a);
+  ul.appendChild(liP);
+  div.appendChild(ul);
+  div.id = "menuPrincipal"
+  contenedor.appendChild(div);
+
+  //Creamos el contenido desplegable
+  ul = document.createElement("ul");
+  ul.setAttribute("class", "dropdown-menu");
+
+  li = document.createElement("li");
+  a = document.createElement("a");
+  a.innerHTML = "Tiendas";
+  a.setAttribute("href", "javascript:;");
+  a.addEventListener("click", initPopulate);
+  li.appendChild(a);
+  ul.appendChild(li);
+
+  li = document.createElement("li");
+  a = document.createElement("a");
+  a.innerHTML = "Categorias";
+  a.setAttribute("href", "javascript:;");
+  a.addEventListener("click", categoriesPopulate);
+  li.appendChild(a);
+  ul.appendChild(li);
+
+  li = document.createElement("li");
+  a = document.createElement("a");
+  a.innerHTML = "Productos";
+  a.setAttribute("href", "javascript:;");
+  a.addEventListener("click", globalProductPopulate);
+  li.appendChild(a);
+  ul.appendChild(li);
+
+  liP.appendChild(ul);
 }
 
 /**
  * Esta función crea un menú con un item para cada tienda
- * @param shopName Nombre de la tienda
  */
-function shopsMenusPopulate(shopName) {
+function shopsMenusPopulate(nameShop) {
   console.log("shopsMenusPopulate");
 
   //Creamos los elementos header, nav y ul
-  var nav = document.getElementById("menu1");
-  var contenedor = nav.firstElementChild;
-  var div = document.createElement("div");
-  var ul = document.createElement("ul");
+  var contenedor = document.getElementById("menuPrincipal").firstElementChild;
+  //var ul = document.createElement("ul");
   var li, a;
 
   //Cogemos las tiendas
@@ -301,29 +444,18 @@ function shopsMenusPopulate(shopName) {
     //Creamos un evento onclick
     a.addEventListener("click", callShopPopulate(objectShop));
 
-    //Creamos el li y añadimos la clase active al li de la tienda actual
+    //Creamos el li
     li = document.createElement("li");
-    if (objectShop.name == shopName) {
-      li.className = "active";
+    if (objectShop.name == nameShop) {
+      li.setAttribute("class", "active");
     }
 
-    //Añadimos el enlace al li y el li al ul
+    //Añadimos el enlace al li y el li al contenedor
     li.appendChild(a);
-    ul.appendChild(li);
+    contenedor.appendChild(li);
 
     shop = shops.next();
   }
-
-  ul.className = "nav nav-tabs";
-  div.appendChild(ul);
-
-  //Añadimos el menu a la página
-  div.id = "menuPrincipal";
-  div.className = "collapse navbar-collapse";
-  contenedor.appendChild(div);
-
-  //Mostramos el menu
-  nav.style.display = "block";
 }
 
 /**
@@ -343,9 +475,9 @@ function shopPopulate(data) {
 
   //Si data es un objeto Shop trabajamos con un iterador
   if (data instanceof Shop) {
-    removeShopsMenu();  //Borramos el menu de las tiendas si existe
     removeCategoriesMenu(); //Borramos el menu de las categorias si existe
     clearMain(); //Borramos el contenedor principal si existe
+    removeShopsMenu();
 
     var products = StoreHouse.getInstance().getShopProducts(data); //Cogemos los productos
     var product = products.next();
@@ -387,6 +519,11 @@ function shopPopulate(data) {
   divProducts.id = "tiendas";
   divProducts.class = "panel-body";
   main.appendChild(divProducts);
+
+  //Si estamos logueados mostramos las funciones ocultas
+  if(checkCookie()){
+    showButtons();
+  }
 }
 
 /**
@@ -479,8 +616,7 @@ function productShopPopulate(index, product) {
   }
 
   //Añadimos un evento que se ejecuta justo antes de cerrar la ventana
-  ventanas[i].addEventListener("beforeunload", callHideProductShopPopulate(index));
-  ventanas[i].onunload = checkOpened;
+  ventanas[i].addEventListener("beforeunload", callHideProductShopPopulate(index, product.name));
 
   document.getElementById("cerrarTodo").style.display = "block";
 }
@@ -489,26 +625,33 @@ function productShopPopulate(index, product) {
  * Esta función cambia los displays de los botones al cerrar una ventana
  * @param index Numero del id del elemento html.
  */
-function hideProductShopPopulate(index) {
+function hideProductShopPopulate(index, name) {
   console.log("hideProductShopPopulate");
 
   //Cogemos los botones
   var button = document.getElementById("btnShow" + index);
   var button2 = document.getElementById("btnHide" + index);
-  var opened = false;
+  var cont = 0;
+  var position;
 
   //Cambiamos los displays para mostrar un boton y ocultar otro
   button.style.display = "block";
   button2.style.display = "none";
 
+  //Borramos la referencia de la ventana
+  position = ventanas.findIndex(function (a) {
+    return a.name == name;
+  });
+  ventanas.splice(position, 1);
+
   //Comprobamos si queda alguna ventana abierta para saber si mantenemos visible el boton "cerrar todo"
   for (let i = 0; i < ventanas.length && !opened; i++) {
     if (!ventanas[i].closed) {
-      opened = true;
+      cont++;
     }
   }
 
-  if (!opened) {
+  if (cont <= 1) {
     document.getElementById("cerrarTodo").style.display = "none";
   }
 }
@@ -520,18 +663,29 @@ function hideProductShopPopulate(index) {
 function globalProductPopulate() {
   console.log("globalProductPopulate");
 
-  removeShopsMenu();  //Borramos el menu de las tiendas si existe
   removeCategoriesMenu(); //Borramos el menu de las categorias si existe
   clearMain(); //Borramos el contenedor principal si existe
+  removeMenu(); //Borramos las tiendas del menu
+
+  principalMenuPopulate("Productos");
 
   //Elementos html necesarios para mostrar la información
   var main = document.getElementById("main");
   var section = document.createElement("section");
-  var div, h4, text, strong;
+  var div, h4, text, strong, button, divButtons;
 
   var storeHouse = StoreHouse.getInstance(); //Instancia del alamacen
   var categories = storeHouse.categories;
   var category = categories.next();
+
+  button = document.createElement("button");
+  button.setAttribute("type", "buttom");
+  button.setAttribute("class", "btn btn-lg center-block new private");
+  button.setAttribute("data-toggle", "modal");
+  button.setAttribute("data-target", "#insertProduct");
+  button.addEventListener("click", modalInsertProduct);
+  button.innerHTML = "Insertar producto";
+  section.appendChild(button);
 
   while (category.done !== true) {
     div = document.createElement("div");
@@ -548,6 +702,24 @@ function globalProductPopulate() {
       text.appendChild(strong);
       div.appendChild(getProductInfo(category.value.products[i]));
       div.lastElementChild.appendChild(text);
+
+      divButtons = document.createElement("div");
+      divButtons.setAttribute("class", "btns");
+      div.lastElementChild.appendChild(divButtons);
+
+      button = document.createElement("button");
+      button.setAttribute("class", "btn remove private");
+      button.innerHTML = "Eliminar";
+      button.addEventListener("click", callRemoveProduct(category.value.products[i]));
+      divButtons.appendChild(button);
+
+      button = document.createElement("button");
+      button.setAttribute("class", "btn set private");
+      button.setAttribute("data-toggle", "modal");
+      button.setAttribute("data-target", "#setProduct");
+      button.innerHTML = "Modificar";
+      button.addEventListener("click", callModalEditProduct(category.value.products[i]));
+      divButtons.appendChild(button);
     }
     div.setAttribute("class", "infoGlobal");
     section.appendChild(div);
@@ -555,8 +727,109 @@ function globalProductPopulate() {
     category = categories.next();
   }
 
-  section.setAttribute("class", "panel");
   main.appendChild(section);
+
+  //Si estamos logueados mostramos las funciones ocultas
+  if(checkCookie()){
+    showButtons();
+  }
+}
+
+/**
+ * Esta funcion muestra las categorias disponibles en el almacen
+ */
+function categoriesPopulate() {
+  console.log("categoriesPopulate");
+
+  removeCategoriesMenu(); //Borramos el menu de las categorias si existe
+  clearMain(); //Borramos el contenedor principal si existe
+  removeMenu(); //Borramos las tiendas del menu
+
+  principalMenuPopulate("Categorias");
+
+  //Elementos html necesarios para mostrar la información
+  var main = document.getElementById("main");
+  var section = document.createElement("section");
+  var divMargen, divCategory, divButtons, divPanel, row, h3, p, button;
+  var i = 0;
+
+  var categories = StoreHouse.getInstance().categories;
+  var category = categories.next();
+
+  main.className = "col-md-12"; //Cambiamos la clase del main para hacerlo mas ancho";
+
+  button = document.createElement("button");
+  button.setAttribute("type", "button");
+  button.setAttribute("class", "btn btn-lg center-block new private");
+  button.setAttribute("data-toggle", "modal");
+  button.setAttribute("data-target", "#insertCategory");
+  button.addEventListener("click", modalInsertCategory);
+  button.innerHTML = "Insertar categoria";
+  section.appendChild(button);
+
+  while (category.done !== true) {
+    //Creamos una fila cada 3 categorias
+    if (i % 3 == 0) {
+      row = document.createElement("div");
+      row.className = "row";
+      section.appendChild(row);
+    }
+
+    divMargen = document.createElement("div");
+    divMargen.className = "col-sm-3 col-md-4  margen";
+    row.appendChild(divMargen);
+
+    divPanel = document.createElement("div");
+    divPanel.setAttribute("class", "panel panel-default");
+    divMargen.appendChild(divPanel);
+
+    divCategory = document.createElement("div");
+    divCategory.id = "c" + (i + 1);
+    divCategory.className = " category";
+    divPanel.appendChild(divCategory);
+
+    //Creamos y añadimos un titulo
+    h3 = document.createElement("h3");
+    h3.className = "text-center";
+    h3.innerHTML = category.value.category.title;
+    divCategory.appendChild(h3);
+
+    //Creamos y añadimos una descripcion
+    p = document.createElement("p");
+    p.innerHTML = category.value.category.description;
+    divCategory.appendChild(p);
+
+    if(i != 0){ //Si la categoria no es la de por defecto
+      //Creamos los botones de modificar y eliminar
+      divButtons = document.createElement("div");
+      divButtons.setAttribute("class", "buttons");
+      divPanel.appendChild(divButtons);
+
+      button = document.createElement("button");
+      button.setAttribute("class", "btn remove private");
+      button.innerHTML = "Eliminar";
+      button.addEventListener("click", callRemoveCategory(category.value.category));
+      divButtons.appendChild(button);
+
+      button = document.createElement("button");
+      button.setAttribute("class", "btn set private");
+      button.setAttribute("data-toggle", "modal");
+      button.setAttribute("data-target", "#setCategory");
+      button.innerHTML = "Modificar";
+      button.addEventListener("click", callModalEditCategory(category.value.category));
+      divButtons.appendChild(button);
+    }
+
+    category = categories.next();
+    i++;
+  }
+
+  main.appendChild(section);
+
+  //Si estamos logueados mostramos las funciones ocultas
+  if(checkCookie()){
+    showButtons();
+  }
 }
 
 /*Funciones privadas*/
@@ -616,15 +889,28 @@ function clearMain() {
 }
 
 /**
- * Esta funcion elimina el menu de tiendas si existe
+ * Esta funcion elimina el menu principal
+ */
+function removeMenu() {
+  var nav = document.getElementById("menu1");
+  var menu = nav.firstElementChild;
+
+  menu.removeChild(menu.lastElementChild);
+}
+
+/**
+ * Esta funcion elimina el menu con los items de las tiendas
  */
 function removeShopsMenu() {
-  var nav = document.getElementById("menu1");
-  var menu = nav.getElementsByClassName("collapse navbar-collapse")[0];
+  console.log("removeShopsMenu");
 
-  if (menu instanceof Node) {   //Comprobamos si ya existia
-    nav.firstElementChild.removeChild(menu);    //Si existe lo borramos
-    nav.style.display = "none";
+  var menu = document.getElementById("menuPrincipal").firstElementChild;
+  var item = menu.firstElementChild;
+  var sibling = item.nextElementSibling;
+
+  while (sibling instanceof Node) {
+    menu.removeChild(sibling);
+    sibling = item.nextElementSibling;
   }
 }
 
@@ -637,19 +923,6 @@ function removeCategoriesMenu() {
 
   if (aside instanceof Node) {   //Comprobamos si ya existia
     contenedor.removeChild(aside);    //Si existe lo borramos
-  }
-}
-
-/**
- * Esta funcion elimina el boton mostrar todo, si existe
- */
-
-function removeButton() {
-  var header = document.getElementsByTagName("header")[0].firstElementChild;
-  var button = header.getElementsByTagName("button")[1];
-
-  if (button instanceof Node) {   //Comprobamos si ya existia
-    header.removeChild(button);    //Si existe lo borramos
   }
 }
 
@@ -916,13 +1189,14 @@ function productCarousel(product) {
  */
 function closeAllWindows() {
   console.log("closeAllWindows");
+  var items = ventanas.length;
 
-  for (let i = 0; i < ventanas.length; i++) {
-    ventanas[i].close();
+  for (let i = 0; i < items; i++) {
+    ventanas[0].close();
   }
 
-  //Borramos las referencias del array
-  ventanas.splice(0, ventanas.length);
+  document.getElementById("cerrarTodo").style.display = "none";
+
 }
 
 /**

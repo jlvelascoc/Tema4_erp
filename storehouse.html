@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="author" content="Jose Luis">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-cache">
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/mis_estilos.css">
@@ -35,12 +34,390 @@
     <main id="main" class="col-sm-12">
 
     </main>
+
+    <div id="modals">
+      <!--Modal iniciar sesion-->
+      <div class="modal fade" id="logIn" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" >Iniciar sesión</h4>
+            </div>
+            <div class="modal-body">
+              <form name="formProductMofied" action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="user" class="col-md-12">Usuario</label>
+                  <div class="col-md-12">
+                    <input type="text" name="user" id="user" class="form-control" placeholder="Ej: usuario">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="password" class="col-md-12">Contraseña</label>
+                  <div class="col-md-12">
+                    <input type="password" name="password" id="password" class="form-control">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="start">Iniciar sesión</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal insertar Tienad-->
+      <div class="modal fade" id="insertShop" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Insertar Tienda</h4>
+            </div>
+            <div class="modal-body">
+              <form action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="nameNShop" class="col-md-12">Nombre*</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nameNShop" id="nameNShop" class="form-control" placeholder="Nombre">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="cifNShop" class="col-md-12">CIF</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="cifNShop" id="cifNShop" class="form-control" placeholder="Ej: 12335355j">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="addressNShop" class="col-md-12">Dirección</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="addressNShop" id="addressNShop" class="form-control" placeholder="Ej: c/mata 10">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="phoneNShop" class="col-md-12">Telefono</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="phoneNShop" id="phoneNShop" class="form-control" placeholder="Ej: 902202122">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="imageNShop" class="col-md-12">Imagen</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="imageNShop" id="imageNShop" class="form-control" placeholder="Ej: imagen.png">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="saveShop">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal modificar Tienad-->
+      <div class="modal fade" id="setShop" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Modificar Tienda</h4>
+            </div>
+            <div class="modal-body">
+              <form action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="nameShop" class="col-md-12">Nombre*</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nameShop" id="nameShop" class="form-control">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="cifShop" class="col-md-12">CIF</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="cifShop" id="cifShop" class="form-control">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="addressShop" class="col-md-12">Dirección</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="addressShop" id="addressShop" class="form-control">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="phoneShop" class="col-md-12">Telefono</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="phoneShop" id="phoneShop" class="form-control">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="imageShop" class="col-md-12">Imagen</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="imageShop" id="imageShop" class="form-control" placeholder="Ej: imagen.png">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="saveSetShop">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal insertar Categoria-->
+      <div class="modal fade" id="insertCategory" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Insertar Categoría</h4>
+            </div>
+            <div class="modal-body">
+              <form action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="nameNewCat" class="col-md-12">Nombre*</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nameNewCat" id="nameNewCat" class="form-control" placeholder="Nombre">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="descriptionNewCat" class="col-md-12">Descripción*</label>
+                  <div class="col-sm-12">
+                    <textarea name="descriptionNewCat" id="descriptionNewCat" class="form-control" cols="30" rows="4"></textarea>
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal modificar Categoria-->
+      <div class="modal fade" id="setCategory" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" >Modificar Categoría</h4>
+            </div>
+            <div class="modal-body">
+              <form action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="nombreC" class="col-md-12">Nombre*</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nombreC" id="nombreC" class="form-control">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="descripcionC" class="col-md-12">Descripción*</label>
+                  <div class="col-sm-12">
+                    <textarea name="descripcionC" id="descripcionC" class="form-control" cols="30" rows="4"></textarea>
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal modificar Producto-->
+      <div class="modal fade" id="setProduct" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" >Modificar Producto</h4>
+            </div>
+            <div class="modal-body">
+              <form name="formProductMofied" action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="nombreP" class="col-md-12">Nombre*</label>
+                  <div class="col-md-12">
+                    <input type="text" name="nombreP" id="nombreP" class="form-control">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="descripcionP" class="col-md-12">Descripción</label>
+                  <div class="col-md-12">
+                    <textarea name="descripcionP" id="descripcionP" class="form-control" cols="30" rows="4"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="precioP" class="col-md-12">Precio*</label>
+                  <div class="col-md-12">
+                    <input type="text" name="precioP" id="precioP" class="form-control" placeholder="Ej: 200.90">
+                  </div>
+                  <p class="col-md-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="imgP" class="col-md-12">Imagenes*</label>
+                  <div class="col-md-12">
+                    <input type="text" name="imgP" id="imgP" class="form-control" placeholder="img1.png,img2.jpg...">
+                  </div>
+                  <span class="help-block col-md-12">Teclea el nombre de las imagenes separadas por comas.</span>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="saveSetProduct">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal insertar Producto-->
+      <div class="modal fade" id="insertProduct" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" >Insertar Producto</h4>
+            </div>
+            <div class="modal-body">
+              <form name="formProductMofied" action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="tipos" class="col-md-12">Elige un tipo de producto</label>
+                  <div class="col-md-12">
+                    <select name="tipos" id="tipos" class="form-control" onchange="modalInsertProduct()">
+                      <option value="Bass">Bajo</option>
+                      <option value="Drums">Batería</option>
+                      <option value="Amplifier">Amplificador</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="categorias" class="col-md-12">Elige una categoria</label>
+                  <div class="col-md-12">
+                    <select name="categorias" id="categorias" class="form-control"></select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="nombreNP" class="col-md-12">Nombre*</label>
+                  <div class="col-md-12">
+                    <input type="text" name="nombreNP" id="nombreNP" class="form-control" placeholder="Ej: fender jazz bass">
+                  </div>
+                  <p class="col-md-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="descripcionNP" class="col-md-12">Descripción</label>
+                  <div class="col-md-12">
+                    <textarea name="descripcionNP" id="descripcionNP" class="form-control" cols="30" rows="4"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="precioNP" class="col-md-12">Precio*</label>
+                  <div class="col-md-12">
+                    <input type="text" name="precioNP" id="precioNP" class="form-control" placeholder="Ej: 250.50">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label for="imgNP" class="col-md-12">Imagenes*</label>
+                  <div class="col-md-12">
+                    <input type="text" name="imgNP" id="imgNP" class="form-control" placeholder="img1.png,img2.jpg...">
+                  </div>
+                  <p class="col-sm-12 error"></p>
+                  <span class="help-block col-sm-12">Teclea el nombre de las imagenes separadas por comas.</span>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="saveProduct">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal añadir producto a una tienda-->
+      <div class="modal fade" id="addProduct" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" >Añadir Producto</h4>
+            </div>
+            <div class="modal-body">
+              <form name="formProductMofied" action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="tipos" class="col-md-12">Elige un producto</label>
+                  <div class="col-md-12">
+                    <select name="products" id="products" class="form-control"></select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="precioNP" class="col-md-12">Cantidad*</label>
+                  <div class="col-md-4">
+                    <input type="number" name="cantidad" id="cantidad" class="form-control">
+                  </div>
+                  <p class="col-md-12 error"></p>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="saveStock">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <footer class="container-fluid text-center">
   <a href="#arriba">
-    <spam class="glyphicon glyphicon-chevron-up"></spam>
+    <span class="glyphicon glyphicon-chevron-up"></span>
   </a>
   <h6>DEC</h6>
   <p>Jose Luis Velasco</p>
@@ -51,6 +428,7 @@
 <script charset="utf-8" src="js/exceptions.js"></script>
 <script charset="utf-8" src="js/objectsStoreHouse.js"></script>
 <script charset="utf-8" src="js/storeHouse.js"></script>
+<script charset="utf-8" src="js/forms.js"></script>
 <script charset="utf-8" src="js/layout.js"></script>
 </body>
 </html>

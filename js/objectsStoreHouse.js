@@ -106,6 +106,11 @@
       _images.splice(index, 1);
     }
 
+    //Metodo que permite borrar todas las imagenes
+    this.removeAllImages = function () {
+      _images.splice(0, _images.length);
+    }
+
     //Metodo que permite borrar una imagen dada su url
     this.removeImage = function (url) {
       //Controlamos que index no pueda ser vacio y que la imagen existe en el array
@@ -134,7 +139,7 @@
   }
 
   //Constructor del objeto Bass. Ademas de los parametros comunes recibe el numero de cuerdas y el tipo de electronica
-  function Bass(name = "", price = "", strings = 4, electronic = "passive") {
+  function Bass(name = "", price = "", strings = 4, electronic = "pasiva") {
     //Abrimos el candado para poder llamar a la clase abstracta
     abstractCreateLock = false;
     Product.call(this, name, price);
@@ -145,8 +150,8 @@
     if (strings < 4 || strings > 7) throw new InvalidValueException("strings", strings);
 
     //Controlamos que electronic no sea vacio y que su valor es pasive o active. Por defecto pasive
-    electronic = (typeof electronic !== 'undefined') ? electronic.toLowerCase() : "passive";
-    if (!/^(passive|active)$/.test(electronic)) throw new InvalidValueException("electronic", electronic);
+    electronic = (typeof electronic !== 'undefined') ? electronic.toLowerCase() : "pasiva";
+    if (!/^(pasiva|activa)$/.test(electronic)) throw new InvalidValueException("electronic", electronic);
 
     //atributos privados de bass
     var _strings = strings;   //Numero de cuerdas
@@ -172,8 +177,8 @@
       },
       set: function (value) {
         //Controlamos que value no sea vacio y que su valor es passive o active. Por defecto passive
-        value = (typeof value !== 'undefined') ? value.toLowerCase() : "passive";
-        if (!/^(passive|active)$/.test(value)) throw new InvalidValueException("electronic", value);
+        value = (typeof value !== 'undefined') ? value.toLowerCase() : "pasiva";
+        if (!/^(pasiva|activa)$/.test(value)) throw new InvalidValueException("electronic", value);
         _electronic = value;
       }
     });
@@ -194,15 +199,15 @@
   }
 
   //Constructo del objeto Drums.  Ademas de los parametros comunes recibe el tipo de bateria
-  function Drums(name = "", price = "", type = "acoustic") {
+  function Drums(name = "", price = "", type = "acustica") {
     //Abrimos el seguro para poder llamar al superconstructor
     abstractCreateLock = false;
     Product.call(this, name, price);
     abstractCreateLock = true;
 
     //Controlamos que type no sea vacio y que su valor es acoustic o electronic. Por defecto acoustic
-    type = (typeof type !== 'undefined') ? type.toLowerCase() : "acoustic";
-    if (!/^(acoustic|electronic)$/.test(type)) throw new InvalidValueException("type", type);
+    type = (typeof type !== 'undefined') ? type.toLowerCase() : "acustica";
+    if (!/^(acustica|electronica)$/.test(type)) throw new InvalidValueException("type", type);
 
     //atributos privados de bass
     var _type = type;   //Tipo de bateria
@@ -216,7 +221,7 @@
       set: function (value) {
         //Controlamos que value no sea vacio y que su valor es acoustic o electronic. Por defecto acoustic
         value = (typeof value !== 'undefined') ? type.toLowerCase() : "acoustic";
-        if (!/^(acoustic|electronic)$/.test(value)) throw new InvalidValueException("type", value);
+        if (!/^(acustica|electronica)$/.test(value)) throw new InvalidValueException("type", value);
         _type = value;
       }
     });
@@ -237,7 +242,7 @@
   }
 
   //Cosntructor del objeto Amplifier. Ademas de los atributos comunes recibe la potencia y el tipo
-  function Amplifier(name = "", price = "", watts = "", type = "transistors") {
+  function Amplifier(name = "", price = "", watts = "", type = "transistores") {
     //Abrimos el seguro para llamar al superconstructor
     abstractCreateLock = false;
     Product.call(this, name, price);
@@ -245,8 +250,8 @@
 
     //Controlamos que type no sea vacio y que su valor es transistors, valves ,
     // hibrids o modeling. Por defecto transistors
-    type = (typeof type !== 'undefined' || type === "") ? type.toLowerCase() : "transistors";
-    if (!/^(transistors|valves|hibrids|modeling)$/.test(type)) throw new InvalidValueException("type", type);
+    type = (typeof type !== 'undefined' || type === "") ? type.toLowerCase() : "transistores";
+    if (!/^(transistores|valvulas)$/.test(type)) throw new InvalidValueException("type", type);
 
     //Controlamos que watts no sea vacio
     watts = (typeof watts !== 'undefined') ? watts : "";
@@ -264,8 +269,8 @@
       set: function (value) {
         //Controlamos que value no sea vacio y que su valor es transistors, valves ,
         // hibrids o modeling. Por defecto transistors
-        value = (typeof value !== 'undefined') ? value.toLowerCase() : "transistors";
-        if (!/^(transistors|valves|hibrids|modeling)$/.test(value)) throw new InvalidValueException("type", value);
+        value = (typeof value !== 'undefined') ? value.toLowerCase() : "transistores";
+        if (!/^(transistores|valvulas)$/.test(value)) throw new InvalidValueException("type", value);
         _type = value;
       }
     });
@@ -409,6 +414,7 @@ function Shop (name){
   var _cif = "";
   var _address = "";
   var _phone = "";
+  var _image = "";
   var _coords = "";
 
   //Propiedades públicas de acceso
@@ -448,6 +454,15 @@ function Shop (name){
     },
     set: function (value) {
       _phone = value;
+    }
+  });
+
+  Object.defineProperty(this, 'image', {    //Permite ver y modificar _image
+    get: function () {
+      return _image;
+    },
+    set: function (value) {
+      _image = value;
     }
   });
 

@@ -58,3 +58,17 @@ Version 3.0.0
         Creada la funcion closeAllWindows.
         
     Modificado fichero mis_estilos.css
+
+Version 4.0.0
+
+
+    Creado el fichero forms.js
+    Modificado el fichero layout.
+        He modificado algunas funciones de este fichero para añadir nuevas funcionalidades.
+    Modificado el fichero objectsStoreHouse.js
+        He añadido la propiedad imagen al objeto Shop
+    Modificado el fichero storeHouse.js
+        He corregido algunos errores de otras fases anteriores.
+    Modificado el fichero mis_estilos.css
+    Modificado el fichero storehouse.html
+        He añadido los modales.

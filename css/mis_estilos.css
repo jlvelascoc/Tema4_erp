@@ -9,16 +9,27 @@ header div{
   padding-top: 10px;
 }
 
+nav button{
+  background-color: #ff832a;
+}
+
+#signOff{
+  display: none;
+}
+
 #cerrarTodo{
   display: none;
-  margin-left: 15px;
+  margin-right: 15px;
 }
 
 #menu1{
   background-color: #BD2404;
   margin-bottom: 15px;
   border-radius: 0px;
-  display: none;
+}
+
+#menuPrincipal ul{
+  background-color: #BD2404;
 }
 
 #menuPrincipal a{
@@ -33,6 +44,12 @@ header div{
   color: #ff832a;
 }
 
+.liHeader{
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+}
+
 #menuCategorias a{
   color: #ff832a;
 }
@@ -42,26 +59,43 @@ header div{
   color: white;
 }
 
-button{
-  background-color: #ff832a;
-  color: white;
-}
-
-nav button{
-  background-color: #ff832a;
-}
-
 #main{
   min-height: calc(100vh - 200px);
 }
 
-.margen{
-  padding: 0 15px;
+.private{
+  display: none;
 }
 
 .tienda{
   text-align: center;
   cursor: pointer;
+}
+
+.new{
+  height: 45px;
+  margin-bottom: 15px;
+}
+
+.buttons{
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.btns{
+  display: flex;
+}
+
+.btns button{
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+button{
+  background-color: #ff832a;
+  color: white;
+  height: 35px;
 }
 
 .producto{
@@ -76,6 +110,11 @@ h3{
   background-color: #f5f5f5;
   margin: 0;
   padding: 15px;
+}
+
+.category p{
+  padding: 5px 10px 5px 10px;
+  border-bottom: 2px solid red;
 }
 
 .imgProducto{
@@ -95,12 +134,24 @@ h3{
   height: 184px;
 }
 
-pre{
-  white-space: pre-line;
-}
-
 .hideBtn{
   display: none;
+}
+
+.productInfo{
+  position: relative;
+}
+
+.productInfo p{
+  padding: 0 15px 0 15px;
+}
+
+.error{
+  color: #ff0000;
+}
+
+.carousel{
+  margin-top: 25px;
 }
 
 footer{
@@ -111,17 +162,4 @@ footer{
 
 footer a{
   color: #ff832a;
-}
-
-.category{
-  margin-top: 40px;
-  border-bottom: 2px solid red;
-}
-
-.productInfo p{
-  padding: 0 15px 0 15px;
-}
-
-.carousel{
-  margin-top: 25px;
 }

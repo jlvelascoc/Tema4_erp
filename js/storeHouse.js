@@ -93,6 +93,16 @@ var StoreHouse = (function () {
         return _categories.length;
       }
 
+      this.getCategoryById = function (id) {
+        if (!id) throw new EmptyValueException();   //Controlamos que id sea vacio
+
+        var category = _categories.find(function (a) {
+          return a.category.id == id;
+        });
+
+        return category.category;
+      }
+
       /**
        * Este método devuelve un iterador de los productos de una categoria.
        * Si recibimos el parametro type, solo devuelve los productos de ese tipo
@@ -181,6 +191,17 @@ var StoreHouse = (function () {
             if (_categories[i].products[j] === product) {
               _categories[i].products.splice(j, 1); //Borramos el producto
               removed = true; //Cambiamos la condicion
+            }
+          }
+        }
+
+        var removedInShop;
+        for (var z = 0; z < _shops.length; z++){
+          removedInShop = false
+          for (var x = 0; x < _shops[z].products.length && !removedInShop; x++){
+            if (_shops[z].products[x].serialNumber == product.serialNumber){
+              _shops[z].products.splice(x, 1);
+              removedInShop = true;
             }
           }
         }
@@ -442,6 +463,28 @@ var StoreHouse = (function () {
       }//Fin del metodo getGlobalStock
 
       /**
+       * Este metodo devuelve un producto del almacen
+       * @param serialNumber Numero de serie del producto
+       * @return Object Objeto producto
+       */
+      this.getProductBySn = function (serialNumber) {
+        //Variable para saber si se encuentra. Sirve como condicion de salida del bucle
+        var exist = false;
+
+        //Recorremos los productos categoria a categoria
+        for(var i = 0; i < _categories.length && !exist; i++){
+          for(var j = 0; j < _categories[i].products.length && !exist; j++){
+            //Comparamos el serialnumber. Si son iguales cambiamos la condicion para salir del bucle
+            if (_categories[i].products[j].serialNumber == serialNumber){
+              exist = true;
+            }
+          }
+        }
+
+        return _categories[i-1].products[j-1];
+      }//Fin del metodo getProduct
+
+      /**
        * Propiedad defaultCategory
        * Es la categoria por defecto para los productos
        * @type {Category}
@@ -464,6 +507,7 @@ var StoreHouse = (function () {
        * @private
        */
       var _defaultShop = new Shop("Default", "Default shop");
+      _defaultShop.image = "tienda0.png";
       //Propiedad publica de acceso a _defaultShop
       this.addShop(_defaultShop); //añadimos la tienda por defecto
 
@@ -608,30 +652,8 @@ var StoreHouse = (function () {
       }
 
       /**
-       * Este metodo devuelve un producto del almacen
-       * @param prodseruct Objeto Product
-       * @returns {boolean} True si lo encuentra, false si no.
-       */
-      function getProduct(serialNumber) {
-        //Variable para saber si se encuentra. Sirve como condicion de salida del bucle
-        var exist = false;
-
-        //Recorremos los productos categoria a categoria
-        for(var i = 0; i < _categories.length && !exist; i++){
-          for(var j = 0; j < _categories[i].products.length && !exist; j++){
-            //Comparamos el serialnumber. Si son iguales cambiamos la condicion para salir del bucle
-            if (_categories[i].products[j].serialNumber === serialNumber){
-              exist = true;
-            }
-          }
-        }
-
-        return _categories[i-1].products[j-1];
-      }
-
-      /**
        * Este metodo devuelve una categoria del almacen
-       * @param prodseruct Objeto Product
+       * @param serialNumber SerialNumber del objeto Product
        * @returns {boolean} True si lo encuentra, false si no.
        */
       function getCategory(serialNumber) {
@@ -650,6 +672,28 @@ var StoreHouse = (function () {
 
         return _categories[i-1];
       }
+
+      /**
+       * Este metodo devuelve un producto del almacen
+       * @param serialNumber Numero de serie del producto
+       * @return Object Objeto producto
+       */
+      function getProduct (serialNumber) {
+        //Variable para saber si se encuentra. Sirve como condicion de salida del bucle
+        var exist = false;
+
+        //Recorremos los productos categoria a categoria
+        for(var i = 0; i < _categories.length && !exist; i++){
+          for(var j = 0; j < _categories[i].products.length && !exist; j++){
+            //Comparamos el serialnumber. Si son iguales cambiamos la condicion para salir del bucle
+            if (_categories[i].products[j].serialNumber === serialNumber){
+              exist = true;
+            }
+          }
+        }
+        return _categories[i-1].products[j-1];
+      }//Fin del metodo getProduct
+
     } //Fin del constructor StoreHouse
     StoreHouse.prototype = {};
     StoreHouse.prototype.constructor = StoreHouse;
