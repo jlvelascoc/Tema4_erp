@@ -30,6 +30,7 @@
 </nav>
 
 <div class="container">
+  <p id="error"></p>
   <div id="contain" class="row">
     <main id="main" class="col-sm-12">
 
@@ -43,7 +44,7 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title" >Iniciar sesión</h4>
+              <h4 class="modal-title">Iniciar sesión</h4>
             </div>
             <div class="modal-body">
               <form name="formProductMofied" action="#" class="form-horizontal">
@@ -89,17 +90,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="cifNShop" class="col-md-12">CIF</label>
-                  <div class="col-sm-12">
-                    <input type="text" name="cifNShop" id="cifNShop" class="form-control" placeholder="Ej: 12335355j">
-                  </div>
-                  <p class="col-sm-12 error"></p>
-                </div>
-
-                <div class="form-group">
                   <label for="addressNShop" class="col-md-12">Dirección</label>
                   <div class="col-sm-12">
-                    <input type="text" name="addressNShop" id="addressNShop" class="form-control" placeholder="Ej: c/mata 10">
+                    <input type="text" name="addressNShop" id="addressNShop" class="form-control"
+                           placeholder="Ej: c/mata 10">
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
@@ -107,7 +101,8 @@
                 <div class="form-group">
                   <label for="phoneNShop" class="col-md-12">Telefono</label>
                   <div class="col-sm-12">
-                    <input type="text" name="phoneNShop" id="phoneNShop" class="form-control" placeholder="Ej: 902202122">
+                    <input type="text" name="phoneNShop" id="phoneNShop" class="form-control"
+                           placeholder="Ej: 902202122">
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
@@ -115,7 +110,8 @@
                 <div class="form-group">
                   <label for="imageNShop" class="col-md-12">Imagen</label>
                   <div class="col-sm-12">
-                    <input type="text" name="imageNShop" id="imageNShop" class="form-control" placeholder="Ej: imagen.png">
+                    <input type="text" name="imageNShop" id="imageNShop" class="form-control"
+                           placeholder="Ej: imagen.png">
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
@@ -140,6 +136,8 @@
             </div>
             <div class="modal-body">
               <form action="#" class="form-horizontal">
+
+              <form action="#" class="form-horizontal">
                 <div class="form-group">
                   <label for="nameShop" class="col-md-12">Nombre*</label>
                   <div class="col-sm-12">
@@ -149,9 +147,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="cifShop" class="col-md-12">CIF</label>
+                  <label for="cifShop" class="col-md-12">CIF*</label>
                   <div class="col-sm-12">
-                    <input type="text" name="cifShop" id="cifShop" class="form-control">
+                    <input type="text" name="cifShop" id="cifShop" class="form-control" readonly>
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
@@ -175,7 +173,8 @@
                 <div class="form-group">
                   <label for="imageShop" class="col-md-12">Imagen</label>
                   <div class="col-sm-12">
-                    <input type="text" name="imageShop" id="imageShop" class="form-control" placeholder="Ej: imagen.png">
+                    <input type="text" name="imageShop" id="imageShop" class="form-control"
+                           placeholder="Ej: imagen.png">
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
@@ -211,7 +210,8 @@
                 <div class="form-group">
                   <label for="descriptionNewCat" class="col-md-12">Descripción*</label>
                   <div class="col-sm-12">
-                    <textarea name="descriptionNewCat" id="descriptionNewCat" class="form-control" cols="30" rows="4"></textarea>
+                    <textarea name="descriptionNewCat" id="descriptionNewCat" class="form-control" cols="30"
+                              rows="4"></textarea>
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
@@ -231,10 +231,17 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title" >Modificar Categoría</h4>
+              <h4 class="modal-title">Modificar Categoría</h4>
             </div>
             <div class="modal-body">
               <form action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="idC" class="col-md-12">Id</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="idC" id="idC" class="form-control" readonly>
+                  </div>
+                </div>
+
                 <div class="form-group">
                   <label for="nombreC" class="col-md-12">Nombre*</label>
                   <div class="col-sm-12">
@@ -266,9 +273,17 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title" >Modificar Producto</h4>
+              <h4 class="modal-title">Modificar Producto</h4>
             </div>
             <div class="modal-body">
+              <form name="formProductMofied" action="#" class="form-horizontal">
+                <div class="form-group">
+                  <label for="serialP" class="col-md-12">Serial number</label>
+                  <div class="col-md-12">
+                    <input type="text" name="serialP" id="serialP" class="form-control" readonly>
+                  </div>
+                </div>
+
               <form name="formProductMofied" action="#" class="form-horizontal">
                 <div class="form-group">
                   <label for="nombreP" class="col-md-12">Nombre*</label>
@@ -302,6 +317,7 @@
                 </div>
               </form>
             </div>
+          </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" id="saveSetProduct">Guardar</button>
             </div>
@@ -316,7 +332,7 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title" >Insertar Producto</h4>
+              <h4 class="modal-title">Insertar Producto</h4>
             </div>
             <div class="modal-body">
               <form name="formProductMofied" action="#" class="form-horizontal">
@@ -341,7 +357,8 @@
                 <div class="form-group">
                   <label for="nombreNP" class="col-md-12">Nombre*</label>
                   <div class="col-md-12">
-                    <input type="text" name="nombreNP" id="nombreNP" class="form-control" placeholder="Ej: fender jazz bass">
+                    <input type="text" name="nombreNP" id="nombreNP" class="form-control"
+                           placeholder="Ej: fender jazz bass">
                   </div>
                   <p class="col-md-12 error"></p>
                 </div>
@@ -349,7 +366,8 @@
                 <div class="form-group">
                   <label for="descripcionNP" class="col-md-12">Descripción</label>
                   <div class="col-md-12">
-                    <textarea name="descripcionNP" id="descripcionNP" class="form-control" cols="30" rows="4"></textarea>
+                    <textarea name="descripcionNP" id="descripcionNP" class="form-control" cols="30"
+                              rows="4"></textarea>
                   </div>
                 </div>
 
@@ -385,7 +403,7 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
               </button>
-              <h4 class="modal-title" >Añadir Producto</h4>
+              <h4 class="modal-title">Añadir Producto</h4>
             </div>
             <div class="modal-body">
               <form name="formProductMofied" action="#" class="form-horizontal">
@@ -430,5 +448,6 @@
 <script charset="utf-8" src="js/storeHouse.js"></script>
 <script charset="utf-8" src="js/forms.js"></script>
 <script charset="utf-8" src="js/layout.js"></script>
+<script charset="utf-8" src="js/indexedDB.js"></script>
 </body>
 </html>

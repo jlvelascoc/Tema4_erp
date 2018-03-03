@@ -72,3 +72,13 @@ Version 4.0.0
     Modificado el fichero mis_estilos.css
     Modificado el fichero storehouse.html
         He añadido los modales.
+
+Version 5.0.0
+
+    Creado el fichero indexedDB.js
+    Modificado el fichero layout.
+            He modificado la función init. Ahora en ella solo se crean las instancias de los objetos.
+        Modificado el fichero objectsStoreHouse.js
+            He añadido la funcion getObject a todos los objetos.
+        Modificado el fichero storeHouse.js
+        Modificado el fichero storehouse.html

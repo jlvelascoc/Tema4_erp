@@ -1,194 +1,161 @@
 "use strict";
 var ventanas = [];
+var productsByCategory = [[],[],[],[]];
+var productsInShop = [[],[],[],[],[]];
+var categoriesData;
+var shopsData;
 
 /**
- * Esta función crea los objetos necesarios para realizar
- * la práctica. También llama a la función initPopulate que
- * dibuja la página
+ * Esta función crea los objetos necesarios para realizar la práctica.
  */
 function init() {
   console.log("init");
 
-  var storeHouse = StoreHouse.getInstance(); //Cogemos la instancia del almacen
-  storeHouse.name = "Musicopolix"; //Cambiamos el nombre
-
-  var logo = document.querySelectorAll("header a");//Cogemos la referencia del logo
-  logo = logo[0];
-  logo.addEventListener("click", initPopulate);
-
   //Creamos tres tiendas
-  var danubioAzul = new Shop("Danubio Azul");
-  var laLira = new Shop("La Lira");
-  var musiReal = new Shop("Decibelios");
-  var guitarCenter = new Shop("Garcia Cid");
-
-  //Añadimos la imagens de cada una
-  danubioAzul.image = "tienda1.png";
-  laLira.image = "tienda2.png";
-  musiReal.image = "tienda3.png";
-  guitarCenter.image = "tienda4.png";
-
-  //Añadimos las tiendas al almacen
-  try {
-    console.log(storeHouse.addShop(danubioAzul));
-    console.log(storeHouse.addShop(laLira));
-    console.log(storeHouse.addShop(musiReal));
-    console.log(storeHouse.addShop(guitarCenter));
-  }
-  catch (err) {
-    console.log(err.toString());
-  }
+  shopsData = [
+    new Shop("Default", "A000000000"),
+    new Shop("Danubio Azul", generateCif()),
+    new Shop("La Lira", generateCif()),
+    new Shop("Decibelios", generateCif()),
+    new Shop("Garcia Cid", generateCif())
+  ];
+  //Añadimos la imagenes de cada una
+  shopsData[0].image = "tienda0.png";
+  shopsData[1].image = "tienda1.png";
+  shopsData[2].image = "tienda2.png";
+  shopsData[3].image = "tienda3.png";
+  shopsData[4].image = "tienda4.png";
 
   //Creamos tres categorias
-  var cuerda = new Category("Cuerda", "Guitarras y bajos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!");
-  var percusion = new Category("Percusion", "Instrumentos de percusion Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!");
-  var amplificadores = new Category("Amplificadores", "Amplificadores de todos los instrumentos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!");
-
-  //Añadimos las categorias al almacen
-  try {
-    console.log(storeHouse.addCategory(cuerda));
-    console.log(storeHouse.addCategory(percusion));
-    console.log(storeHouse.addCategory(amplificadores));
-  }
-  catch (err) {
-    console.log(err.toString());
-  }
+  categoriesData = [
+    new Category("0000000000", "Default", "Default category"),
+    new Category(generateId(), "Cuerda", "Guitarras y bajos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!"),
+    new Category(generateId(), "Percusion", "Instrumentos de percusion Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!"),
+    new Category(generateId(), "Amplificadores", "Amplificadores de todos los instrumentos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!")
+  ];
 
   //Creamos los productos
-  var fenderJB = new Bass("Fender jazzbass", 500, 4, "pasiva");
-  var cortArt = new Bass("Cort artisan", 450, "activa");
-  var rickenbacker = new Bass("Rickenbacker", 150, 5, "activa");
-  var pearl = new Drums("Pearl reference pure", 800, "acustica");
-  var mapex = new Drums("Mapex Armory", 650, "acustica");
-  var yamaha = new Drums("Yamaha e-drums", 480, "electronica");
-  var markbass = new Amplifier("Markbass mk210", 600, 300, "transistores");
-  var marshall = new Amplifier("Marshall MG100", 300, 150, "transistores");
-  var ashdown = new Amplifier("Ashdown EVO 115", 250, 150, "transistores");
+  productsByCategory[1] = [
+    new Bass(generateSerialNumber(), "Fender jazzbass", 500, 4, "pasiva"),
+    new Bass(generateSerialNumber(), "Cort artisan", 450, "activa"),
+    new Bass(generateSerialNumber(), "Rickenbacker", 150, 5, "activa")
+  ];
+
+  productsByCategory[2] = [
+    new Drums(generateSerialNumber(), "Pearl reference pure", 800, "acustica"),
+    new Drums(generateSerialNumber(), "Mapex Armory", 650, "acustica"),
+    new Drums(generateSerialNumber(), "Yamaha e-drums", 480, "electronica")
+  ];
+
+  productsByCategory[3] = [
+    new Amplifier(generateSerialNumber(), "Markbass mk210", 600, 300, "transistores"),
+    new Amplifier(generateSerialNumber(), "Marshall MG100", 300, 150, "transistores"),
+    new Amplifier(generateSerialNumber(), "Ashdown EVO 115", 250, 150, "transistores")
+  ];
 
   //Añadimos una descripción a los productos
-  fenderJB.description = "Cuerpo de fresno americano, Mástil de arce canadiense, Diapasón de arce, 20 trastes, Escala: 864mm, Ancho de la cejilla: 38mm, Alma de doble acción, Pastillas de bobina simple Roswell JBA Alnico-5 vintage de estilo JB, 2 controles de volumen y 1 de tono, Herrajes de cromo deluxe, Clavijas de afinación PB-style clásicas, Cuerdas D'addario 045-100, Color: Natural de alto brillo.";
-  cortArt.description = "Cuerpo de fresno de pantano, Mástil de 5 piezas de wengué y palisandro atornillado (bolt-on), Diapasón de palisandro (Dalbergia latifolia),Sin trastes ni thomann líneas de trastes, Escala de 34\" (864mm), Pastillas Bartolini MK-1, Preamplificador activo Markbass MB-1 con ecualizador de 3 bandas, 1 potenciómetro de volumen y de balance, Interruptor mini para modo activo/pasivo, Herrajes negros, Clavijas de afinación Hipshot Ultralight, Acabado: Natural a poro abierto.";
-  rickenbacker.description = "Cuerpo de arce, Mástil de arce atravesado, Diapasón de madera Caribbean Rosewood (Metopium Brownei), Triangle Inlays, 20 trastes, Medida 845 mm, Ancho de cejuela 42,9 mm, Mecánicas thomann Schaller Deluxe, 2 pastillas Single Coil Bass, Peso: Aprox. 4,1 kg, Color: Midnight Blue, incluye caja.";
-  pearl.description = "Versión Standard, EXX725Z/C, Cascos laminados, Color: Jet Black #31, Hardware cromado, Cascos combinados de maderas caoba asiática y chopo para sonido profundo y voluminoso.";
-  mapex.description = "Configuración 'Rock', Material del casco: Arce/Nogal, Herrajes de cromo negros, Cascos lacados de alto brillo, Color: Arce 'Agua Profunda' (Deep Water Maple Burst, #MSL), El thomann borde SONIClear™ mejora el tono y el rango de afinación.";
-  yamaha.description = "Incluye diez Kits de Batería y diez Funciones de Ejercicios, El set viene con Pads de Batería de nuevo desarrollo, Pads de thomann platillos grandes, Nuevo módulo DTX400 Drum Trigger Module con 169 sonidos de alta calidad, USB, Aux in, Salida de auriculares, Pedal de bombo casi silencioso.";
-  markbass.description = "Potencia: 500W 4 ohm / 300W 8 ohm, Configuración: 2x altavoces de 10\" de neodimio, Custom made by thomann B&C + Tweeter, 40Hz - 18KHz, Reguladores: Volumen, Bass, low y Hight mid, Hights, Master Volumen, Filtro Pre Shape variable, Función de Emulación Vintage Speaker, Salida de línea, Envío y retorno de efectos, Recinto adaptado como monitor (wedge) con dos ángulos de apoyo, Sistema Bassreflex, ultra ligero y ultra compacto, Peso: Aprox. 20 kg, Medida An x thomann Al x Pr: 59,5 x 48 x 47,5 cm.";
-  marshall.description = "2x 50 W, 4 canales, Efectos FX digitales, Entrada de micrófono (alimentación phantom 15V), Medidas: 60 x 54 x 26,1cm, Peso: 21kg.";
-  ashdown.description = "1 altavoz Ashdown de 15\", Emulación de válvulas, Entrada activa y pasiva, Medidor VU, Ecualizador de 5 bandas, Interruptor 'bright', Interruptor 'deep', DI balanceada conmutable (ecualizador Pre/Post), Control de compresión, Control 'overdrive', Control de sub-armónicos, Bucle de efectos, Salida de afinador.";
+  productsByCategory[1][0].description = "Cuerpo de fresno americano, Mástil de arce canadiense, Diapasón de arce, 20 trastes, Escala: 864mm, Ancho de la cejilla: 38mm, Alma de doble acción, Pastillas de bobina simple Roswell JBA Alnico-5 vintage de estilo JB, 2 controles de volumen y 1 de tono, Herrajes de cromo deluxe, Clavijas de afinación PB-style clásicas, Cuerdas D'addario 045-100, Color: Natural de alto brillo.";
+  productsByCategory[1][1].description = "Cuerpo de fresno de pantano, Mástil de 5 piezas de wengué y palisandro atornillado (bolt-on), Diapasón de palisandro (Dalbergia latifolia),Sin trastes ni thomann líneas de trastes, Escala de 34\" (864mm), Pastillas Bartolini MK-1, Preamplificador activo Markbass MB-1 con ecualizador de 3 bandas, 1 potenciómetro de volumen y de balance, Interruptor mini para modo activo/pasivo, Herrajes negros, Clavijas de afinación Hipshot Ultralight, Acabado: Natural a poro abierto.";
+  productsByCategory[1][2].description = "Cuerpo de arce, Mástil de arce atravesado, Diapasón de madera Caribbean Rosewood (Metopium Brownei), Triangle Inlays, 20 trastes, Medida 845 mm, Ancho de cejuela 42,9 mm, Mecánicas thomann Schaller Deluxe, 2 pastillas Single Coil Bass, Peso: Aprox. 4,1 kg, Color: Midnight Blue, incluye caja.";
+  productsByCategory[2][0].description = "Versión Standard, EXX725Z/C, Cascos laminados, Color: Jet Black #31, Hardware cromado, Cascos combinados de maderas caoba asiática y chopo para sonido profundo y voluminoso.";
+  productsByCategory[2][1].description = "Configuración 'Rock', Material del casco: Arce/Nogal, Herrajes de cromo negros, Cascos lacados de alto brillo, Color: Arce 'Agua Profunda' (Deep Water Maple Burst, #MSL), El thomann borde SONIClear™ mejora el tono y el rango de afinación.";
+  productsByCategory[2][2].description = "Incluye diez Kits de Batería y diez Funciones de Ejercicios, El set viene con Pads de Batería de nuevo desarrollo, Pads de thomann platillos grandes, Nuevo módulo DTX400 Drum Trigger Module con 169 sonidos de alta calidad, USB, Aux in, Salida de auriculares, Pedal de bombo casi silencioso.";
+  productsByCategory[3][0].description = "Potencia: 500W 4 ohm / 300W 8 ohm, Configuración: 2x altavoces de 10\" de neodimio, Custom made by thomann B&C + Tweeter, 40Hz - 18KHz, Reguladores: Volumen, Bass, low y Hight mid, Hights, Master Volumen, Filtro Pre Shape variable, Función de Emulación Vintage Speaker, Salida de línea, Envío y retorno de efectos, Recinto adaptado como monitor (wedge) con dos ángulos de apoyo, Sistema Bassreflex, ultra ligero y ultra compacto, Peso: Aprox. 20 kg, Medida An x thomann Al x Pr: 59,5 x 48 x 47,5 cm.";
+  productsByCategory[3][1].description = "2x 50 W, 4 canales, Efectos FX digitales, Entrada de micrófono (alimentación phantom 15V), Medidas: 60 x 54 x 26,1cm, Peso: 21kg.";
+  productsByCategory[3][2].description = "1 altavoz Ashdown de 15\", Emulación de válvulas, Entrada activa y pasiva, Medidor VU, Ecualizador de 5 bandas, Interruptor 'bright', Interruptor 'deep', DI balanceada conmutable (ecualizador Pre/Post), Control de compresión, Control 'overdrive', Control de sub-armónicos, Bucle de efectos, Salida de afinador.";
 
   //Añadimos las medidas de los toms de las baterias
-  pearl.toms = ["22x18", "12x08", "13x09", "16x16", "14x5.5"];
-  mapex.toms = ["22x18", "10x08", "12x09", "14x14", "14x5.5"];
-  yamaha.toms = ["5", "7.5", "7.5", "7.5", "7.5"];
+  productsByCategory[2][0].toms = ["22x18", "12x08", "13x09", "16x16", "14x5.5"];
+  productsByCategory[2][1].toms = ["22x18", "10x08", "12x09", "14x14", "14x5.5"];
+  productsByCategory[2][2].toms = ["5", "7.5", "7.5", "7.5", "7.5"];
 
   //Añadimos las imagenes a los productos
-  fenderJB.addImage("img/fender.png");
-  fenderJB.addImage("img/fender-1.png");
-  fenderJB.addImage("img/fender-2.png");
-  fenderJB.addImage("img/fender-3.png");
-  cortArt.addImage("img/cort.png");
-  cortArt.addImage("img/cort-1.png");
-  cortArt.addImage("img/cort-2.png");
-  rickenbacker.addImage("img/rickenbacker.png");
-  rickenbacker.addImage("img/rickenbacker-1.png");
-  rickenbacker.addImage("img/rickenbacker-2.png");
-  pearl.addImage("img/pearl.png");
-  pearl.addImage("img/pearl-1.png");
-  pearl.addImage("img/pearl-2.png");
-  mapex.addImage("img/mapex.png");
-  mapex.addImage("img/mapex-1.png");
-  mapex.addImage("img/mapex-2.png");
-  mapex.addImage("img/mapex-3.png");
-  yamaha.addImage("img/yamaha.png");
-  yamaha.addImage("img/yamaha-1.png");
-  yamaha.addImage("img/yamaha-2.png");
-  markbass.addImage("img/markbass.png");
-  markbass.addImage("img/markbass-1.png");
-  markbass.addImage("img/markbass-2.png");
-  marshall.addImage("img/marshall.png");
-  marshall.addImage("img/marshall-1.png");
-  marshall.addImage("img/marshall-2.png");
-  ashdown.addImage("img/ashdown.png");
-  ashdown.addImage("img/ashdown-1.png");
-  ashdown.addImage("img/ashdown-2.png");
+  productsByCategory[1][0].addImage("img/fender.png");
+  productsByCategory[1][0].addImage("img/fender-1.png");
+  productsByCategory[1][0].addImage("img/fender-2.png");
+  productsByCategory[1][0].addImage("img/fender-3.png");
+  productsByCategory[1][1].addImage("img/cort.png");
+  productsByCategory[1][1].addImage("img/cort-1.png");
+  productsByCategory[1][1].addImage("img/cort-2.png");
+  productsByCategory[1][2].addImage("img/rickenbacker.png");
+  productsByCategory[1][2].addImage("img/rickenbacker-1.png");
+  productsByCategory[1][2].addImage("img/rickenbacker-2.png");
+  productsByCategory[2][0].addImage("img/pearl.png");
+  productsByCategory[2][0].addImage("img/pearl-1.png");
+  productsByCategory[2][0].addImage("img/pearl-2.png");
+  productsByCategory[2][1].addImage("img/mapex.png");
+  productsByCategory[2][1].addImage("img/mapex-1.png");
+  productsByCategory[2][1].addImage("img/mapex-2.png");
+  productsByCategory[2][1].addImage("img/mapex-3.png");
+  productsByCategory[2][2].addImage("img/yamaha.png");
+  productsByCategory[2][2].addImage("img/yamaha-1.png");
+  productsByCategory[2][2].addImage("img/yamaha-2.png");
+  productsByCategory[3][0].addImage("img/markbass.png");
+  productsByCategory[3][0].addImage("img/markbass-1.png");
+  productsByCategory[3][0].addImage("img/markbass-2.png");
+  productsByCategory[3][1].addImage("img/marshall.png");
+  productsByCategory[3][1].addImage("img/marshall-1.png");
+  productsByCategory[3][1].addImage("img/marshall-2.png");
+  productsByCategory[3][2].addImage("img/ashdown.png");
+  productsByCategory[3][2].addImage("img/ashdown-1.png");
+  productsByCategory[3][2].addImage("img/ashdown-2.png");
 
-  //Añadimos los productos al almacen
-  try {
-    console.log(storeHouse.addProduct(fenderJB, cuerda));
-    console.log(storeHouse.addProduct(cortArt, cuerda));
-    console.log(storeHouse.addProduct(rickenbacker, cuerda));
-    console.log(storeHouse.addProduct(pearl, percusion));
-    console.log(storeHouse.addProduct(mapex, percusion));
-    console.log(storeHouse.addProduct(yamaha, percusion));
-    console.log(storeHouse.addProduct(markbass, amplificadores));
-    console.log(storeHouse.addProduct(marshall, amplificadores));
-    console.log(storeHouse.addProduct(ashdown, amplificadores));
-  }
-  catch (err) {
-    console.log(err.toString());
+  //Convertimos los objetos product en literales
+  for(let i = 1; i < productsByCategory.length; i++){
+    for(let j = 0; j < productsByCategory[i].length; j++){
+      productsByCategory[i][j] = productsByCategory[i][j].getObject();
+    }
   }
 
-  //Añadimos los productos a las tiendas
-  try {
-    storeHouse.addProductInShop(danubioAzul, fenderJB, 5);
-    storeHouse.addProductInShop(danubioAzul, cortArt, 2);
-    storeHouse.addProductInShop(danubioAzul, rickenbacker, 1);
-    storeHouse.addProductInShop(danubioAzul, pearl, 1);
-    storeHouse.addProductInShop(danubioAzul, mapex, 1);
-    storeHouse.addProductInShop(danubioAzul, yamaha, 1);
-    storeHouse.addProductInShop(danubioAzul, markbass, 1);
-    storeHouse.addProductInShop(danubioAzul, marshall, 3);
-    storeHouse.addProductInShop(danubioAzul, ashdown, 4);
-  }
-  catch (err) {
-    console.log(err.toString());
-  }
+  //Creamos un array con el serial number y el stock de los productos en cada tienda
+  productsInShop[1] = [
+    {serialNumber: productsByCategory[1][0].serialNumber, stock: 5},
+    {serialNumber: productsByCategory[1][1].serialNumber, stock: 1},
+    {serialNumber: productsByCategory[1][2].serialNumber, stock: 3},
+    {serialNumber: productsByCategory[2][0].serialNumber, stock: 7},
+    {serialNumber: productsByCategory[2][1].serialNumber, stock: 7},
+    {serialNumber: productsByCategory[2][2].serialNumber, stock: 9},
+    {serialNumber: productsByCategory[3][0].serialNumber, stock: 9},
+    {serialNumber: productsByCategory[3][1].serialNumber, stock: 1},
+    {serialNumber: productsByCategory[3][2].serialNumber, stock: 10}
+  ];
 
-  try {
-    storeHouse.addProductInShop(laLira, fenderJB, 1);
-    storeHouse.addProductInShop(laLira, cortArt, 1);
-    storeHouse.addProductInShop(laLira, rickenbacker, 1);
-    storeHouse.addProductInShop(laLira, pearl, 1);
-    storeHouse.addProductInShop(laLira, mapex, 1);
-    storeHouse.addProductInShop(laLira, yamaha, 1);
-    storeHouse.addProductInShop(laLira, markbass, 1);
-    storeHouse.addProductInShop(laLira, marshall, 1);
-    storeHouse.addProductInShop(laLira, ashdown, 1);
-  }
-  catch (err) {
-    console.log(err.toString());
-  }
+  productsInShop[2] = [
+    {serialNumber: productsByCategory[1][0].serialNumber, stock: 4},
+    {serialNumber: productsByCategory[1][1].serialNumber, stock: 3},
+    {serialNumber: productsByCategory[1][2].serialNumber, stock: 4},
+    {serialNumber: productsByCategory[2][0].serialNumber, stock: 3},
+    {serialNumber: productsByCategory[2][1].serialNumber, stock: 5},
+    {serialNumber: productsByCategory[2][2].serialNumber, stock: 6},
+    {serialNumber: productsByCategory[3][0].serialNumber, stock: 7},
+    {serialNumber: productsByCategory[3][1].serialNumber, stock: 8},
+    {serialNumber: productsByCategory[3][2].serialNumber, stock: 9}
+  ];
 
-  try {
-    storeHouse.addProductInShop(musiReal, fenderJB, 2);
-    storeHouse.addProductInShop(musiReal, cortArt, 1);
-    storeHouse.addProductInShop(musiReal, mapex, 1);
-    storeHouse.addProductInShop(musiReal, yamaha, 1);
-    storeHouse.addProductInShop(musiReal, marshall, 2);
-    storeHouse.addProductInShop(musiReal, ashdown, 1);
-  }
-  catch (err) {
-    console.log(err.toString());
-  }
+  productsInShop[3] = [
+    {serialNumber: productsByCategory[1][0].serialNumber, stock: 1},
+    {serialNumber: productsByCategory[1][1].serialNumber, stock: 3},
+    {serialNumber: productsByCategory[1][2].serialNumber, stock: 4},
+    {serialNumber: productsByCategory[2][0].serialNumber, stock: 5},
+    {serialNumber: productsByCategory[2][1].serialNumber, stock: 6},
+    {serialNumber: productsByCategory[2][2].serialNumber, stock: 2},
+    {serialNumber: productsByCategory[3][0].serialNumber, stock: 2},
+    {serialNumber: productsByCategory[3][1].serialNumber, stock: 2},
+    {serialNumber: productsByCategory[3][2].serialNumber, stock: 2}
+  ];
 
-  try {
-    storeHouse.addProductInShop(guitarCenter, fenderJB, 10);
-    storeHouse.addProductInShop(guitarCenter, cortArt, 5);
-    storeHouse.addProductInShop(guitarCenter, rickenbacker, 4);
-    storeHouse.addProductInShop(guitarCenter, pearl, 2);
-    storeHouse.addProductInShop(guitarCenter, mapex, 5);
-    storeHouse.addProductInShop(guitarCenter, yamaha, 3);
-    storeHouse.addProductInShop(guitarCenter, markbass, 3);
-    storeHouse.addProductInShop(guitarCenter, marshall, 7);
-    storeHouse.addProductInShop(guitarCenter, ashdown, 5);
-  }
-  catch (err) {
-    console.log(err.toString());
-  }
-
-  //Invocamos a la funcion para dibujar la pagina;
-  initPopulate();
-}
+  productsInShop[4] = [
+    {serialNumber: productsByCategory[1][0].serialNumber, stock: 2},
+    {serialNumber: productsByCategory[1][1].serialNumber, stock: 2},
+    {serialNumber: productsByCategory[1][2].serialNumber, stock: 2},
+    {serialNumber: productsByCategory[2][0].serialNumber, stock: 1},
+    {serialNumber: productsByCategory[2][1].serialNumber, stock: 1},
+    {serialNumber: productsByCategory[2][2].serialNumber, stock: 1},
+    {serialNumber: productsByCategory[3][0].serialNumber, stock: 3},
+    {serialNumber: productsByCategory[3][1].serialNumber, stock: 3},
+    {serialNumber: productsByCategory[3][2].serialNumber, stock: 3}
+  ];
+}//Fin de la función init
 
 /**
  * Esta función dibuja la página. En ella se muestran
@@ -252,7 +219,7 @@ function initPopulate() {
 
     //Creamos y añadimos la imagen
     src = document.createAttribute("src");
-    src.value = "img/"+ objectShop.image;
+    src.value = "img/" + objectShop.image;
     imagen = document.createElement("img")
     imagen.setAttributeNode(src);
     imagen.className = "imgTienda";
@@ -270,7 +237,7 @@ function initPopulate() {
     divPanel.appendChild(divShop);
     col.appendChild(divPanel);
 
-    if(i != 0){ //si la tienda no es la de por defecto
+    if (i != 0) { //si la tienda no es la de por defecto
       //Creamos los botones eliminar, añadir y modificar tienda
       divButtons = document.createElement("div");
       divButtons.setAttribute("class", "buttons");
@@ -345,7 +312,7 @@ function initPopulate() {
   closeAllWindows();
 
   //Si estamos logueados mostramos las funciones ocultas
-  if(checkCookie()){
+  if (checkCookie()) {
     showButtons();
   }
 }
@@ -521,7 +488,7 @@ function shopPopulate(data) {
   main.appendChild(divProducts);
 
   //Si estamos logueados mostramos las funciones ocultas
-  if(checkCookie()){
+  if (checkCookie()) {
     showButtons();
   }
 }
@@ -710,7 +677,7 @@ function globalProductPopulate() {
       button = document.createElement("button");
       button.setAttribute("class", "btn remove private");
       button.innerHTML = "Eliminar";
-      button.addEventListener("click", callRemoveProduct(category.value.products[i]));
+      button.addEventListener("click", callRemoveProduct(category.value.products[i], category.value.category));
       divButtons.appendChild(button);
 
       button = document.createElement("button");
@@ -718,7 +685,7 @@ function globalProductPopulate() {
       button.setAttribute("data-toggle", "modal");
       button.setAttribute("data-target", "#setProduct");
       button.innerHTML = "Modificar";
-      button.addEventListener("click", callModalEditProduct(category.value.products[i]));
+      button.addEventListener("click", callModalEditProduct(category.value.products[i], category.value.category));
       divButtons.appendChild(button);
     }
     div.setAttribute("class", "infoGlobal");
@@ -730,7 +697,7 @@ function globalProductPopulate() {
   main.appendChild(section);
 
   //Si estamos logueados mostramos las funciones ocultas
-  if(checkCookie()){
+  if (checkCookie()) {
     showButtons();
   }
 }
@@ -799,7 +766,7 @@ function categoriesPopulate() {
     p.innerHTML = category.value.category.description;
     divCategory.appendChild(p);
 
-    if(i != 0){ //Si la categoria no es la de por defecto
+    if (i != 0) { //Si la categoria no es la de por defecto
       //Creamos los botones de modificar y eliminar
       divButtons = document.createElement("div");
       divButtons.setAttribute("class", "buttons");
@@ -827,7 +794,7 @@ function categoriesPopulate() {
   main.appendChild(section);
 
   //Si estamos logueados mostramos las funciones ocultas
-  if(checkCookie()){
+  if (checkCookie()) {
     showButtons();
   }
 }
@@ -1222,5 +1189,3 @@ function callCloseWindow(name) {
     closeWindow(name);
   }
 }
-
-window.onload = init;

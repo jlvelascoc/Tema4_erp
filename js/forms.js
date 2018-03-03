@@ -31,9 +31,10 @@ function insertCategory() {
   }
 
   if (validated) {  //Si esta todo correcto añadimos la categoria
-    var category = new Category(items[0].value, items[1].value); //Creo un objeto categoria
+    var category = new Category(generateId(), items[0].value, items[1].value); //Creo un objeto categoria
 
     StoreHouse.getInstance().addCategory(category); //Añado la categoria
+    insertCategoryDB(category); //Añadimos un registro a la base datos
 
     modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
 
@@ -53,8 +54,9 @@ function modalEditCategory(category) {
   var items = form.getElementsByClassName("form-control");  //Cogemos los inputs
 
   //Cargamos los valores actuales de la categoria
-  items[0].value = category.title;
-  items[1].value = category.description;
+  items[0].value = category.id;
+  items[1].value = category.title;
+  items[2].value = category.description;
 
   //Asignamos al evento onclick del boton guardar la funcion que guarda los cambios
   modal.getElementsByTagName("button")[1].onclick = callEditCategory(category);
@@ -74,19 +76,20 @@ function editCategory(category) {
   clearParagraph("setCategory"); //Borramos los mensajes de los parrafos
 
   //Validamos los campos
-  if (items[0].value == "") {
+  if (items[1].value == "") {
     errors[0].innerHTML = "El campo nombre no puede ser vacío";
     validated = false;
   }
 
-  if (items[1].value == "") {
+  if (items[2].value == "") {
     errors[1].innerHTML = "El campo descripción no puede ser vacío";
     validated = false;
   }
 
   if (validated) { //Si esta todo correcto modificamos la categoria
-    category.title = items[0].value;
-    category.description = items[1].value;
+    category.title = items[1].value;
+    category.description = items[2].value;
+    editCategoryDB(category); //Actualizamos el registro en la base de datos
 
     modal.getElementsByTagName("button")[0].click();
 
@@ -100,6 +103,7 @@ function editCategory(category) {
  */
 function removeCategory(category) {
   StoreHouse.getInstance().removeCategory(category);
+  removeCategoryDB(category); //Eliminamos el registro de la base datos
   categoriesPopulate();
 }
 
@@ -128,29 +132,24 @@ function insertShop() {
     validated = false;
   }
 
-  if (items[1].value != "" && !(/^\d{8}[A-Za-z]$/.test(items[1].value))) {
-    errors[1].innerHTML = "El campo cif debe tener el siguiente formato: 12345678j";
+  if (items[2].value != "" && !(/^\d{9}$/.test(items[2].value))) {
+    errors[2].innerHTML = "El campo telefono debe tener estar formado por 9 digitos";
     validated = false;
   }
 
-  if (items[3].value != "" && !(/^\d{9}$/.test(items[3].value))) {
-    errors[3].innerHTML = "El campo telefono debe tener estar formado por 9 digitos";
-    validated = false;
-  }
-
-  if (items[4].value != "" && !(/^\w{1,}.\w{3,4}$/.test(items[4].value))) {
-    errors[4].innerHTML = "El campo imagen debe tener el siguiente formato: imagen.png";
+  if (items[3].value != "" && !(/^\w{1,}.\w{3,4}$/.test(items[3].value))) {
+    errors[3].innerHTML = "El campo imagen debe tener el siguiente formato: imagen.png";
     validated = false;
   }
 
   if (validated) {  //Si todo esta correcto creamos el obejto y lo añadimos
-    var shop = new Shop(items[0].value); //Creo un objeto shop
-    shop.cif = items[1].value;
-    shop.address = items[2].value;
-    shop.phone = items[3].value;
-    shop.image = items[4].value;
+    var shop = new Shop(items[0].value, generateCif()); //Creo un objeto shop
+    shop.address = items[1].value;
+    shop.phone = items[2].value;
+    shop.image = items[3].value;
 
     StoreHouse.getInstance().addShop(shop); //Añado la tienda
+    insertShopDB(shop); //Inserto la tienda en la base de datos
 
     modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
 
@@ -199,11 +198,6 @@ function editShop(shop) {
     validated = false;
   }
 
-  if (items[1].value != "" && !(/^\d{8}[A-Za-z]$/.test(items[1].value))) {
-    errors[1].innerHTML = "El campo cif debe tener el siguiente formato: 12345678j";
-    validated = false;
-  }
-
   if (items[3].value != "" && !(/^\d{9}$/.test(items[3].value))) {
     errors[3].innerHTML = "El campo telefono debe tener estar formado por 9 digitos";
     validated = false;
@@ -216,10 +210,11 @@ function editShop(shop) {
 
   if (validated) {  //si todo esta correcto modificamos los datos
     shop.name = items[0].value;
-    shop.cif = items[1].value;
     shop.address = items[2].value;
     shop.phone = items[3].value;
     shop.image = items[4].value;
+
+    editShopDB(shop); //Modificamos el registro en la base datos
 
     modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
     initPopulate();
@@ -232,6 +227,7 @@ function editShop(shop) {
  */
 function removeShop(shop) {
   StoreHouse.getInstance().removeShop(shop);
+  removeShopDB(shop); //Eliminamos el registro de la base datos
   initPopulate();
 }
 
@@ -426,7 +422,7 @@ function modalInsertProduct() {
     while (category.done !== true) {
       objectCategory = category.value.category;
       option = document.createElement("option");
-      option.value = objectCategory.id;
+      option.value = objectCategory.title;
       option.innerHTML = objectCategory.title;
       select.appendChild(option);
 
@@ -485,7 +481,7 @@ function insertProduct() {
       }
 
       if(validated) {
-        var product = new Bass(items[2].value, items[4].value, items[5].value, items[6].value);
+        var product = new Bass(generateSerialNumber(), items[2].value, items[4].value, items[5].value, items[6].value);
       }
       break;
 
@@ -496,7 +492,7 @@ function insertProduct() {
       }
 
       if(validated) {
-        var product = new Drums(items[2].value, items[4].value, items[5].value, items[6].value);
+        var product = new Drums(generateSerialNumber(), items[2].value, items[4].value, items[5].value, items[6].value);
       }
       break;
 
@@ -512,7 +508,7 @@ function insertProduct() {
       }
 
       if(validated) {
-        var product = new Amplifier(items[2].value, items[4].value, items[5].value, items[6].value);
+        var product = new Amplifier(generateSerialNumber(), items[2].value, items[4].value, items[5].value, items[6].value);
       }
       break;
   }
@@ -524,8 +520,9 @@ function insertProduct() {
       product.addImage(images[i]);
     }
 
-    var objectCategory = StoreHouse.getInstance().getCategoryById(items[1].value);
+    var objectCategory = StoreHouse.getInstance().getCategoryByTitle(items[1].value);
     StoreHouse.getInstance().addProduct(product, objectCategory);
+    insertProductDB(product, objectCategory); //Insetamos el registro en la base da datos
 
     modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
     clearModal("insertProduct");  //Liampiamos los campos del modal
@@ -538,14 +535,14 @@ function insertProduct() {
  * Tambien asigna un evento onclick al boton guardar del modal setProduct
  * @param product Objeto Product
  */
-function modalEditProduct(product) {
+function modalEditProduct(product, category) {
   var modal = document.getElementById("setProduct");  //Cogemos el modal
   var contenedor = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
   var items = contenedor.getElementsByClassName("form-control");  //Cogemos los campos
   var groups = contenedor.getElementsByClassName("form-group"); //Cogemos los grupos para saber donde tenemos que insertar los nuevos
   var group, div, label, input, p;
 
-  if (contenedor.children.length > 4) { //Si el formulario ha sido alterado lo restauramos
+  if (contenedor.children.length > 5) { //Si el formulario ha sido alterado lo restauramos
     restoreModal("setProduct");
   }
 
@@ -717,19 +714,20 @@ function modalEditProduct(product) {
       break;
   }
   //Cargamos la informacion comun a todos los productos
-  items[0].value = product.name;
-  items[1].innerHTML = product.description;
-  items[2].value = product.price;
-  items[5].value = product.images.toString();
+  items[0].value = product.serialNumber;
+  items[1].value = product.name;
+  items[2].innerHTML = product.description;
+  items[3].value = product.price;
+  items[6].value = product.images.toString();
 
-  modal.getElementsByTagName("button")[1].onclick = callEditProduct(product); //Asignamos el evento al boton guardar
+  modal.getElementsByTagName("button")[1].onclick = callEditProduct(product, category); //Asignamos el evento al boton guardar
 }
 
 /**
  * Esta función edita la informacion de un producto en el almacen
  * @param product Objeto Product
  */
-function editProduct(product) {
+function editProduct(product, category) {
   var modal = document.getElementById("setProduct"); //Cogemos el  modal
   var contenedor = modal.getElementsByTagName("form")[0]; //Cogemos el  formulario
   var items = contenedor.getElementsByClassName("form-control"); //Cogemos los campos
@@ -740,86 +738,87 @@ function editProduct(product) {
   clearParagraph("setProduct"); //Borramos los mensajes de los parrafos
 
   //Hacemos las validaciones comunes a todos los productos
-  if (items[0].value == "") {
+  if (items[1].value == "") {
     errors[0].innerHTML = "El campo nombre no puede ser vacío";
     validated = false;
   }
 
-  if (items[2].value == "") {
+  if (items[3].value == "") {
     errors[1].innerHTML = "El campo precio no puede ser vacío";
     validated = false;
   }
 
-  if (items[2].value != "" && !(/^\d{1,5}(.\d{1,2}){0,1}$/.test(items[2].value))) {
+  if (items[3].value != "" && !(/^\d{1,5}(.\d{1,2}){0,1}$/.test(items[3].value))) {
     errors[1].innerHTML = "El campo precio debe tener el siguiente formato: 125.90";
     validated = false;
   }
 
-  if (items[5].value == ""){
+  if (items[6].value == ""){
     errors[4].innerHTML = "El campo imagenes no puede ser vacío";
     validated = false;
   }
   else{
-    var images = items[5].value.split(",");
+    var images = items[6].value.split(",");
   }
 
   switch (true) { //Hacemos las validaciones expecificas de cada tipo de producto
     case (product instanceof Bass):
-      if (items[3].value != "" && !(/^[4|5|6]$/.test(items[3].value))) {
+      if (items[4].value != "" && !(/^[4|5|6]$/.test(items[4].value))) {
         errors[2].innerHTML = "El campo cuerdas solo acepta como valor 4, 5 o 6";
         validated = false;
       }
 
-      if (items[4].value != "" && !(/^(pasiva|activa)$/.test(items[4].value))) {
+      if (items[5].value != "" && !(/^(pasiva|activa)$/.test(items[5].value))) {
         errors[3].innerHTML = "El campo electronica solo acepta como valor pasiva o activa";
         validated = false;
       }
 
       if(validated) {
-        product.strings = items[3].value;
-        product.electronic = items[4].value;
+        product.strings = items[4].value;
+        product.electronic = items[5].value;
       }
       break;
 
     case (product instanceof Drums):
-      if (items[3].value != "" && !(/^(acustica|electronica)$/.test(items[3].value))) {
+      if (items[4].value != "" && !(/^(acustica|electronica)$/.test(items[4].value))) {
         errors[2].innerHTML = "El campo tipo solo acepta como valor acustica o electronica";
         validated = false;
       }
 
       if(validated) {
-        product.type = items[3].value;
-        product.toms = items[4].value;
+        product.type = items[4].value;
+        product.toms = items[5].value;
       }
       break;
 
     case (product instanceof Amplifier):
-      if (items[3].value != "" && !(/^\d{2,4}$/.test(items[3].value))) {
+      if (items[4].value != "" && !(/^\d{2,4}$/.test(items[4].value))) {
         errors[2].innerHTML = "El campo potencia solo acepta numeros de mas de dos cifras";
         validated = false;
       }
 
-      if (items[4].value != "" && !(/^(transistores|valvulas)$/.test(items[4].value))) {
+      if (items[5].value != "" && !(/^(transistores|valvulas)$/.test(items[5].value))) {
         errors[3].innerHTML = "El campo tipo solo acepta como valor transistores o valvulas";
         validated = false;
       }
 
       if(validated) {
-        product.watts = items[3].value;
-        product.electronic = items[4].value;
+        product.watts = items[4].value;
+        product.electronic = items[5].value;
       }
       break;
   }
 
   if(validated) { //Si todo esta correcto editamos la informacion del producto
-    product.name = items[0].value;
-    product.description = items[1].value;
-    product.price = items[2].value;
+    product.name = items[1].value;
+    product.description = items[2].value;
+    product.price = items[3].value;
 
     product.removeAllImages();
     for (let i = 0; i < images.length; i++) {
       product.addImage(images[i]);
     }
+    editProductDB(product, category); //Modificamos el registro  en la base de datos
 
     modal.getElementsByTagName("button")[0].click();  //HAcemos click en el boton x para cerrar el modal
     globalProductPopulate();
@@ -830,8 +829,9 @@ function editProduct(product) {
  * Esta funcion elimina un producto del almacen
  * @param product Objeto Product
  */
-function removeProduct(product) {
+function removeProduct(product, category) {
   StoreHouse.getInstance().removeProduct(product);
+  removeProductDB(product, category); //Borramos el registro de la base de datos
   globalProductPopulate();
 }
 
@@ -892,7 +892,8 @@ function addProductInShop(shop) {
   }
 
   if(validated) {
-    storeHouse.addProductInShop(shop, storeHouse.getProductBySn(items[0].value), parseInt(items[1].value, 10));
+    storeHouse.addProductInShop(shop, items[0].value, parseInt(items[1].value, 10));
+    addProductInShopDB(shop, items[0].value, parseInt(items[1].value, 10)); //Añadimos el registro a la tienda
     modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
     clearModal("addProduct");
     initPopulate();
@@ -1093,9 +1094,9 @@ function callRemoveShop(shop) {
  * @param product Objeto Product
  * @return {Function} modalEditProduct
  */
-function callModalEditProduct(product) {
+function callModalEditProduct(product, category) {
   return function () {
-    modalEditProduct(product);
+    modalEditProduct(product, category);
   }
 }
 
@@ -1104,9 +1105,9 @@ function callModalEditProduct(product) {
  * @param product Objeto Product
  * @return {Function} editProduct
  */
-function callEditProduct(product) {
+function callEditProduct(product, category) {
   return function () {
-    editProduct(product);
+    editProduct(product, category);
   }
 }
 
@@ -1115,9 +1116,9 @@ function callEditProduct(product) {
  * @param product Objeto Product
  * @return {Function} removeProduct
  */
-function callRemoveProduct(product) {
+function callRemoveProduct(product, category) {
   return function () {
-    removeProduct(product);
+    removeProduct(product, category);
   }
 }
 

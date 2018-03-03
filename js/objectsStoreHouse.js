@@ -1,30 +1,70 @@
 "use strict";
+
+/**
+ * Esta función genera cifs aleatorios para las tiendas
+ * @return {string}
+ */
+function generateCif() {
+  var charts = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var numbers = "1234567890";
+  var cif = charts[Math.floor(Math.random() * 25)];
+
+  for(let i = 0; i <= 8; i++){
+    cif += numbers[Math.floor(Math.random() * 10)];
+  }
+
+  return cif;
+}
+
+/**
+ * Estafuncion genera ids aleatorios para las categorias
+ * @return {string}
+ */
+function generateId() {
+  var charts = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var id = "";
+
+  for(let i = 0; i <= 10; i++){
+    id += charts[Math.floor(Math.random() * 35)];
+  }
+
+  return id;
+}
+
+/**
+ * Estafuncion genera numeros de serie aleatorios
+ * @return {string}
+ */
+function generateSerialNumber() {
+  var charts = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var serialNumber = "";
+
+  for(let i = 0; i <= 10; i++){
+    serialNumber += charts[Math.floor(Math.random() * 61)];
+  }
+
+  return serialNumber;
+}
+
 //Funcion anomina que se ejecuta para devolver los constructores Product, Bass, Drums & Amplifiers
 //Utilizo este tipo de funcion para que producto sea una clase abstracta
 (function () {
   var abstractCreateLock = false; //Seguro clase abstracta
 
-  //Clouser para generar numeros de serie distintos para cada producto.
-  //Devuelve un numero distinto cada vez
-  var GenerateSerialNumber = function () {
-    var cont = 1;
-    return function () {
-      return cont++
-    };
-  }();
-
   //Cosntructor de la clase abstracta Product
-  function Product(name, price) {
+  function Product(serialNumber, name, price) {
     //Comprobaciones
     if (abstractCreateLock) throw new AbstractClassException("Product"); //Seguro para que no se pueda instanciar
     if (!(this instanceof Product)) throw new InvalidAccessConstructorException();
+    serialNumber = (typeof serialNumber !== undefined) ? serialNumber : "";
+    if (!serialNumber) throw new EmptyValueException("serialNumber");
     name = (typeof name !== undefined) ? name : "";
     if (!name) throw new EmptyValueException("name");
     price = (typeof price !== undefined) ? price : "";
     if (!price) throw new EmptyValueException("price");
 
     //Propiedades privadas
-    var _serialNumber = GenerateSerialNumber(); //numero de serie del producto
+    var _serialNumber = serialNumber; //numero de serie del producto
     var _name = name;   //nombre del producto
     var _price = price;   //precio del producto
     var _description = "";    //descricion del producto
@@ -135,14 +175,26 @@
   Product.prototype = {};
   Product.prototype.constructor = Product;
   Product.prototype.toString = function () {
-    return "Serial number: " + this.serialNumber + "; Name: " + this.name + "; Price: " + this.price + "€; Description: " + this.description + "; Taxes: " + this.tax + "%; Images: " + this.images;
+    return "Serial number: " + this.serialNumber + "; Name: " + this.name + "; Price: " + this.price + "€; Description: " + this.description + "; Taxes: " + this.tax + "%; Images: " + this.images.toString();
+  }
+
+  //Metodo que devuelve el objeto de forma literal
+  Product.prototype.getObject = function () {
+    return {
+      serialNumber: this.serialNumber,
+      name: this.name,
+      price: this.price,
+      description: this.description,
+      tax: this.tax,
+      images : this.images
+    };
   }
 
   //Constructor del objeto Bass. Ademas de los parametros comunes recibe el numero de cuerdas y el tipo de electronica
-  function Bass(name = "", price = "", strings = 4, electronic = "pasiva") {
+  function Bass(serialNumber, name = "", price = "", strings = 4, electronic = "pasiva") {
     //Abrimos el candado para poder llamar a la clase abstracta
     abstractCreateLock = false;
-    Product.call(this, name, price);
+    Product.call(this, serialNumber, name, price);
     abstractCreateLock = true;
 
     //Controlamos que strings no sea vacio y que su valor es 4, 5, 6 o 7. Por defecto 4
@@ -156,7 +208,7 @@
     //atributos privados de bass
     var _strings = strings;   //Numero de cuerdas
     var _electronic = electronic;   //Tipo de electronica
-    var _type = "";   //Tipo de bajo
+    var _productType = "bass";
 
     //Propiedades de acceso a los atributos privados
     Object.defineProperty(this, 'strings', {    //Permite ver y modificar _strings
@@ -183,26 +235,38 @@
       }
     });
 
-    Object.defineProperty(this, 'type', { //Permite ver y modificar _type
+    Object.defineProperty(this, 'productType', {   //Permite ver y modificar _productType
       get: function () {
-        return _type;
-      },
-      set: function (value) {
-        _type = value;
+        return _productType;
       }
     });
   }//Fin del constructor Bass
   Bass.prototype = Object.create(Product.prototype);
   Bass.prototype.constructor = Bass;
   Bass.prototype.toString = function () {
-    return Product.prototype.toString.call(this) + "; Strings: " + this.strings + "; Electronic: " + this.electronic + "; Type: " + this.type;
+    return Product.prototype.toString.call(this) + "; Strings: " + this.strings + "; Electronic: " + this.electronic;
+  }
+
+  //Metodo que devuelve el objeto de forma literal
+  Bass.prototype.getObject = function () {
+    return {
+      serialNumber: this.serialNumber,
+      name: this.name,
+      price: this.price,
+      description: this.description,
+      tax: this.tax,
+      images: this.images,
+      strings: this.strings,
+      electronic: this.electronic,
+      productType: this.productType
+    };
   }
 
   //Constructo del objeto Drums.  Ademas de los parametros comunes recibe el tipo de bateria
-  function Drums(name = "", price = "", type = "acustica") {
+  function Drums(serialNumber, name = "", price = "", type = "acustica") {
     //Abrimos el seguro para poder llamar al superconstructor
     abstractCreateLock = false;
-    Product.call(this, name, price);
+    Product.call(this, serialNumber, name, price);
     abstractCreateLock = true;
 
     //Controlamos que type no sea vacio y que su valor es acoustic o electronic. Por defecto acoustic
@@ -212,6 +276,7 @@
     //atributos privados de bass
     var _type = type;   //Tipo de bateria
     var _toms = []; //array con las medidas de los toms
+    var _productType = "drums";
 
     //Propiedades de acceso a los atributos privados
     Object.defineProperty(this, 'type', {   //Permite ver y modificar _type
@@ -234,6 +299,12 @@
         _toms = value;
       }
     });
+
+    Object.defineProperty(this, 'productType', {   //Permite ver y modificar _productType
+      get: function () {
+        return _productType;
+      }
+    });
   }//Fin del constructor Drums
   Drums.prototype = Object.create(Product.prototype);
   Drums.prototype.constructor = Drums;
@@ -241,11 +312,26 @@
     return Product.prototype.toString.call(this) + "; Type: " + this.type + "; Inches of toms: " + this.toms;
   }
 
+  //Metodo que devuelve el objeto de forma literal
+  Drums.prototype.getObject = function () {
+    return {
+      serialNumber: this.serialNumber,
+      name: this.name,
+      price: this.price,
+      description: this.description,
+      tax: this.tax,
+      images: this.images,
+      type: this.type,
+      toms: this.toms,
+      productType: this.productType
+    };
+  }
+
   //Cosntructor del objeto Amplifier. Ademas de los atributos comunes recibe la potencia y el tipo
-  function Amplifier(name = "", price = "", watts = "", type = "transistores") {
+  function Amplifier(serialNumber, name = "", price = "", watts = "", type = "transistores") {
     //Abrimos el seguro para llamar al superconstructor
     abstractCreateLock = false;
-    Product.call(this, name, price);
+    Product.call(this, serialNumber, name, price);
     abstractCreateLock = true;
 
     //Controlamos que type no sea vacio y que su valor es transistors, valves ,
@@ -260,6 +346,7 @@
     //atributos privados de bass
     var _type = type;   //tipo de amplificador
     var _watts = watts;   //potencia en wattios
+    var _productType = "amplifier";
 
     //Propiedades de acceso a los atributos privados
     Object.defineProperty(this, 'type', {   //Permite ver y modificar _type
@@ -285,11 +372,32 @@
         _watts = (value);
       }
     });
+
+    Object.defineProperty(this, 'productType', {   //Permite ver y modificar _productType
+      get: function () {
+        return _productType;
+      }
+    });
   }//Fin del constructor Drums
   Amplifier.prototype = Object.create(Product.prototype);
   Amplifier.prototype.constructor = Amplifier;
   Amplifier.prototype.toString = function () {
     return Product.prototype.toString.call(this) + "; Type: " + this.type + "; Watts: " + this.watts;
+  }
+
+  //Metodo que devuelve el objeto de forma literal
+  Amplifier.prototype.getObject = function () {
+    return {
+      serialNumber: this.serialNumber,
+      name: this.name,
+      price: this.price,
+      description: this.description,
+      tax: this.tax,
+      images: this.images,
+      type: this.type,
+      watts: this.watts,
+      productType: this.productType
+    };
   }
 
   abstractCreateLock = true; //Activamos el seguro de la clase abstracta
@@ -301,29 +409,23 @@
   window.Amplifier = Amplifier;
 })();
 
-//Clouser para asignar el id  de category de forma automatica
-var categoryId = function () {
-  var cont = 1;
-  return function () {
-    return cont++
-  };
-}();
-
 //Constructor de category
-function Category(title, description) {
+function Category(id, title, description) {
   //Controlamos que el objeto se instancia mediante constructor
   if (!(this instanceof Category)) throw new InvalidAccessConstructorException();
+  //Controlamos que id no esta vacio
+  if (!id) throw new EmptyValueException("id");
   //Controlamos que title no esta vacio
   title = (typeof title !== 'undefined') ? title : "";
   if (!title) throw new EmptyValueException("title");
 
   //Propiedades privadas
-  var _id = categoryId();   //Identificador de la categoria
+  var _id = id; //Id
   var _title = title;   //Titulo
   var _description = description || "";   //Descripcion
 
   //Propiedades públicas de acceso
-  Object.defineProperty(this, 'id', {   //Permite ver _id
+  Object.defineProperty(this, 'id', {    //Permite ver y modificar _id
     get: function () {
       return _id;
     }
@@ -352,7 +454,16 @@ function Category(title, description) {
 Category.prototype = {};
 Category.prototype.constructor = Category;
 Category.prototype.toString = function () {
-  return "ID: " + this.id + "; Title: " + this.title + "; Description: " + this.description;
+  return "Title: " + this.title + "; Description: " + this.description;
+}
+
+//Metodo que devuelve el objeto de forma literal
+Category.prototype.getObject = function () {
+  return {
+    id: this.id,
+    title: this.title,
+    description: this.description
+  };
 }
 
 //Constructor del objeto Coords
@@ -400,18 +511,27 @@ Coords.prototype.toString = function () {
   return "Latitude: " +this.latitude + "; Longitude: " + this.longitude;
 }
 
+//Metodo que devuelve el objeto de forma literal
+Coords.prototype.getObject = function () {
+  return {
+    latitude: this.latitude,
+    longitude: this.longitude
+  };
+}
 
 //Constructor del objeto Shop
-function Shop (name){
+function Shop (name, cif){
   //Controlamos que Shop se instancia mediante constructor
   if (!(this instanceof Shop)) throw new InvalidAccessConstructorException();
   //Controlamos que name no esté vacio
   name = (typeof name !== undefined) ? name : "";
   if (!name) throw new EmptyValueException("name");
+  //Controlamos que cif no esté vacio
+  if (!cif) throw new EmptyValueException("cif");
 
   //Propiedades privadas
   var _name = name;
-  var _cif = "";
+  var _cif = cif;
   var _address = "";
   var _phone = "";
   var _image = "";
@@ -433,9 +553,6 @@ function Shop (name){
   Object.defineProperty(this, 'cif', {    //Permite ver y modificar _cif
     get: function () {
       return _cif;
-    },
-    set: function (value) {
-      _cif = value;
     }
   });
 
@@ -481,4 +598,16 @@ Shop.prototype = {};
 Shop.prototype.constructor = Shop;
 Shop.prototype.toString = function () {
   return "Name: " + this.name + "; CIF: " + this.cif + "; Address: " + this.address + "; Phone: " + this.phone + "; Coords: " + this.coords;
+}
+
+//Metodo que devuelve el objeto de forma literal
+Shop.prototype.getObject = function () {
+  return {
+    name: this.name,
+    cif: this.cif,
+    address: this. address,
+    phone: this.phone,
+    coords: this.coords,
+    image: this.image
+  };
 }

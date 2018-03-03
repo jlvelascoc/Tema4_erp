@@ -81,11 +81,11 @@ var StoreHouse = (function () {
         if (!(category instanceof Category)) throw new WrongValueException("Category");
         //Buscamos la posicion de la categoria en el array. Si no se encuentra lanzamos una excepción
         var index = getCategoryIndex(category);
-        if (index === -1) throw new NonExistingCategoryException(category.id);
+        if (index === -1) throw new NonExistingCategoryException(category);
 
         //Añadimos los productos de esa categoria a la categoria por defecto
         for (let i = 0; i < _categories[index].products.length; i++) {
-          this.addProduct(_categories[index].products[i], this.defaultCategory);
+          this.addProduct(_categories[index].products[i], _categories[0].category);
         }
 
         //Borramos la categoria del array
@@ -93,11 +93,16 @@ var StoreHouse = (function () {
         return _categories.length;
       }
 
-      this.getCategoryById = function (id) {
-        if (!id) throw new EmptyValueException();   //Controlamos que id sea vacio
+      /**
+       * Este metodo busca una categoria por su title y la devuelve.
+       * @param title Nombre de la categoria
+       * @return {*} Objeto categoria
+       */
+      this.getCategoryByTitle = function (title) {
+        if (!title) throw new EmptyValueException();   //Controlamos que id sea vacio
 
         var category = _categories.find(function (a) {
-          return a.category.id == id;
+          return a.category.title == title;
         });
 
         return category.category;
@@ -149,7 +154,7 @@ var StoreHouse = (function () {
         if (!(product instanceof Product)) throw new WrongValueException("Product");
         //Si category no existe le damos el valor de la categoria por defecto
         if (!category || category === 'undefined') {
-          category = this.defaultCategory;
+          category = _categories[0].category;
         }
         //Controlamos que product sea una instacia de product
         if (!(category instanceof Category)) throw new WrongValueException("Category");
@@ -288,13 +293,9 @@ var StoreHouse = (function () {
         //Comprobamos que shop es una instancia de Shop
         if (!(shop instanceof Shop)) throw new WrongValueException("Shop");
         if (!product) throw new EmptyValueException("product");   //Comprobamos que product no esta vacío
-        //Comprobamos que product es una instancia de Product
-        if (!(product instanceof Product)) throw new WrongValueException("Product");
         if (!stock) throw new EmptyValueException("stock");   //Comprobamos que stock no esta vacío
         //Comprobamos que stock es un numero y que no es negativo
         if (isNaN(stock) || stock < 0) throw new InvalidValueException("stock", stock);
-        //Comprobamos que el producto se encuentra en el almacen
-        if (!checkProductStoreHouse(product)) throw new NonExistingValueException("product", product.serialNumber);
 
         //Obtenemos la posicion de la tienda
         var index = getShopIndex(shop);
@@ -302,7 +303,7 @@ var StoreHouse = (function () {
 
         //Comprobamos si el producto está en la tienda
         if (checkProductShop(index, product) === -1){ //Si no está, lo añadimos
-          _shops[index].products.push({serialNumber: product.serialNumber, stock: stock});
+          _shops[index].products.push({serialNumber: product, stock: stock});
         }
         else{ //Si está incrementamos su stock
           this.addQuantityProductInShop(shop, product, stock);
@@ -323,12 +324,12 @@ var StoreHouse = (function () {
         //Comprobamos que shop es una instancia de Shop
         if (!(shop instanceof Shop)) throw new WrongValueException("Shop");
         if (!product) throw new EmptyValueException("product");   //Comprobamos que product no esta vacío
-        //Comprobamos que product es una instancia de Product
-        if (!(product instanceof Product)) throw new WrongValueException("Product");
+        /*//Comprobamos que product es una instancia de Product
+        if (!(product instanceof Product)) throw new WrongValueException("Product");*/
         if (stock < 0) throw new InvalidValueException("stock", stock); //Comprobamos que stock no es negativo
         if (isNaN(stock) || stock === "") stock = 1;  //Si no recibimos stock, el valor por defecto es 1
         //Comprobamos que el producto está registrado en el almacen
-        if (!checkProductStoreHouse(product)) throw new NonExistingValueException("product", product.serialNumber);
+        //if (!checkProductStoreHouse(product)) throw new NonExistingValueException("product", product);
 
         //Obtenemos la posicion de la tienda
         var index = getShopIndex(shop);
@@ -337,7 +338,7 @@ var StoreHouse = (function () {
         //Obtenemos la posicion del producto
         var position = checkProductShop(index, product);
         //Si el producto no existe lanzamos excepcion
-        if (position === -1) throw new NonExistingProductInShopException(product.name, shop.name);
+        if (position === -1) throw new NonExistingProductInShopException(product, shop.name);
 
         _shops[index].products[position].stock += stock;  //Incrementamos el stock
         return _shops[index].products[position].stock; //Devolvemos el stock del producto en la tienda
@@ -454,9 +455,6 @@ var StoreHouse = (function () {
           if(index != -1){
             stock +=  _shops[i].products[index].stock;
           }
-          else{
-            stock = 0;
-          }
         }
 
         return stock;
@@ -486,34 +484,19 @@ var StoreHouse = (function () {
 
       /**
        * Propiedad defaultCategory
-       * Es la categoria por defecto para los productos
-       * @type {Category}
-       * @private
        */
-      var _defaultCategory = new Category("Default", "Default category");
-      this.addCategory(_defaultCategory);//añadimos la categoria por defecto
-
-      //Propiedad publica de acceso a _defaultCategory
       Object.defineProperty(this, 'defaultCategory', {
         get: function () {
-          return _defaultCategory;
+          return _categories[0].category.id;
         }
       });
 
       /**
        * Propiedad defaultShop
-       * Es la tienda por defecto
-       * @type {Shop}
-       * @private
        */
-      var _defaultShop = new Shop("Default", "Default shop");
-      _defaultShop.image = "tienda0.png";
-      //Propiedad publica de acceso a _defaultShop
-      this.addShop(_defaultShop); //añadimos la tienda por defecto
-
       Object.defineProperty(this, 'defaultShop', {
         get: function () {
-          return _defaultShop;
+          return _shops[0].shop.cif;
         }
       });
 
@@ -576,7 +559,7 @@ var StoreHouse = (function () {
         for(let i = 0; i < _categories.length && !exist; i++){
           for(let j = 0; j < _categories[i].products.length && !exist; j++){
             //Comparamos el serialnumber. Si son iguales cambiamos la condicion para salir del bucle
-            if (_categories[i].products[j].serialNumber === product.serialNumber){
+            if (_categories[i].products[j].serialNumber === product){
               exist = true;
             }
           }
@@ -597,7 +580,7 @@ var StoreHouse = (function () {
         //Recorremos todos los productos de la tienda
         for(var i = 0; i < _shops[index].products.length && !exist; i++){
           //Comparamos el serialnumber. Si son iguales cambiamos la condicion para salir del bucle
-          if (_shops[index].products[i].serialNumber === product.serialNumber){
+          if (_shops[index].products[i].serialNumber === product){
             exist = true;
           }
         }
