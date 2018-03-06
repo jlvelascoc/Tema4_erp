@@ -82,3 +82,8 @@ Version 5.0.0
             He añadido la funcion getObject a todos los objetos.
         Modificado el fichero storeHouse.js
         Modificado el fichero storehouse.html
+        
+Version 5.0.1
+
+    Creado el fichero cache.manifest
+    Incluida la directiva manifest en storehouse.html y producto.html

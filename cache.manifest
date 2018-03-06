@@ -1,0 +1,13 @@
+CACHE MANIFEST
+# Versión 1.0
+
+storehouse.html
+producto.html
+saveData.php
+
+js/*
+img/*
+fonts/*
+css/*
+
+
