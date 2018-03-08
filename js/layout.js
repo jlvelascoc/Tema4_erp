@@ -182,7 +182,7 @@ function initPopulate() {
   var section = document.createElement("section");  //Contenedor donde agruparemos las tiendas
   var header = document.getElementsByTagName("header")[0].firstElementChild; //Cogemos la cabecera
   var button; //Boton para mostrar cerrar las ventanas
-  var col, divShop, divButtons, divPanel, src, h2, imagen, row;  //Elementos para cada tienda
+  var col, divShop, divButtons, divPanel, src, h2, imagen, row, div;  //Elementos para cada tienda
   var objectShop;   //tienda
 
   var shops = StoreHouse.getInstance().shops;
@@ -300,13 +300,19 @@ function initPopulate() {
     button.className = "btn pull-right";
     button.addEventListener("click", closeAllWindows);
     header.appendChild(button);
+
+    //Creamos el boton guardar datos
+    button = document.createElement("button");
+    button.innerHTML = "Guardar datos";
+    button.id = "save";
+    button.className = "btn pull-right private";
+    button.addEventListener("click", saveData);
+    header.appendChild(button);
   }
 
   //Añadimos la seccion al contenedor principal
   section.id = "tiendas";
   main.appendChild(section);
-
-  main.setAttribute("class", "col-sm-12");
 
   //Cerramos las ventanas de productos que haya abiertas
   closeAllWindows();
@@ -379,6 +385,14 @@ function principalMenuPopulate(nameSection) {
   a.innerHTML = "Productos";
   a.setAttribute("href", "javascript:;");
   a.addEventListener("click", globalProductPopulate);
+  li.appendChild(a);
+  ul.appendChild(li);
+
+  li = document.createElement("li");
+  a = document.createElement("a");
+  a.innerHTML = "Mapa de las tiendas";
+  a.setAttribute("href", "javascript:;");
+  a.addEventListener("click", geolocationPopulate);
   li.appendChild(a);
   ul.appendChild(li);
 
@@ -797,6 +811,28 @@ function categoriesPopulate() {
   if (checkCookie()) {
     showButtons();
   }
+}
+
+function geolocationPopulate() {
+  removeCategoriesMenu(); //Borramos el menu de las categorias si existe
+  clearMain(); //Borramos el contenedor principal si existe
+  removeMenu(); //Borramos las tiendas del menu
+
+  principalMenuPopulate("Categorias");
+
+  //Elementos html necesarios para mostrar la información
+  var main = document.getElementById("main");
+  var section = document.createElement("section");
+  var div = document.createElement("div");
+
+  div.id = "principalMap";
+  section.appendChild(div);
+  section.setAttribute("class", "container");
+  main.appendChild(section);
+
+  //principalMap(div);
+
+  getLocation("principalMap");
 }
 
 /*Funciones privadas*/

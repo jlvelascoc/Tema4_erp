@@ -470,11 +470,6 @@ Category.prototype.getObject = function () {
 function Coords(latitude, longitude) {
   //Controlamos que el objeto se instancia mediante constructor
   if (!(this instanceof Coords)) throw new InvalidAccessConstructorException();
-  //Comprobamos que latitude y longitude no sean vacios
-  latitude = (typeof latitude !== 'undefined') ? latitude : "";
-  if (!latitude) throw new EmptyValueException("latitude");
-  longitude = (typeof longitude !== 'undefined') ? longitude : "";
-  if (!longitude) throw new EmptyValueException("longitude");
 
   //Propiedades privadas
   var _latitude = latitude;
@@ -508,7 +503,7 @@ function Coords(latitude, longitude) {
 Coords.prototype = {};
 Coords.prototype.constructor = Coords;
 Coords.prototype.toString = function () {
-  return "Latitude: " +this.latitude + "; Longitude: " + this.longitude;
+  return this.latitude + "," + this.longitude;
 }
 
 //Metodo que devuelve el objeto de forma literal
@@ -585,7 +580,7 @@ function Shop (name, cif){
 
   Object.defineProperty(this, 'coords', {   //Permite ver y modificar _coords
     get: function () {
-      return _coords.toString();
+      return {latitude: _coords.latitude, longitude: _coords.longitude};
     },
     set: function (value) {
       //Controlamos que value sea una instancia de Coords

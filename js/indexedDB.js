@@ -252,6 +252,7 @@ function editShopDB(shop) {
         updateData.shop.address = shop.address;
         updateData.shop.phone = shop.phone
         updateData.shop.image = shop.image;
+        updateData.shop.coords = shop.coords;
 
         cursor.update(updateData); //Actualizamos el registro
         modified = true; //Cambiamos la condicion para que no itera más

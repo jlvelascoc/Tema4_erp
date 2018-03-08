@@ -113,6 +113,7 @@ function removeCategory(category) {
 function modalInsertShop() {
   //Asignamos el evento insertShop al boton guardar
   document.getElementById("insertShop").getElementsByTagName("button")[1].onclick = insertShop;
+  getLocation("addShopMap"); //Dibujamos el mapa en el modal
 }
 
 /**
@@ -122,6 +123,7 @@ function insertShop() {
   var modal = document.getElementById("insertShop");
   var items = modal.getElementsByClassName("form-control"); //Recojo el valor de los inputs
   var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
+  var coords = document.getElementsByName("coords")[0].value.split(",");
   var validated = true;
 
   clearParagraph("insertShop"); //Borramos los mensajes de los parrafos
@@ -144,6 +146,8 @@ function insertShop() {
 
   if (validated) {  //Si todo esta correcto creamos el obejto y lo añadimos
     var shop = new Shop(items[0].value, generateCif()); //Creo un objeto shop
+    var coords = new Coords(coords[0], coords[1]);
+    shop.coords = coords;
     shop.address = items[1].value;
     shop.phone = items[2].value;
     shop.image = items[3].value;
@@ -167,6 +171,7 @@ function modalEditShop(shop) {
   var modal = document.getElementById("setShop"); //Cogemos el modal
   var form = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
   var items = form.getElementsByClassName("form-control");  //Cogemos los inputs
+  var coords = document.getElementsByName("setCoords")[0];
 
   //Cargamos los valores actuales de la tienda
   items[0].value = shop.name;
@@ -174,9 +179,11 @@ function modalEditShop(shop) {
   items[2].value = shop.address;
   items[3].value = shop.phone;
   items[4].value = shop.image;
+  coords.value = shop.coords.latitude + "," + shop.coords.longitude;
 
   //Asignamos al evento onclick del boton guardar la funcion que guarda los cambios
   modal.getElementsByTagName("button")[1].onclick = callEditShop(shop);
+  getLocation("setShopMap"); //Dibujamos el mapa en el  modal
 }
 
 /**
@@ -188,6 +195,7 @@ function editShop(shop) {
   var form = modal.getElementsByTagName("form")[0];   //Cogemos el formulario
   var items = form.getElementsByClassName("form-control");  //Cogemos los campos
   var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
+  var coords = document.getElementsByName("setCoords")[0].value.split(",");
   var validated = true;
 
   clearParagraph("setShop"); //Borramos los mensajes de los parrafos
@@ -209,6 +217,8 @@ function editShop(shop) {
   }
 
   if (validated) {  //si todo esta correcto modificamos los datos
+    var coords = new Coords(coords[0], coords[1]);
+    shop.coords = coords;
     shop.name = items[0].value;
     shop.address = items[2].value;
     shop.phone = items[3].value;

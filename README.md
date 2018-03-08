@@ -92,3 +92,10 @@ Version 6.0.0
     Creado el fichero data.json
         Fichero con los objetos necesarios para la carga incial del erp.
     Modificado indexedDB.js
+    
+Version 7.0.0
+
+    Creado el fichero geolocation.js
+    Moficado el fichero forms.js
+    Modificado el fichero layout.js
+    Modificado el fichero mis_estilos.css

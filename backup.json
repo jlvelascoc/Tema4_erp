@@ -1,0 +1,381 @@
+{
+  "categories": [
+    {
+      "category": {
+        "id": "0000000000",
+        "title": "Default",
+        "description": "Default category"
+      },
+      "products": []
+    },
+    {
+      "category": {
+        "id": "6W3Q02M6WS0",
+        "title": "Cuerda",
+        "description": "Guitarras y bajos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!"
+      },
+      "products": [
+        {
+          "serialNumber": "zPBvRtMUPuK",
+          "name": "Fender jazzbass",
+          "price": 500,
+          "description": "Cuerpo de fresno americano, Mástil de arce canadiense, Diapasón de arce, 20 trastes, Escala: 864mm, Ancho de la cejilla: 38mm, Alma de doble acción, Pastillas de bobina simple Roswell JBA Alnico-5 vintage de estilo JB, 2 controles de volumen y 1 de tono, Herrajes de cromo deluxe, Clavijas de afinación PB-style clásicas, Cuerdas D'addario 045-100, Color: Natural de alto brillo.",
+          "tax": 21,
+          "images": [
+            "img/fender.png",
+            "img/fender-1.png",
+            "img/fender-2.png",
+            "img/fender-3.png"
+          ],
+          "strings": 4,
+          "electronic": "pasiva",
+          "productType": "bass"
+        },
+        {
+          "serialNumber": "S1G62XYhyeu",
+          "name": "Cort artisan",
+          "price": 450,
+          "description": "Cuerpo de fresno de pantano, Mástil de 5 piezas de wengué y palisandro atornillado (bolt-on), Diapasón de palisandro (Dalbergia latifolia),Sin trastes ni thomann líneas de trastes, Escala de 34\" (864mm), Pastillas Bartolini MK-1, Preamplificador activo Markbass MB-1 con ecualizador de 3 bandas, 1 potenciómetro de volumen y de balance, Interruptor mini para modo activo/pasivo, Herrajes negros, Clavijas de afinación Hipshot Ultralight, Acabado: Natural a poro abierto.",
+          "tax": 21,
+          "images": [
+            "img/cort.png",
+            "img/cort-1.png",
+            "img/cort-2.png"
+          ],
+          "strings": "activa",
+          "electronic": "pasiva",
+          "productType": "bass"
+        },
+        {
+          "serialNumber": "Ugh3jeujE5F",
+          "name": "Rickenbacker",
+          "price": 150,
+          "description": "Cuerpo de arce, Mástil de arce atravesado, Diapasón de madera Caribbean Rosewood (Metopium Brownei), Triangle Inlays, 20 trastes, Medida 845 mm, Ancho de cejuela 42,9 mm, Mecánicas thomann Schaller Deluxe, 2 pastillas Single Coil Bass, Peso: Aprox. 4,1 kg, Color: Midnight Blue, incluye caja.",
+          "tax": 21,
+          "images": [
+            "img/rickenbacker.png",
+            "img/rickenbacker-1.png",
+            "img/rickenbacker-2.png"
+          ],
+          "strings": 5,
+          "electronic": "activa",
+          "productType": "bass"
+        }
+      ]
+    },
+    {
+      "category": {
+        "id": "BPCEW2QW9LD",
+        "title": "Percusion",
+        "description": "Instrumentos de percusion Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!"
+      },
+      "products": [
+        {
+          "serialNumber": "heQYuQTlMrA",
+          "name": "Pearl reference pure",
+          "price": 800,
+          "description": "Versión Standard, EXX725Z/C, Cascos laminados, Color: Jet Black #31, Hardware cromado, Cascos combinados de maderas caoba asiática y chopo para sonido profundo y voluminoso.",
+          "tax": 21,
+          "images": [
+            "img/pearl.png",
+            "img/pearl-1.png",
+            "img/pearl-2.png"
+          ],
+          "type": "acustica",
+          "toms": "",
+          "productType": "drums"
+        },
+        {
+          "serialNumber": "H2N5RMgkTNj",
+          "name": "Mapex Armory",
+          "price": 650,
+          "description": "Configuración 'Rock', Material del casco: Arce/Nogal, Herrajes de cromo negros, Cascos lacados de alto brillo, Color: Arce 'Agua Profunda' (Deep Water Maple Burst, #MSL), El thomann borde SONIClear™ mejora el tono y el rango de afinación.",
+          "tax": 21,
+          "images": [
+            "img/mapex.png",
+            "img/mapex-1.png",
+            "img/mapex-2.png",
+            "img/mapex-3.png"
+          ],
+          "type": "acustica",
+          "toms": "",
+          "productType": "drums"
+        },
+        {
+          "serialNumber": "Bv4HxQeFEeY",
+          "name": "Yamaha e-drums",
+          "price": 480,
+          "description": "Incluye diez Kits de Batería y diez Funciones de Ejercicios, El set viene con Pads de Batería de nuevo desarrollo, Pads de thomann platillos grandes, Nuevo módulo DTX400 Drum Trigger Module con 169 sonidos de alta calidad, USB, Aux in, Salida de auriculares, Pedal de bombo casi silencioso.",
+          "tax": 21,
+          "images": [
+            "img/yamaha.png",
+            "img/yamaha-1.png",
+            "img/yamaha-2.png"
+          ],
+          "type": "electronica",
+          "toms": "",
+          "productType": "drums"
+        }
+      ]
+    },
+    {
+      "category": {
+        "id": "LMLYCEPH84U",
+        "title": "Amplificadores",
+        "description": "Amplificadores de todos los instrumentos Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, aut doloribus ea est excepturi illo impedit laboriosam libero, natus perspiciatis placeat provident quidem quo, rem repellat veniam voluptas voluptatem voluptates!"
+      },
+      "products": [
+        {
+          "serialNumber": "oAXrGWrcvIh",
+          "name": "Markbass mk210",
+          "price": 600,
+          "description": "Potencia: 500W 4 ohm / 300W 8 ohm, Configuración: 2x altavoces de 10\" de neodimio, Custom made by thomann, Tweeter, 40Hz - 18KHz, Reguladores: Volumen, Bass, low y Hight mid, Hights, Master Volumen, Filtro Pre Shape variable, Función de Emulación Vintage Speaker, Salida de línea, Envío y retorno de efectos, Recinto adaptado como monitor (wedge) con dos ángulos de apoyo, Sistema Bassreflex, ultra ligero y ultra compacto, Peso: Aprox. 20 kg, Medida An x thomann Al x Pr: 59,5 x 48 x 47,5 cm.",
+          "tax": 21,
+          "images": [
+            "img/markbass.png",
+            "img/markbass-1.png",
+            "img/markbass-2.png"
+          ],
+          "type": "transistores",
+          "watts": 300,
+          "productType": "amplifier"
+        },
+        {
+          "serialNumber": "epsFy22yHOu",
+          "name": "Marshall MG100",
+          "price": 300,
+          "description": "2x 50 W, 4 canales, Efectos FX digitales, Entrada de micrófono (alimentación phantom 15V), Medidas: 60 x 54 x 26,1cm, Peso: 21kg.",
+          "tax": 21,
+          "images": [
+            "img/marshall.png",
+            "img/marshall-1.png",
+            "img/marshall-2.png"
+          ],
+          "type": "transistores",
+          "watts": 150,
+          "productType": "amplifier"
+        },
+        {
+          "serialNumber": "WqU7ed7ax5k",
+          "name": "Ashdown EVO 115",
+          "price": 250,
+          "description": "1 altavoz Ashdown de 15\", Emulación de válvulas, Entrada activa y pasiva, Medidor VU, Ecualizador de 5 bandas, Interruptor 'bright', Interruptor 'deep', DI balanceada conmutable (ecualizador Pre/Post), Control de compresión, Control 'overdrive', Control de sub-armónicos, Bucle de efectos, Salida de afinador.",
+          "tax": 21,
+          "images": [
+            "img/ashdown.png",
+            "img/ashdown-1.png",
+            "img/ashdown-2.png"
+          ],
+          "type": "transistores",
+          "watts": 150,
+          "productType": "amplifier"
+        }
+      ]
+    }
+  ],
+  "shops": [
+    {
+      "shop": {
+        "name": "Default",
+        "cif": "A000000000",
+        "address": "",
+        "phone": "",
+        "coords": "",
+        "image": "tienda0.png"
+      },
+      "products": []
+    },
+    {
+      "shop": {
+        "name": "Garcia Cid",
+        "cif": "D109500467",
+        "address": "",
+        "phone": "",
+        "coords": "",
+        "image": "tienda4.png"
+      },
+      "products": [
+        {
+          "serialNumber": "zPBvRtMUPuK",
+          "stock": 2
+        },
+        {
+          "serialNumber": "S1G62XYhyeu",
+          "stock": 2
+        },
+        {
+          "serialNumber": "Ugh3jeujE5F",
+          "stock": 2
+        },
+        {
+          "serialNumber": "heQYuQTlMrA",
+          "stock": 1
+        },
+        {
+          "serialNumber": "H2N5RMgkTNj",
+          "stock": 1
+        },
+        {
+          "serialNumber": "Bv4HxQeFEeY",
+          "stock": 1
+        },
+        {
+          "serialNumber": "oAXrGWrcvIh",
+          "stock": 3
+        },
+        {
+          "serialNumber": "epsFy22yHOu",
+          "stock": 3
+        },
+        {
+          "serialNumber": "WqU7ed7ax5k",
+          "stock": 3
+        }
+      ]
+    },
+    {
+      "shop": {
+        "name": "Decibelios",
+        "cif": "M831713247",
+        "address": "",
+        "phone": "",
+        "coords": "",
+        "image": "tienda3.png"
+      },
+      "products": [
+        {
+          "serialNumber": "zPBvRtMUPuK",
+          "stock": 1
+        },
+        {
+          "serialNumber": "S1G62XYhyeu",
+          "stock": 3
+        },
+        {
+          "serialNumber": "Ugh3jeujE5F",
+          "stock": 4
+        },
+        {
+          "serialNumber": "heQYuQTlMrA",
+          "stock": 5
+        },
+        {
+          "serialNumber": "H2N5RMgkTNj",
+          "stock": 6
+        },
+        {
+          "serialNumber": "Bv4HxQeFEeY",
+          "stock": 2
+        },
+        {
+          "serialNumber": "oAXrGWrcvIh",
+          "stock": 2
+        },
+        {
+          "serialNumber": "epsFy22yHOu",
+          "stock": 2
+        },
+        {
+          "serialNumber": "WqU7ed7ax5k",
+          "stock": 2
+        }
+      ]
+    },
+    {
+      "shop": {
+        "name": "Danubio Azul",
+        "cif": "Q432672070",
+        "address": "",
+        "phone": "",
+        "coords": "",
+        "image": "tienda1.png"
+      },
+      "products": [
+        {
+          "serialNumber": "zPBvRtMUPuK",
+          "stock": 5
+        },
+        {
+          "serialNumber": "S1G62XYhyeu",
+          "stock": 1
+        },
+        {
+          "serialNumber": "Ugh3jeujE5F",
+          "stock": 3
+        },
+        {
+          "serialNumber": "heQYuQTlMrA",
+          "stock": 7
+        },
+        {
+          "serialNumber": "H2N5RMgkTNj",
+          "stock": 7
+        },
+        {
+          "serialNumber": "Bv4HxQeFEeY",
+          "stock": 9
+        },
+        {
+          "serialNumber": "oAXrGWrcvIh",
+          "stock": 9
+        },
+        {
+          "serialNumber": "epsFy22yHOu",
+          "stock": 1
+        },
+        {
+          "serialNumber": "WqU7ed7ax5k",
+          "stock": 10
+        }
+      ]
+    },
+    {
+      "shop": {
+        "name": "La Lira",
+        "cif": "V972385722",
+        "address": "",
+        "phone": "",
+        "coords": "",
+        "image": "tienda2.png"
+      },
+      "products": [
+        {
+          "serialNumber": "zPBvRtMUPuK",
+          "stock": 4
+        },
+        {
+          "serialNumber": "S1G62XYhyeu",
+          "stock": 3
+        },
+        {
+          "serialNumber": "Ugh3jeujE5F",
+          "stock": 4
+        },
+        {
+          "serialNumber": "heQYuQTlMrA",
+          "stock": 3
+        },
+        {
+          "serialNumber": "H2N5RMgkTNj",
+          "stock": 5
+        },
+        {
+          "serialNumber": "Bv4HxQeFEeY",
+          "stock": 6
+        },
+        {
+          "serialNumber": "oAXrGWrcvIh",
+          "stock": 7
+        },
+        {
+          "serialNumber": "epsFy22yHOu",
+          "stock": 8
+        },
+        {
+          "serialNumber": "WqU7ed7ax5k",
+          "stock": 9
+        }
+      ]
+    }
+  ]
+}
