@@ -83,7 +83,12 @@ Version 5.0.0
         Modificado el fichero storeHouse.js
         Modificado el fichero storehouse.html
         
-Version 5.0.1
+Version 6.0.0
 
-    Creado el fichero cache.manifest
-    Incluida la directiva manifest en storehouse.html y producto.html
+    Creado el fichero save.js
+        Este fichero genera un json con todos los datos del erp.
+    Creado el fichero saveData.php
+        Este fichero guarda el json con todos los datos en el disco del equipo.
+    Creado el fichero data.json
+        Fichero con los objetos necesarios para la carga incial del erp.
+    Modificado indexedDB.js

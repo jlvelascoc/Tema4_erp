@@ -1,7 +1,7 @@
 "use strict";
 
 const DB_NAME = 'UT07Indexed_storeHouse';
-const DB_VERSION = 1;
+const DB_VERSION = 3;
 const DB_STORE_NAME_SHOPS = 'shops';
 const DB_STORE_NAME_CATEGORIES = 'categories';
 
@@ -19,6 +19,7 @@ request.onerror = function (event) {
  * @param event
  */
 request.onsuccess = function (event) {
+  console.log("onsuccess");
   db = event.target.result;
 
   //Error genérico de la base de datos
@@ -74,6 +75,7 @@ request.onsuccess = function (event) {
       //Instanciamos la tienda y la añadimos al erp
       shop = new Shop(cursor.value.shop.name, cursor.value.shop.cif);
       shop.image = cursor.value.shop.image;
+      shop.coords = new Coords(cursor.value.shop.coords.latitude, cursor.value.shop.coords.longitude);
       storeHouse.addShop(shop);
 
       //Añadimos los productos a la tienda
@@ -99,36 +101,41 @@ request.onsuccess = function (event) {
  * @param event
  */
 request.onupgradeneeded = function (event) {
+  console.log("onupgradeneeded");
   db = event.target.result;
 
-  //Ejecutamos la donde se instancian los objetos
-  init();
+  //Creamos los contenedores
+  var categoryObjectStore = db.createObjectStore(DB_STORE_NAME_CATEGORIES, {keyPath: "category.id"});
+  var shopsObjectStore = db.createObjectStore(DB_STORE_NAME_SHOPS, {keyPath: "shop.cif"});
 
-  //Creamos un almacen para categorias. Los objetos almacenados tienen una propiedad category y otra products.
-  //category: objeto category, products: array con objetos producto
-  try {
-    var categoryObjectStore = db.createObjectStore(DB_STORE_NAME_CATEGORIES, {keyPath: "category.id"});
+  var xmlhttp = new XMLHttpRequest();
 
-    for (var i in categoriesData) {
-      categoryObjectStore.add({category: categoriesData[i].getObject(), products: productsByCategory[i]});
+  xmlhttp.onreadystatechange = function () {  //Cuando el fichero esté cargado completamente
+    if (this.readyState == 4 && this.status == 200) {
+      var myObj = JSON.parse(this.responseText);//Parseamos el json
+
+      //Nos aseguramos que estan los contenedores creados
+      shopsObjectStore.transaction.oncomplete  = function () {
+        var transaction = db.transaction([DB_STORE_NAME_CATEGORIES, DB_STORE_NAME_SHOPS], "readwrite");
+        var categories = transaction.objectStore(DB_STORE_NAME_CATEGORIES);
+        var shops = transaction.objectStore(DB_STORE_NAME_SHOPS);
+
+        //Creamos un almacen para categorias. Los objetos almacenados tienen una propiedad category y otra products.
+        //category: objeto category, products: array con objetos producto
+        for (var i in myObj.categories) {
+          categories.add({category: myObj.categories[i].category, products: myObj.categories[i].products});
+        }
+
+        //Creamos un almacen para tiendas. Los objetos almacenados tienen una propiedad shop y otra products.
+        //shop: objeto shop, products: array con los serialnumber de los productos
+        for (var i in myObj.shops) {
+          shops.add({shop: myObj.shops[i].shop, products: myObj.shops[i].products});
+        }
+      }
     }
-
-  } catch (e) {
-    console.log("Exception creating categories object store: " + e);
-  }
-
-  //Creamos un almacen para tiendas. Los objetos almacenados tienen una propiedad shop y otra products.
-  //shop: objeto shop, products: array con los serialnumber de los productos
-  try {
-    var shopsObjectStore = db.createObjectStore(DB_STORE_NAME_SHOPS, {keyPath: "shop.cif"});
-
-    for (var i in shopsData) {
-      shopsObjectStore.add({shop: shopsData[i].getObject(), products: productsInShop[i]});
-    }
-
-  } catch (e) {
-    console.log("Exception creating shops object store: " + e);
-  }
+  };
+  xmlhttp.open("GET", "data.json", false);
+  xmlhttp.send();
 };
 
 /**
@@ -197,12 +204,12 @@ function productsToDefaultCategory(products) {
   request.onsuccess = function () {
     var updateData = request.result;
 
-    for(let i in products){ //Recorremos los productos
+    for (let i in products) { //Recorremos los productos
       var index = updateData.products.findIndex(function (a) { //Obtenemos el indice
         return a.serialNumber == products[i].serialNumber;
       });
 
-      if(index == -1){ //Si el indice es -1 significa que no existe todavia y por lo tanto lo añadimos
+      if (index == -1) { //Si el indice es -1 significa que no existe todavia y por lo tanto lo añadimos
         updateData.products.push(products[i]);
       }
     }
@@ -285,15 +292,15 @@ function productsToDefaultShop(products) {
     updateData.shop.phone = request.result.shop.phone
     updateData.shop.image = request.result.shop.image;
 
-    for(let i in products){ //Recorremos los productos
+    for (let i in products) { //Recorremos los productos
       var index = updateData.products.findIndex(function (a) { //obtenemos el indice
         return a.serialNumber == products[i].serialNumber;
       });
 
-      if(index == -1){ //Si el indice es -1 significa que no existe en la tienda por defecto y lo añadimos
+      if (index == -1) { //Si el indice es -1 significa que no existe en la tienda por defecto y lo añadimos
         updateData.products.push({serialNumber: products[i].serialNumber, stock: products[i].stock});
       }
-      else{ //Si existe incrementamos su stock
+      else { //Si existe incrementamos su stock
         updateData.products[i].stock += products[i].stock;
       }
     }
@@ -353,7 +360,7 @@ function editProductDB(product, category) {
       if (cursor.value.category.id == category.id) {
         //Recorremos el array de productos
         for (let i = 0; i < cursor.value.products.length && !modified; i++) {
-          if (cursor.value.products[i].serialNumber == product.serialNumber){
+          if (cursor.value.products[i].serialNumber == product.serialNumber) {
             var updateData = cursor.value;
 
             //Modificamos las propiedades genericas
@@ -402,7 +409,7 @@ function removeProductDB(product, category) {
       //si el id de la categoria actual es igual al de la categoria pasada por parametro, borramos el registro
       if (cursor.value.category.id == category.id) {
         for (let i = 0; i < cursor.value.products.length && !removed; i++) {
-          if (cursor.value.products[i].serialNumber == product.serialNumber){
+          if (cursor.value.products[i].serialNumber == product.serialNumber) {
             var updateData = cursor.value;
             cursor.value.products.splice(i, 1);
 
@@ -438,7 +445,7 @@ function addProductInShopDB(shop, serialNumber, stock) {
       if (cursor.value.shop.cif == shop.cif) {
         //Recorremos los productos
         for (let i = 0; i < cursor.value.products.length && !added; i++) {
-          if (cursor.value.products[i].serialNumber == serialNumber){
+          if (cursor.value.products[i].serialNumber == serialNumber) {
             var updateData = cursor.value;
 
             updateData.products[i].serialNumber = serialNumber;
@@ -450,7 +457,7 @@ function addProductInShopDB(shop, serialNumber, stock) {
         }
         //Si no se ha cambiado el valor de la condicion significa que no existe ese producto en la tienda
         //Por lo tanto lo añadimos
-        if (!added){
+        if (!added) {
           var updateData = cursor.value;
           updateData.products.push({serialNumber: serialNumber, stock: stock});
           updateData.products = cursor.value.products;

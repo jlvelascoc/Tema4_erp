@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" manifest="cache.manifest">
+<html lang="en">
 <head>
   <title>Storehouse</title>
   <meta charset="UTF-8">
@@ -35,6 +35,8 @@
     <main id="main" class="col-sm-12">
 
     </main>
+
+    <!--<div id="principalMap"></div>-->
 
     <div id="modals">
       <!--Modal iniciar sesion-->
@@ -115,7 +117,8 @@
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
-
+                <div id="addShopMap"></div>
+                <input type="hidden" name="coords">
               </form>
             </div>
             <div class="modal-footer">
@@ -176,7 +179,8 @@
                   </div>
                   <p class="col-sm-12 error"></p>
                 </div>
-
+                <div id="setShopMap"></div>
+                <input type="hidden" name="setCoords">
               </form>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" id="saveSetShop">Guardar</button>
@@ -445,6 +449,8 @@
 <script charset="utf-8" src="js/forms.js"></script>
 <script charset="utf-8" src="js/layout.js"></script>
 <script charset="utf-8" src="js/indexedDB.js"></script>
-<script charset="utf-8" src="js/saveRecovery.js"></script>
+<script charset="utf-8" src="js/save.js"></script>
+<script charset="utf-8" src="js/geolocation.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDemBz8SwKDXECBQ4-ZIXiGLAFKUcwIIVU"></script>
 </body>
 </html>

@@ -22,6 +22,10 @@ nav button{
   margin-right: 15px;
 }
 
+#save{
+  margin-right: 15px;
+}
+
 #menu1{
   background-color: #BD2404;
   margin-bottom: 15px;
@@ -144,6 +148,24 @@ h3{
 
 .productInfo p{
   padding: 0 15px 0 15px;
+}
+
+#principalMap{
+  width: 100%;
+  height: 500px;
+  margin-bottom: 15px;
+}
+
+#addShopMap{
+   width: 80%;
+   height: 300px;
+   margin: auto;
+}
+
+#setShopMap{
+  width: 80%;
+  height: 300px;
+  margin: auto;
 }
 
 .error{
