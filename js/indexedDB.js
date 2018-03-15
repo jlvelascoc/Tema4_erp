@@ -108,6 +108,33 @@ request.onupgradeneeded = function (event) {
   var categoryObjectStore = db.createObjectStore(DB_STORE_NAME_CATEGORIES, {keyPath: "category.id"});
   var shopsObjectStore = db.createObjectStore(DB_STORE_NAME_SHOPS, {keyPath: "shop.cif"});
 
+  $.ajax({
+    url: "data.json",
+    type: 'GET',
+    dataType: 'json',
+    async: false,
+    success: function (myObj) {
+      //Nos aseguramos que estan los contenedores creados
+      shopsObjectStore.transaction.oncomplete = function () {
+        var transaction = db.transaction([DB_STORE_NAME_CATEGORIES, DB_STORE_NAME_SHOPS], "readwrite");
+        var categories = transaction.objectStore(DB_STORE_NAME_CATEGORIES);
+        var shops = transaction.objectStore(DB_STORE_NAME_SHOPS);
+
+        //Creamos un almacen para categorias. Los objetos almacenados tienen una propiedad category y otra products.
+        //category: objeto category, products: array con objetos producto
+        for (var i in myObj.categories) {
+          categories.add({category: myObj.categories[i].category, products: myObj.categories[i].products});
+        }
+
+        //Creamos un almacen para tiendas. Los objetos almacenados tienen una propiedad shop y otra products.
+        //shop: objeto shop, products: array con los serialnumber de los productos
+        for (var i in myObj.shops) {
+          shops.add({shop: myObj.shops[i].shop, products: myObj.shops[i].products});
+        }
+      }
+    }
+  });
+  /*
   var xmlhttp = new XMLHttpRequest();
 
   xmlhttp.onreadystatechange = function () {  //Cuando el fichero esté cargado completamente
@@ -135,7 +162,7 @@ request.onupgradeneeded = function (event) {
     }
   };
   xmlhttp.open("GET", "data.json", false);
-  xmlhttp.send();
+  xmlhttp.send();*/
 };
 
 /**
@@ -397,30 +424,39 @@ function editProductDB(product, category) {
 }
 
 function removeProductDB(product, category) {
-  //Creamos la transaccion
-  var productsObjectStore = db.transaction(DB_STORE_NAME_CATEGORIES, "readwrite").objectStore(DB_STORE_NAME_CATEGORIES);
+  //Creamos la transaccion para borrar el producto
+  var categoriesObjectStore = db.transaction(DB_STORE_NAME_CATEGORIES, "readwrite").objectStore(DB_STORE_NAME_CATEGORIES);
+  var request = categoriesObjectStore.get(category.id);
+  request.onsuccess = function (event) {
+    var updateData = request.result;
+    var index = updateData.products.findIndex(function (a) {
+      return a.serialNumber == product.serialNumber;
+    });
+
+    updateData.products.splice(index, 1); //Borramos el registro
+    categoriesObjectStore.put(updateData); //Actualizamos el registro
+  };
+
+  //Borramos el producto de las tiendas
+  var shopsObjectStore = db.transaction(DB_STORE_NAME_SHOPS, "readwrite").objectStore(DB_STORE_NAME_SHOPS);
   var removed = false;
 
-  //Creamos un cursor para recorrer las categorias
-  productsObjectStore.openCursor().onsuccess = function (event) {
-
+  //Creamos un cursor para recorrer las tiendas
+  shopsObjectStore.openCursor().onsuccess = function (event) {
     var cursor = event.target.result;
 
-    if (cursor && !removed) {
-      //si el id de la categoria actual es igual al de la categoria pasada por parametro, borramos el registro
-      if (cursor.value.category.id == category.id) {
-        for (let i = 0; i < cursor.value.products.length && !removed; i++) {
-          if (cursor.value.products[i].serialNumber == product.serialNumber) {
-            var updateData = cursor.value;
-            cursor.value.products.splice(i, 1);
-
-            updateData.products = cursor.value.products;
-            cursor.update(updateData);
-            removed = true;
-          }
+    if (cursor) {
+      for (let i = 0; i < cursor.value.products.length && !removed; i++) {
+        if (cursor.value.products[i].serialNumber == product.serialNumber) {
+          var updateData = cursor.value;
+          cursor.value.products.splice(i, 1);
+          updateData.products = cursor.value.products;
+          cursor.update(updateData);
+          removed = true;
         }
       }
       cursor.continue();
+      removed = false;
     }
   };
 }

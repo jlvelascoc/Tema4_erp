@@ -99,3 +99,12 @@ Version 7.0.0
     Moficado el fichero forms.js
     Modificado el fichero layout.js
     Modificado el fichero mis_estilos.css
+
+Version 8.0.0
+
+    Modificado el fichero layout.js
+    Modificado el fichero forms.js
+    Modificado el fichero save.js
+    Modificado el fichero indexedDB.js
+    Modificado el fichero geolocation.js
+    

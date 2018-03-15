@@ -5,28 +5,27 @@
  */
 function modalInsertCategory() {
   //Asignamos el evento insertCategory al boton guardar
-  document.getElementById("insertCategory").getElementsByTagName("button")[1].onclick = insertCategory;
+  $("#insertCategory").find("button.btn-primary").click(insertCategory);
 }
 
 /**
  * Esta función inserta una categoria en el almacen
  */
 function insertCategory() {
-  var modal = document.getElementById("insertCategory");
-  var items = modal.getElementsByClassName("form-control"); //Recojo el valor de los inputs
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
+  var items = $("#insertCategory").find(".form-control"); //Recojo el valor de los inputs
+  var errors = $("#insertCategory").find(".error"); //Cojo la referencias de los parrafos
   var validated = true;
 
   clearParagraph("insertCategory"); //Borramos los mensajes de los parrafos
 
   //Validamos los campos
-  if (items[0].value == "") {
-    errors[0].innerHTML = "El campo nombre no puede ser vacío";
+  if ($(items[0]).val() == "") {
+    $(errors[0]).text("El campo nombre no puede ser vacío");
     validated = false;
   }
 
-  if (items[1].value == "") {
-    errors[1].innerHTML = "El campo descripción no puede ser vacío";
+  if ($(items[1]).val() == "") {
+    $(errors[1]).text("El campo descripción no puede ser vacío");
     validated = false;
   }
 
@@ -36,7 +35,7 @@ function insertCategory() {
     StoreHouse.getInstance().addCategory(category); //Añado la categoria
     insertCategoryDB(category); //Añadimos un registro a la base datos
 
-    modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
+    $("#insertCategory").find(".close").click(); //Pulsamos el boton x para cerrar el modal
 
     clearModal("insertCategory"); //Limpiamos los campos
     categoriesPopulate(); //Volvemos a mostrar las categorias
@@ -49,17 +48,15 @@ function insertCategory() {
  * @param category Objeto categoria
  */
 function modalEditCategory(category) {
-  var modal = document.getElementById("setCategory"); //Cogemos el modal
-  var form = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var items = form.getElementsByClassName("form-control");  //Cogemos los inputs
+  var items = $("#setCategory").find(".form-control");  //Cogemos los inputs
 
   //Cargamos los valores actuales de la categoria
-  items[0].value = category.id;
-  items[1].value = category.title;
-  items[2].value = category.description;
+  $(items[0]).val(category.id);
+  $(items[1]).val(category.title);
+  $(items[2]).val(category.description);
 
   //Asignamos al evento onclick del boton guardar la funcion que guarda los cambios
-  modal.getElementsByTagName("button")[1].onclick = callEditCategory(category);
+  $("#setCategory").find("button.btn-primary").click(callEditCategory(category));
 }
 
 /**
@@ -67,31 +64,30 @@ function modalEditCategory(category) {
  * @param category Objeto categoria
  */
 function editCategory(category) {
-  var modal = document.getElementById("setCategory"); //Cogemos el modal
-  var form = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var items = form.getElementsByClassName("form-control");  //Cogemos los inputs
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
+  var items = $("#setCategory").find(".form-control"); //Recojo el valor de los inputs
+  var errors = $("#setCategory").find(".error"); //Cojo la referencias de los parrafos
   var validated = true;
 
   clearParagraph("setCategory"); //Borramos los mensajes de los parrafos
 
   //Validamos los campos
-  if (items[1].value == "") {
-    errors[0].innerHTML = "El campo nombre no puede ser vacío";
+  if ($(items[1]).val()== "") {
+    $(errors[0]).text("El campo nombre no puede ser vacío");
     validated = false;
   }
 
-  if (items[2].value == "") {
-    errors[1].innerHTML = "El campo descripción no puede ser vacío";
+  if ($(items[2]).val() == "") {
+    $(errors[1]).text("El campo descripción no puede ser vacío");
     validated = false;
   }
 
-  if (validated) { //Si esta todo correcto modificamos la categoria
-    category.title = items[1].value;
-    category.description = items[2].value;
+  if (validated) { //Si esta correcto modificamos la categoria
+    console.log($(items[1]).val());
+    category.title = $(items[1]).val();
+    category.description = $(items[2]).val();
     editCategoryDB(category); //Actualizamos el registro en la base de datos
 
-    modal.getElementsByTagName("button")[0].click();
+    $("#setCategory").find(".close").click();
 
     categoriesPopulate();
   }
@@ -112,7 +108,7 @@ function removeCategory(category) {
  */
 function modalInsertShop() {
   //Asignamos el evento insertShop al boton guardar
-  document.getElementById("insertShop").getElementsByTagName("button")[1].onclick = insertShop;
+  $("#insertShop").find(".btn-primary").click(insertShop);
   getLocation("addShopMap"); //Dibujamos el mapa en el modal
 }
 
@@ -120,10 +116,9 @@ function modalInsertShop() {
  * Esta función inserta una categoria en el almacen
  */
 function insertShop() {
-  var modal = document.getElementById("insertShop");
-  var items = modal.getElementsByClassName("form-control"); //Recojo el valor de los inputs
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
-  var coords = document.getElementsByName("coords")[0].value.split(",");
+  var items = $("#insertShop").find(".form-control"); //Recojo el valor de los inputs
+  var errors = $("#insertShop").find(".error"); //Cojo la referencias de los parrafos
+  var coords = $("#insertShop").find("[name=coords]").val().split(",");
   var validated = true;
 
   clearParagraph("insertShop"); //Borramos los mensajes de los parrafos
@@ -144,7 +139,7 @@ function insertShop() {
     validated = false;
   }
 
-  if (validated) {  //Si todo esta correcto creamos el obejto y lo añadimos
+  if (validated) {  //Si esta correcto creamos el obejto y lo añadimos
     var shop = new Shop(items[0].value, generateCif()); //Creo un objeto shop
     var coords = new Coords(coords[0], coords[1]);
     shop.coords = coords;
@@ -155,7 +150,7 @@ function insertShop() {
     StoreHouse.getInstance().addShop(shop); //Añado la tienda
     insertShopDB(shop); //Inserto la tienda en la base de datos
 
-    modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
+    $("#insertShop").find(".close").click(); //Pulsamos el boton x para cerrar el modal
 
     clearModal("insertShop"); //Limpiamos los campos del modal
     initPopulate(); //Volvemos a mostrar las tiendas
@@ -168,10 +163,8 @@ function insertShop() {
  * @param shop Objeto Shop
  */
 function modalEditShop(shop) {
-  var modal = document.getElementById("setShop"); //Cogemos el modal
-  var form = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var items = form.getElementsByClassName("form-control");  //Cogemos los inputs
-  var coords = document.getElementsByName("setCoords")[0];
+  var items = $("#setShop").find(".form-control");  //Cogemos los inputs
+  var coords = $("#setShop").find("[name=setCoords]")[0];
 
   //Cargamos los valores actuales de la tienda
   items[0].value = shop.name;
@@ -182,7 +175,7 @@ function modalEditShop(shop) {
   coords.value = shop.coords.latitude + "," + shop.coords.longitude;
 
   //Asignamos al evento onclick del boton guardar la funcion que guarda los cambios
-  modal.getElementsByTagName("button")[1].onclick = callEditShop(shop);
+  $("#setShop").find(".btn-primary").click(callEditShop(shop));
   getLocation("setShopMap"); //Dibujamos el mapa en el  modal
 }
 
@@ -191,11 +184,9 @@ function modalEditShop(shop) {
  * @param shop Objeto Shop
  */
 function editShop(shop) {
-  var modal = document.getElementById("setShop"); //Cogemos el modal
-  var form = modal.getElementsByTagName("form")[0];   //Cogemos el formulario
-  var items = form.getElementsByClassName("form-control");  //Cogemos los campos
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
-  var coords = document.getElementsByName("setCoords")[0].value.split(",");
+  var items = $("#setShop").find(".form-control");  //Cogemos los campos
+  var errors = $("#setShop").find(".error"); //Cojo la referencias de los parrafos
+  var coords = $("#setShop").find("[name=setCoords]").val().split(",");
   var validated = true;
 
   clearParagraph("setShop"); //Borramos los mensajes de los parrafos
@@ -226,7 +217,7 @@ function editShop(shop) {
 
     editShopDB(shop); //Modificamos el registro en la base datos
 
-    modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
+    $("#setShop").find(".close").click(); //Pulsamos el boton x para cerrar el modal
     initPopulate();
   }
 }
@@ -246,11 +237,10 @@ function removeShop(shop) {
  * Tambien asigna un evento onclick al boton guardar del modal insertProduct
  */
 function modalInsertProduct() {
-  var modal = document.getElementById("insertProduct"); //Cogemos el modal
-  var contenedor = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var type = contenedor.getElementsByTagName("select")[0].value;  //Cogemos el valor del select para saber el tipo de producto
-  var select = contenedor.getElementsByTagName("select")[1];  //Cogemos el select de categorias
-  var groups = contenedor.getElementsByClassName("form-group"); //Cogemos los grupos ya creados para saber donde tenemos que insertar los nuevos
+  var contenedor = $("#insertProduct").find("form")[0]; //Cogemos el formulario
+  var type = $("#tipos").val();  //Cogemos el valor del select para saber el tipo de producto
+  var select = $("#categorias")[0];  //Cogemos el select de categorias
+  var groups =  $("#insertProduct").find(".form-group"); //Cogemos los grupos ya creados para saber donde tenemos que insertar los nuevos
   var group, label, div, input, option, p;
 
   if (contenedor.children.length > 6) { //Si el formulario ha sido alterado lo restauramos
@@ -261,166 +251,194 @@ function modalInsertProduct() {
     case "Bass":
 
       group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      $(group).attr("class", "form-group");
 
       label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "strings");
-      label.innerHTML = "Cuerdas*";
-      group.appendChild(label);
+      $(label).attr({
+        "class": "col-md-12",
+        "for": "strings"
+      });
+      $(label).text("Cuerdas*");
+      $(group).append(label);
 
       div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      $(div).attr("class", "col-md-12");
 
       input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "strings");
-      input.setAttribute("id", "strings");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("placeholder", "4, 5 o 6");
-      div.appendChild(input);
+      $(input).attr({
+        "type": "text",
+        "name": "strings",
+        "id": "strings",
+        "class": "form-control",
+        "placeholder": "4, 5 o 6"
+      });
+      $(div).append(input);
 
       p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
+      $(p).attr("class", "col-md-12 error");
+      $(div).append(p);
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
+      $(group).append(div);
+      $("#imgNP").parent().parent().before(group);
 
       group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      $(group).attr("class", "form-group");
 
       label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "electronic");
-      label.innerHTML = "Electrónica*";
-      group.appendChild(label);
+      $(label).attr({
+        "class": "col-md-12",
+        "for": "electronic"
+      });
+      $(label).text("Electronica*");
+      $(group).append(label);
 
       div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      $(div).attr("class", "col-md-12");
 
       input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "electronic");
-      input.setAttribute("id", "electronic");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("placeholder", "pasiva o activa");
-      div.appendChild(input);
+      $(input).attr({
+        "type": "text",
+        "name": "electronic",
+        "id": "electronic",
+        "class": "form-control",
+        "placeholder": "pasiva o activa"
+      });
+      $(div).append(input);
 
       p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
+      $(p).attr("class", "col-md-12 error");
+      $(div).append(p);
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
+      $(group).append(div);
+      $("#imgNP").parent().parent().before(group);
       break;
 
     case "Drums":
       group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      $(group).attr("class", "form-group");
 
       label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "type");
-      label.innerHTML = "Tipo*";
-      group.appendChild(label);
+      $(label).attr({
+        "class": "col-md-12",
+        "for": "type"
+      });
+      $(label).text("Tipo*");
+      $(group).append(label);
 
       div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      $(div).attr("class", "col-md-12");
 
       input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "type");
-      input.setAttribute("id", "type");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("placeholder", "acustica o electronica");
-      div.appendChild(input);
+      $(input).attr({
+        "type": "text",
+        "name": "type",
+        "id": "type",
+        "class": "form-control",
+        "placeholder": "acustica o electronica"
+      });
+      $(div).append(input);
 
       p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
+      $(p).attr("class", "col-md-12 error");
+      $(div).append(p);
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
+      $(group).append(div);
+      $("#imgNP").parent().parent().before(group);
 
       group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      $(group).attr("class", "form-group");
 
       label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "toms");
-      label.innerHTML = "Medidas de los toms";
-      group.appendChild(label);
+      $(label).attr({
+        "class": "col-md-12",
+        "for": "toms"
+      });
+      $(label).text("Medidas de los toms");
+      $(group).append(label);
 
       div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      $(div).attr("class", "col-md-12");
 
       input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "toms");
-      input.setAttribute("id", "toms");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("placeholder", "Ej: 22x18,12x08,13x09,16x16,14x5.5");
-      div.appendChild(input);
+      $(input).attr({
+        "type": "text",
+        "name": "toms",
+        "id": "toms",
+        "class": "form-control",
+        "placeholder": "Ej: 22x18,12x08,13x09,16x16,14x5.5"
+      });
+      $(div).append(input);
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
+      p = document.createElement("p");
+      $(p).attr("class", "col-md-12 error");
+      $(div).append(p);
+
+      $(group).append(div);
+      $("#imgNP").parent().parent().before(group);
       break;
 
     case "Amplifier":
       group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      $(group).attr("class", "form-group");
 
       label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "watts");
-      label.innerHTML = "Potencia*";
-      group.appendChild(label);
+      $(label).attr({
+        "class": "col-md-12",
+        "for": "watts"
+      });
+      $(label).text("Potencia*");
+      $(group).append(label);
 
       div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      $(div).attr("class", "col-md-12");
 
       input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "watts");
-      input.setAttribute("id", "watts");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("placeholder", "Ej: 150");
-      div.appendChild(input);
+      $(input).attr({
+        "type": "text",
+        "name": "watts",
+        "id": "watts",
+        "class": "form-control",
+        "placeholder": "Ej: 150"
+      });
+      $(div).append(input);
 
       p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
+      $(p).attr("class", "col-md-12 error");
+      $(div).append(p);
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
+      $(group).append(div);
+      $("#imgNP").parent().parent().before(group);
 
       group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      $(group).attr("class", "form-group");
 
       label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "type");
-      label.innerHTML = "Tipo";
-      group.appendChild(label);
+      $(label).attr({
+        "class": "col-md-12",
+        "for": "type"
+      });
+      $(label).text("Tipo*");
+      $(group).append(label);
 
       div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      $(div).attr("class", "col-md-12");
 
       input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "type");
-      input.setAttribute("id", "type");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("placeholder", "transistores o valvulas");
-      div.appendChild(input);
+      $(input).attr({
+        "type": "text",
+        "name": "type",
+        "id": "type",
+        "class": "form-control",
+        "placeholder": "transistores o valvulas"
+      });
+      $(div).append(input);
 
       p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
+      $(p).attr("class", "col-md-12 error");
+      $(div).append(p);
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
+      $(group).append(div);
+      $("#imgNP").parent().parent().before(group);
       break;
   }
 
@@ -431,25 +449,20 @@ function modalInsertProduct() {
 
     while (category.done !== true) {
       objectCategory = category.value.category;
-      option = document.createElement("option");
-      option.value = objectCategory.title;
-      option.innerHTML = objectCategory.title;
-      select.appendChild(option);
+      $(select).append("<option value='"+objectCategory.title+"'>"+objectCategory.title+"</option>");
 
       category = categories.next();
     }
   }
-  modal.getElementsByTagName("button")[1].addEventListener("click", insertProduct); //Asignamos el evento onclick al boton guardar
+  $("#insertProduct").find(".btn-primary").click(insertProduct); //Asignamos el evento onclick al boton guardar
 }
 
 /**
  * Esta funcion inserta un producto en el alamacen
  */
 function insertProduct() {
-  var modal = document.getElementById("insertProduct"); //Cogemos el modal
-  var contenedor = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var items = contenedor.getElementsByClassName("form-control");  //Cogemos los cmapos
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
+  var items = $("#insertProduct").find(".form-control");  //Cogemos los cmapos
+  var errors = $("#insertProduct").find(".error"); //Cojo la referencias de los parrafos
   var validated = true;
 
   clearParagraph("insertProduct"); //Borramos los mensajes de los parrafos
@@ -523,7 +536,7 @@ function insertProduct() {
       break;
   }
 
-  if(validated) { //Si todo esta correcto insertamos el producto
+  if(validated) { //Si esta correcto insertamos el producto
     product.description = items[3].value;
 
     for (let i = 0; i < images.length; i++) { //Añadimos las imagenes
@@ -534,7 +547,7 @@ function insertProduct() {
     StoreHouse.getInstance().addProduct(product, objectCategory);
     insertProductDB(product, objectCategory); //Insetamos el registro en la base da datos
 
-    modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
+    $("#insertProduct").find(".close").click(); //Pulsamos el boton x para cerrar el modal
     clearModal("insertProduct");  //Liampiamos los campos del modal
     globalProductPopulate();
   }
@@ -546,191 +559,92 @@ function insertProduct() {
  * @param product Objeto Product
  */
 function modalEditProduct(product, category) {
-  var modal = document.getElementById("setProduct");  //Cogemos el modal
-  var contenedor = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var items = contenedor.getElementsByClassName("form-control");  //Cogemos los campos
-  var groups = contenedor.getElementsByClassName("form-group"); //Cogemos los grupos para saber donde tenemos que insertar los nuevos
-  var group, div, label, input, p;
-
+  var contenedor = $("#setProduct").find("form")[0]; //Cogemos el formulario
+  var items = $("#setProduct").find(".form-control");  //Cogemos los campos
+  var groups = $("#setProduct").find(".form-group"); //Cogemos los grupos para saber donde tenemos que insertar los nuevos
+  var group, div, input, p;
+console.log(items);
   if (contenedor.children.length > 5) { //Si el formulario ha sido alterado lo restauramos
     restoreModal("setProduct");
   }
 
   switch (true) { //Cargamos la informacion segun el tipo de producto
     case (product instanceof Bass):
-      group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      group = $("<div class='form-group'></div>");
+      group.append("<label class='col-md-12' for='strings'>Cuerdas*</label>");
 
-      label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "strings");
-      label.innerHTML = "Cuerdas*";
-      group.appendChild(label);
+      div = $("<div class='col-md-12'></div>");
+      div.append("<input type='text' name='strings' id='strings' class='form-control' value='"+product.strings+"'>");
+      div.append("<p class='col-md-12 error'></p>");
 
-      div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      group.append(div);
+      $("#imgP").parent().parent().before(group);
 
-      input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "strings");
-      input.setAttribute("id", "strings");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("value", product.strings);
-      div.appendChild(input);
+      group = $("<div class='form-group'></div>");
+      group.append("<label class='col-md-12' for='electronic'>Electronica*</label>");
 
-      p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
+      div = $("<div class='col-md-12'></div>");
+      div.append("<input type='text' name='electronic' id='electronic' class='form-control' value='"+product.electronic+"'>");
+      div.append("<p class='col-md-12 error'></p>");
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
-
-      group = document.createElement("div");
-      group.setAttribute("class", "form-group");
-
-      label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "electronic");
-      label.innerHTML = "Electrónica*";
-      group.appendChild(label);
-
-      div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
-
-      input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "electronic");
-      input.setAttribute("id", "electronic");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("value", product.electronic);
-      div.appendChild(input);
-
-      p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
-
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
-
+      group.append(div);
+      $("#imgP").parent().parent().before(group);
       break;
 
     case (product instanceof Drums):
-      group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      group = $("<div class='form-group'></div>");
+      group.append("<label class='col-md-12' for='type'>Tipo*</label>");
 
-      label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "type");
-      label.innerHTML = "Tipo*";
-      group.appendChild(label);
+      div = $("<div class='col-md-12'></div>");
+      div.append("<input type='text' name='type' id='type' class='form-control' value='"+product.type+"'>");
+      div.append("<p class='col-md-12 error'></p>");
 
-      div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      group.append(div);
+      $("#imgP").parent().parent().before(group);
 
-      input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "type");
-      input.setAttribute("id", "type");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("value", product.type);
-      div.appendChild(input);
+      group = $("<div class='form-group'></div>");
+      group.append("<label class='col-md-12' for='toms'>Medidas de los toms</label>");
+      div.append("<p class='col-md-12 error'></p>");
 
-      p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
+      div = $("<div class='col-md-12'></div>");
+      div.append("<input type='text' name='toms' id='toms' class='form-control' value='"+product.toms+"'>");
+      div.append("<p class='col-md-12 error'></p>");
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
-
-      group = document.createElement("div");
-      group.setAttribute("class", "form-group");
-
-      label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "toms");
-      label.innerHTML = "Medidas de los toms";
-      group.appendChild(label);
-
-      div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
-
-      input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "toms");
-      input.setAttribute("id", "toms");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("value", product.toms);
-      div.appendChild(input);
-
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
-
+      group.append(div);
+      $("#imgP").parent().parent().before(group);
       break;
 
     case (product instanceof Amplifier):
-      group = document.createElement("div");
-      group.setAttribute("class", "form-group");
+      group = $("<div class='form-group'></div>");
+      group.append("<label class='col-md-12' for='watts'>Potencia*</label>");
 
-      label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "watts");
-      label.innerHTML = "Potencia*";
-      group.appendChild(label);
+      div = $("<div class='col-md-12'></div>");
+      div.append("<input type='text' name='watts' id='watts' class='form-control' value='"+product.watts+"'>");
+      div.append("<p class='col-md-12 error'></p>");
 
-      div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
+      group.append(div);
+      $("#imgP").parent().parent().before(group);
 
-      input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "watts");
-      input.setAttribute("id", "watts");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("value", product.watts);
-      div.appendChild(input);
+      group = $("<div class='form-group'></div>");
+      group.append("<label class='col-md-12' for='type'>Electrónica*</label>");
 
-      p = document.createElement("p");
-      p.setAttribute("class", "error");
-      div.appendChild(p);
+      div = $("<div class='col-md-12'></div>");
+      div.append("<input type='text' name='type' id='type' class='form-control' value='"+product.type+"'>");
+      div.append("<p class='col-md-12 error'></p>");
 
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
-
-      group = document.createElement("div");
-      group.setAttribute("class", "form-group");
-
-      label = document.createElement("label");
-      label.setAttribute("class", "col-md-12");
-      label.setAttribute("for", "type");
-      label.innerHTML = "Electrónica*";
-      group.appendChild(label);
-
-      div = document.createElement("div");
-      div.setAttribute("class", "col-md-12");
-
-      input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", "type");
-      input.setAttribute("id", "type");
-      input.setAttribute("class", "form-control");
-      input.setAttribute("value", product.type);
-      div.appendChild(input);
-
-      p = document.createElement("p");
-      p.setAttribute("class", "col-md-12 error");
-      div.appendChild(p);
-
-      group.appendChild(div);
-      contenedor.insertBefore(group, groups[groups.length - 1]);
+      group.append(div);
+      $("#imgP").parent().parent().before(group);
       break;
   }
   //Cargamos la informacion comun a todos los productos
-  items[0].value = product.serialNumber;
-  items[1].value = product.name;
-  items[2].innerHTML = product.description;
-  items[3].value = product.price;
-  items[6].value = product.images.toString();
+  $(items[0]).val(product.serialNumber);
+  $(items[1]).val(product.name);
+  $(items[2]).text(product.description);
+  $(items[3]).val(product.price);
+  console.log();
+  $(items[4]).val(product.images.toString());
 
-  modal.getElementsByTagName("button")[1].onclick = callEditProduct(product, category); //Asignamos el evento al boton guardar
+  $("#setProduct").find(".btn-primary").click(callEditProduct(product, category)); //Asignamos el evento al boton guardar
 }
 
 /**
@@ -738,13 +652,11 @@ function modalEditProduct(product, category) {
  * @param product Objeto Product
  */
 function editProduct(product, category) {
-  var modal = document.getElementById("setProduct"); //Cogemos el  modal
-  var contenedor = modal.getElementsByTagName("form")[0]; //Cogemos el  formulario
-  var items = contenedor.getElementsByClassName("form-control"); //Cogemos los campos
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
+  var items = $("#setProduct").find(".form-control"); //Cogemos los campos
+  var errors = $("#setProduct").find(".error"); //Cojo la referencias de los parrafos
   var validated = true;
   var images;
-
+console.log(items);
   clearParagraph("setProduct"); //Borramos los mensajes de los parrafos
 
   //Hacemos las validaciones comunes a todos los productos
@@ -777,7 +689,7 @@ function editProduct(product, category) {
         errors[2].innerHTML = "El campo cuerdas solo acepta como valor 4, 5 o 6";
         validated = false;
       }
-
+console.log(items[5]);
       if (items[5].value != "" && !(/^(pasiva|activa)$/.test(items[5].value))) {
         errors[3].innerHTML = "El campo electronica solo acepta como valor pasiva o activa";
         validated = false;
@@ -819,7 +731,7 @@ function editProduct(product, category) {
       break;
   }
 
-  if(validated) { //Si todo esta correcto editamos la informacion del producto
+  if(validated) { //Si esta correcto editamos la informacion del producto
     product.name = items[1].value;
     product.description = items[2].value;
     product.price = items[3].value;
@@ -830,7 +742,7 @@ function editProduct(product, category) {
     }
     editProductDB(product, category); //Modificamos el registro  en la base de datos
 
-    modal.getElementsByTagName("button")[0].click();  //HAcemos click en el boton x para cerrar el modal
+    $("#setProduct").find(".close").click();  //HAcemos click en el boton x para cerrar el modal
     globalProductPopulate();
   }
 }
@@ -851,9 +763,7 @@ function removeProduct(product, category) {
  * @param shop Objeto Shop
  */
 function modalAddProductInShop(shop) {
-  var modal = document.getElementById("addProduct"); //Cogemos el modal
-  var form = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var select = form.getElementsByTagName("select")[0];  //Cogemos el select
+  var select = $("#addProduct").find("select")[0];  //Cogemos el select
   var option;
 
   if (select.children.length == 0) {  //Si el desplegable esta vacio cargamos los productos
@@ -866,14 +776,14 @@ function modalAddProductInShop(shop) {
 
       for (let i = 0; i < products.length; i++) {
         option = document.createElement("option");
-        option.value = products[i].serialNumber;
-        option.innerHTML = products[i].name;
-        select.appendChild(option);
+        $(option).val(products[i].serialNumber);
+        $(option).text(products[i].name);
+        $(select).append(option);
       }
       category = categories.next();
     }
   }
-  modal.getElementsByTagName("button")[1].addEventListener("click", callAddProductInShop(shop));  //Asignamos el evento
+  $("#addProduct").find(".btn-primary").click(callAddProductInShop(shop));  //Asignamos el evento
 }
 
 /**
@@ -881,10 +791,8 @@ function modalAddProductInShop(shop) {
  * @param shop Objeto Shop
  */
 function addProductInShop(shop) {
-  var modal = document.getElementById("addProduct");  //Cogemos el modal
-  var form = modal.getElementsByTagName("form")[0]; //Cogemos el formulario
-  var items = form.getElementsByClassName("form-control");  //Cogemos los campos
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
+  var items = $("#addProduct").find(".form-control");  //Cogemos los campos
+  var errors = $("#addProduct").find(".error"); //Cojo la referencias de los parrafos
   var storeHouse = StoreHouse.getInstance();
   var validated = true;
 
@@ -904,7 +812,7 @@ function addProductInShop(shop) {
   if(validated) {
     storeHouse.addProductInShop(shop, items[0].value, parseInt(items[1].value, 10));
     addProductInShopDB(shop, items[0].value, parseInt(items[1].value, 10)); //Añadimos el registro a la tienda
-    modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
+    $("#addProduct").find(".close").click(); //Pulsamos el boton x para cerrar el modal
     clearModal("addProduct");
     initPopulate();
   }
@@ -914,22 +822,21 @@ function addProductInShop(shop) {
  * Esta funcion asigna un evento al boton iniciar sesion
  */
 function modalLogIn() {
-  document.getElementById("logIn").getElementsByTagName("button")[1].onclick = logIn;
+  $("#logIn").find(".btn-primary").click(logIn);
 }
 
 /**
  * Esta funcion conprueba si el usuario y la contraseña son correctos. Si lo son crea una cookie para mantener la sesion
  */
 function logIn() {
-  var modal = document.getElementById("logIn");
-  var items = modal.getElementsByClassName("form-control"); //Recojo el valor de los inputs
+  var items = $("#logIn").find(".form-control"); //Recojo el valor de los inputs
 
   if (items[0].value == "prueba" && items[1].value == "prueba") {
     setCookie(10); //Cramos la cookie con expiracion a los 10 dias
     initPopulate();
   }
 
-  modal.getElementsByTagName("button")[0].click(); //Pulsamos el boton x para cerrar el modal
+  $("#logIn").find(".close").click(); //Pulsamos el boton x para cerrar el modal
 }
 
 /**
@@ -937,8 +844,8 @@ function logIn() {
  */
 function logOut() {
   setCookie(-100);
-  document.getElementById("signUp").style.display = "inherit";
-  document.getElementById("signOff").style.display = "none";
+  $("#signUp").css("display", "inherit");
+  $("#signOff").css("display", "none");
   hideButtons(); //Ocultamos los botones privados
   initPopulate();
 }
@@ -1000,25 +907,17 @@ function checkCookie() {
  * Esta funcion muestra los botones para editar la informacion de los objetos del almacen
  */
 function showButtons() {
-  var buttons = document.getElementsByClassName("private");
-  document.getElementById("signUp").style.display = "none"; //Ocultamos el boton iniciar sesion
-
-  for (let i = 0; i < buttons.length; i++) { //Cambiamos el display
-    buttons[i].style.display = "inherit";
-  }
+  $(".private").css("display", "inherit");
+  $("#signUp").css("display", "none"); //Ocultamos el boton iniciar sesion
 }
 
 /**
  * Esta funcion oculta los botones para editar la informacion de los objetos del almacen
  */
 function hideButtons() {
-  var buttons = document.getElementsByClassName("private");
-  document.getElementById("signOff").style.display = "none";  //Ocultamos el boton cerrar sesion
-  document.getElementById("signUp").style.display = "inherit";  //Mostramos el boton iniciar sesion
-
-  for (let i = 0; i < buttons.length; i++) {
-    buttons[i].style.display = "none";
-  }
+  $(".private").css("display", "none");
+  $("#signOff").css("display", "none");  //Ocultamos el boton cerrar sesion
+  $("#signUp").css("display", "inherit");  //Mostramos el boton iniciar sesion
 }
 
 /**
@@ -1026,11 +925,11 @@ function hideButtons() {
  * @param id
  */
 function restoreModal(id) {
-  var modal = document.getElementById(id);
-  var formulario = modal.getElementsByTagName("form")[0];
+  var form = $("#" + id).find("form");
+  var childrens = $(form).children().length;
 
-  formulario.removeChild(formulario.children[formulario.children.length - 2]);
-  formulario.removeChild(formulario.children[formulario.children.length - 2]);
+  $(form).children().eq(childrens - 2).remove();
+  $(form).children().eq(childrens - 3).remove();
 }
 
 /**
@@ -1160,11 +1059,7 @@ function callAddProductInShop(shop) {
  */
 function clearModal(id) {
   var modal = document.getElementById(id);
-  var items =  modal.getElementsByClassName("form-control"); //Recojo el valor de los inputs
-
-  for(let i = 0; i < items.length; i++){
-    items[i].value = "";
-  }
+  $("#"+id).find(".form-control").val("");
 }
 
 /**
@@ -1173,9 +1068,5 @@ function clearModal(id) {
  */
 function clearParagraph(idModal) {
   var modal = document.getElementById(idModal);
-  var errors = modal.getElementsByClassName("error"); //Cojo la referencias de los parrafos
-
-  for (let i = 0; i < errors.length; i++) {
-    errors[i].innerHTML = "";
-  }
+  $("#"+idModal).find(".error").text("");
 }

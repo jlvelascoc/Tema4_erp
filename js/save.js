@@ -42,13 +42,8 @@ function saveData() {
   console.log(myObject);
   myJson = JSON.stringify(myObject);
 
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function(){
-    if (this.readyState == 4 && this.status == 200){
-      console.log("enviado");
-    }
-  }
-  xmlhttp.open("POST", "saveData.php", false);
-  xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xmlhttp.send("json=" + myJson);
+  $.post("saveData.php",
+    {
+      json: myJson,
+    });
 }

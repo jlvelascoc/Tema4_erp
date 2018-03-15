@@ -27,7 +27,7 @@
             "img/fender-2.png",
             "img/fender-3.png"
           ],
-          "strings": 4,
+          "strings": "4",
           "electronic": "pasiva",
           "productType": "bass"
         },
@@ -171,6 +171,14 @@
           "productType": "amplifier"
         }
       ]
+    },
+    {
+      "category": {
+        "id": "Q1APW8G9649",
+        "title": "Microfonos",
+        "description": "Microfonos de todo tipo"
+      },
+      "products": []
     }
   ],
   "shops": [
@@ -180,10 +188,35 @@
         "cif": "A000000000",
         "address": "",
         "phone": "",
-        "coords": "",
+        "coords": {},
         "image": "tienda0.png"
       },
-      "products": []
+      "products": [
+        {
+          "serialNumber": "zPBvRtMUPuK",
+          "stock": 1
+        },
+        {
+          "serialNumber": "S1G62XYhyeu",
+          "stock": 3
+        },
+        {
+          "serialNumber": "heQYuQTlMrA",
+          "stock": 5
+        },
+        {
+          "serialNumber": "Bv4HxQeFEeY",
+          "stock": 2
+        },
+        {
+          "serialNumber": "oAXrGWrcvIh",
+          "stock": 2
+        },
+        {
+          "serialNumber": "epsFy22yHOu",
+          "stock": 2
+        }
+      ]
     },
     {
       "shop": {
@@ -191,7 +224,10 @@
         "cif": "D109500467",
         "address": "",
         "phone": "",
-        "coords": "",
+        "coords": {
+          "latitude": 38.992526,
+          "longitude": -3.922843
+        },
         "image": "tienda4.png"
       },
       "products": [
@@ -200,10 +236,6 @@
           "stock": 2
         },
         {
-          "serialNumber": "S1G62XYhyeu",
-          "stock": 2
-        },
-        {
           "serialNumber": "Ugh3jeujE5F",
           "stock": 2
         },
@@ -220,64 +252,12 @@
           "stock": 1
         },
         {
-          "serialNumber": "oAXrGWrcvIh",
-          "stock": 3
-        },
-        {
           "serialNumber": "epsFy22yHOu",
           "stock": 3
         },
         {
           "serialNumber": "WqU7ed7ax5k",
           "stock": 3
-        }
-      ]
-    },
-    {
-      "shop": {
-        "name": "Decibelios",
-        "cif": "M831713247",
-        "address": "",
-        "phone": "",
-        "coords": "",
-        "image": "tienda3.png"
-      },
-      "products": [
-        {
-          "serialNumber": "zPBvRtMUPuK",
-          "stock": 1
-        },
-        {
-          "serialNumber": "S1G62XYhyeu",
-          "stock": 3
-        },
-        {
-          "serialNumber": "Ugh3jeujE5F",
-          "stock": 4
-        },
-        {
-          "serialNumber": "heQYuQTlMrA",
-          "stock": 5
-        },
-        {
-          "serialNumber": "H2N5RMgkTNj",
-          "stock": 6
-        },
-        {
-          "serialNumber": "Bv4HxQeFEeY",
-          "stock": 2
-        },
-        {
-          "serialNumber": "oAXrGWrcvIh",
-          "stock": 2
-        },
-        {
-          "serialNumber": "epsFy22yHOu",
-          "stock": 2
-        },
-        {
-          "serialNumber": "WqU7ed7ax5k",
-          "stock": 2
         }
       ]
     },
@@ -287,7 +267,10 @@
         "cif": "Q432672070",
         "address": "",
         "phone": "",
-        "coords": "",
+        "coords": {
+          "latitude": 38.983209,
+          "longitude": -3.930949
+        },
         "image": "tienda1.png"
       },
       "products": [
@@ -305,10 +288,6 @@
         },
         {
           "serialNumber": "heQYuQTlMrA",
-          "stock": 7
-        },
-        {
-          "serialNumber": "H2N5RMgkTNj",
           "stock": 7
         },
         {
@@ -331,11 +310,33 @@
     },
     {
       "shop": {
+        "name": "Musimania",
+        "cif": "Q971038848",
+        "address": "",
+        "phone": "",
+        "coords": {
+          "latitude": "38.98094143698612",
+          "longitude": "-3.9134555686076737"
+        },
+        "image": ""
+      },
+      "products": [
+        {
+          "serialNumber": "zPBvRtMUPuK",
+          "stock": 3
+        }
+      ]
+    },
+    {
+      "shop": {
         "name": "La Lira",
         "cif": "V972385722",
         "address": "",
         "phone": "",
-        "coords": "",
+        "coords": {
+          "latitude": 38.982329,
+          "longitude": -3.925349
+        },
         "image": "tienda2.png"
       },
       "products": [
@@ -350,18 +351,6 @@
         {
           "serialNumber": "Ugh3jeujE5F",
           "stock": 4
-        },
-        {
-          "serialNumber": "heQYuQTlMrA",
-          "stock": 3
-        },
-        {
-          "serialNumber": "H2N5RMgkTNj",
-          "stock": 5
-        },
-        {
-          "serialNumber": "Bv4HxQeFEeY",
-          "stock": 6
         },
         {
           "serialNumber": "oAXrGWrcvIh",

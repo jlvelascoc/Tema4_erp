@@ -1,7 +1,7 @@
 "use strict";
 var ventanas = [];
-var productsByCategory = [[],[],[],[]];
-var productsInShop = [[],[],[],[],[]];
+var productsByCategory = [[], [], [], []];
+var productsInShop = [[], [], [], [], []];
 var categoriesData;
 var shopsData;
 
@@ -101,8 +101,8 @@ function init() {
   productsByCategory[3][2].addImage("img/ashdown-2.png");
 
   //Convertimos los objetos product en literales
-  for(let i = 1; i < productsByCategory.length; i++){
-    for(let j = 0; j < productsByCategory[i].length; j++){
+  for (let i = 1; i < productsByCategory.length; i++) {
+    for (let j = 0; j < productsByCategory[i].length; j++) {
       productsByCategory[i][j] = productsByCategory[i][j].getObject();
     }
   }
@@ -166,11 +166,12 @@ function initPopulate() {
 
   //Borramos el contenido de main si existe
   clearMain();
+
   //Borramos el de categorias si existe
   removeCategoriesMenu();
 
   //Si el menu no existe lo creamos
-  if (document.getElementById("menuPrincipal") == null) {
+  if ($("#menuPrincipal") == null) {
     principalMenuPopulate("Tiendas");
   }
   else {//Si existe lo borramos
@@ -178,11 +179,11 @@ function initPopulate() {
     principalMenuPopulate("Tiendas");
   }
 
-  var main = document.getElementById("main"); //Cogemos el contenedor principal
+  var main = $("#main")[0]; //Cogemos el contenedor principal
   var section = document.createElement("section");  //Contenedor donde agruparemos las tiendas
-  var header = document.getElementsByTagName("header")[0].firstElementChild; //Cogemos la cabecera
+  var header = $("header").children(0)[0]; //Cogemos la cabecera
   var button; //Boton para mostrar cerrar las ventanas
-  var col, divShop, divButtons, divPanel, src, h2, imagen, row, div;  //Elementos para cada tienda
+  var col, divShop, divButtons, divPanel, imagen, row, div;  //Elementos para cada tienda
   var objectShop;   //tienda
 
   var shops = StoreHouse.getInstance().shops;
@@ -190,84 +191,90 @@ function initPopulate() {
   var i = 0;
 
   button = document.createElement("button");
-  button.setAttribute("type", "buttom");
-  button.setAttribute("class", "btn btn-lg center-block new private");
-  button.setAttribute("data-toggle", "modal");
-  button.setAttribute("data-target", "#insertShop");
-  button.addEventListener("click", modalInsertShop);
-  button.innerHTML = "Insertar tienda";
-  section.appendChild(button);
+  $(button).attr({
+    "type": "button",
+    "class": "btn btn-lg center-block new private",
+    "data-toggle": "modal",
+    "data-target": "#insertShop"
+  });
+  $(button).click(modalInsertShop);
+  $(button).text("Insertar tienda");
+  $(section).append(button);
 
   while (shop.done !== true) {
     //Creamos una fila cada 3 productos
     if (i % 3 == 0) {
       row = document.createElement("div");
-      row.className = "row";
-      section.appendChild(row);
+      $(row).attr("class", "row");
+      $(section).append(row);
     }
+
     objectShop = shop.value.shop;
     col = document.createElement("div");
-    col.className = "col-sm-4 margen";
+    $(col).attr("class", "col-sm-4 margen");
 
     divPanel = document.createElement("div");
-    divPanel.setAttribute("class", "panel panel-default");
+    $(divPanel).attr("class", "panel panel-default");
 
     //Creamos el div de la tienda
     divShop = document.createElement("div");
-    divShop.id = "t" + i;
-    divShop.className = "tienda";
+    $(divShop).attr({
+      "id": "t" + i,
+      "class": "text-center tienda"
+    });
 
     //Creamos y añadimos la imagen
-    src = document.createAttribute("src");
-    src.value = "img/" + objectShop.image;
     imagen = document.createElement("img")
-    imagen.setAttributeNode(src);
-    imagen.className = "imgTienda";
-    divShop.appendChild(imagen);
+    $(imagen).attr({
+      "class": "imgTienda",
+      "src": "img/" + objectShop.image
+    });
+    $(divShop).append(imagen);
 
     //Creamos y añadimos un titulo
-    h2 = document.createElement("h2");
-    h2.className = "panel-footer";
-    h2.innerHTML = objectShop.name;
-    divShop.appendChild(h2);
+    $(divShop).append("<h2 class='panel-footer'>"+objectShop.name+"</h2>");
 
     //Creamos un evento onclick
-    divShop.addEventListener("click", callShopPopulate(objectShop));
+    $(divShop).click(callShopPopulate(objectShop));
 
-    divPanel.appendChild(divShop);
-    col.appendChild(divPanel);
+    $(divPanel).append(divShop);
+    $(col).append(divPanel);
 
     if (i != 0) { //si la tienda no es la de por defecto
       //Creamos los botones eliminar, añadir y modificar tienda
       divButtons = document.createElement("div");
-      divButtons.setAttribute("class", "buttons");
+      $(divButtons).attr("class", "buttons");
 
       button = document.createElement("button");
-      button.setAttribute("class", "btn remove private");
-      button.innerHTML = "Eliminar";
-      button.addEventListener("click", callRemoveShop(objectShop));
-      divButtons.appendChild(button);
+      $(button).attr("class", "btn remove private");
+      $(button).text("Eliminar");
+      $(button).click(callRemoveShop(objectShop));
+      $(divButtons).append(button);
 
       button = document.createElement("button");
-      button.setAttribute("class", "btn add private");
-      button.setAttribute("data-toggle", "modal");
-      button.setAttribute("data-target", "#addProduct");
-      button.innerHTML = "Añadir Producto";
-      button.addEventListener("click", callModalAddProductInShop(objectShop));
-      divButtons.appendChild(button);
+      $(button).attr({
+        "class": "btn add private",
+        "data-toggle": "modal",
+        "data-target": "#addProduct"
+      });
+      $(button).text("Añadir Producto");
+      $(button).click(callModalAddProductInShop(objectShop));
+      $(divButtons).append(button);
 
       button = document.createElement("button");
-      button.setAttribute("class", "btn set private");
-      button.setAttribute("data-toggle", "modal");
-      button.setAttribute("data-target", "#setShop");
-      button.innerHTML = "Modificar";
-      button.addEventListener("click", callModalEditShop(objectShop));
-      divButtons.appendChild(button);
+      $(button).attr({
+        "class": "btn set private",
+        "data-toggle": "modal",
+        "data-target": "#setShop"
+      });
+      $(button).text("Modificar");
+      $(button).click(callModalEditShop(objectShop));
+      $(divButtons).append(button);
 
-      divPanel.appendChild(divButtons);
+      $(divPanel).append(divButtons);
     }
 
-    row.appendChild(col); //Añadimos la columna a la fila
+    $(row).append(col); //Añadimos la columna a la fila
 
     shop = shops.next();
     i++;
@@ -277,42 +284,52 @@ function initPopulate() {
   if (document.getElementById("signUp") == null) {
     //Boton iniciar sesion
     button = document.createElement("button");
-    button.innerHTML = "Iniciar Sesion";
-    button.id = "signUp";
-    button.className = "btn pull-right";
-    button.setAttribute("data-toggle", "modal");
-    button.setAttribute("data-target", "#logIn");
-    button.addEventListener("click", modalLogIn);
-    header.appendChild(button);
+    $(button).text("Iniciar Sesion");
+    $(button).attr({
+      "id": "signUp",
+      "class": "btn pull-right",
+      "data-toggle": "modal",
+      "data-target": "#logIn"
+    });
+    $(button).click(modalLogIn);
+    $(header).append(button);
 
     //Boton cerrar sesion
     button = document.createElement("button");
-    button.innerHTML = "Cerrar Sesion";
-    button.id = "signOff";
-    button.className = "btn pull-right private";
-    button.addEventListener("click", logOut);
-    header.appendChild(button);
+    $(button).text("Cerrar Sesion");
+    $(button).attr({
+      "id": "signOff",
+      "class": "btn pull-right private"
+    });
+    $(button).click(logOut);
+    $(header).append(button);
 
     //Creamos el boton Cerrar todas las ventanas
     button = document.createElement("button");
-    button.innerHTML = "Cerrar todas las ventanas";
-    button.id = "cerrarTodo";
-    button.className = "btn pull-right";
-    button.addEventListener("click", closeAllWindows);
-    header.appendChild(button);
+    $(button).text("Cerrar todas las ventanas");
+    $(button).attr({
+      "id": "cerrarTodo",
+      "class": "btn pull-right"
+    });
+    $(button).click(closeAllWindows);
+    $(header).append(button);
 
     //Creamos el boton guardar datos
     button = document.createElement("button");
-    button.innerHTML = "Guardar datos";
-    button.id = "save";
-    button.className = "btn pull-right private";
-    button.addEventListener("click", saveData);
-    header.appendChild(button);
+    $(button).text("Guardar datos");
+    $(button).attr({
+      "id": "save",
+      "class": "btn pull-right private"
+    });
+    $(button).click(saveData);
+    $(header).append(button);
   }
 
   //Añadimos la seccion al contenedor principal
-  section.id = "tiendas";
-  main.appendChild(section);
+  $(section).attr("id", "tiendas");
+  $(main).append(section);
+  $(main).removeClass("col-sm-10");
+  $(main).addClass("col-sm-12");
 
   //Cerramos las ventanas de productos que haya abiertas
   closeAllWindows();
@@ -331,70 +348,71 @@ function principalMenuPopulate(nameSection) {
   console.log("principalMenuPopulate");
 
   //Recogemos los elementos padre
-  var nav = document.getElementById("menu1");
-  var contenedor = nav.firstElementChild;
+  var contenedor = $("#menu1").children(0)[0];
   var div = document.createElement("div");
   var ul, liP, li, a, span;
 
   //Creamos la estructura del menu principal
   ul = document.createElement("ul");
-  ul.setAttribute("class", "nav nav-tabs");
+  $(ul).attr("class", "nav nav-tabs");
 
   liP = document.createElement("li");
-  liP.setAttribute("class", "dropdown");
+  $(liP).attr("class", "dropdown");
 
   a = document.createElement("a");
-  a.innerHTML = nameSection;
-  a.setAttribute("id", "itemDDown");
-  a.setAttribute("href", "javascript:;");
-  a.setAttribute("class", "dropdown-toggle");
-  a.setAttribute("data-toggle", "dropdown");
+  $(a).text(nameSection);
+  $(a).attr({
+    "id": "itemDDown",
+    "href": "javascript:;",
+    "class": "dropdown-toggle",
+    "data-toggle": "dropdown"
+  });
 
   span = document.createElement("span");
-  span.setAttribute("class", "caret");
+  $(span).attr("class", "caret");
 
-  a.appendChild(span);
-  liP.appendChild(a);
-  ul.appendChild(liP);
-  div.appendChild(ul);
-  div.id = "menuPrincipal"
-  contenedor.appendChild(div);
+  $(a).append(span);
+  $(liP).append(a);
+  $(ul).append(liP);
+  $(div).append(ul);
+  $(div).attr("id", "menuPrincipal");
+  $(contenedor).append(div);
 
   //Creamos el contenido desplegable
   ul = document.createElement("ul");
-  ul.setAttribute("class", "dropdown-menu");
+  $(ul).attr("class", "dropdown-menu");
 
   li = document.createElement("li");
   a = document.createElement("a");
-  a.innerHTML = "Tiendas";
-  a.setAttribute("href", "javascript:;");
-  a.addEventListener("click", initPopulate);
-  li.appendChild(a);
-  ul.appendChild(li);
+  $(a).text("Tiendas");
+  $(a).attr("href", "javascript:;");
+  $(a).click(initPopulate);
+  $(li).append(a);
+  $(ul).append(li);
 
   li = document.createElement("li");
   a = document.createElement("a");
-  a.innerHTML = "Categorias";
-  a.setAttribute("href", "javascript:;");
-  a.addEventListener("click", categoriesPopulate);
-  li.appendChild(a);
-  ul.appendChild(li);
+  $(a).text("Categorias");
+  $(a).attr("href", "javascript:;");
+  $(a).click(categoriesPopulate);
+  $(li).append(a);
+  $(ul).append(li);
 
   li = document.createElement("li");
   a = document.createElement("a");
-  a.innerHTML = "Productos";
-  a.setAttribute("href", "javascript:;");
-  a.addEventListener("click", globalProductPopulate);
-  li.appendChild(a);
-  ul.appendChild(li);
+  $(a).text("Productos");
+  $(a).attr("href", "javascript:;");
+  $(a).click(globalProductPopulate);
+  $(li).append(a);
+  $(ul).append(li);
 
   li = document.createElement("li");
   a = document.createElement("a");
-  a.innerHTML = "Mapa de las tiendas";
-  a.setAttribute("href", "javascript:;");
-  a.addEventListener("click", geolocationPopulate);
-  li.appendChild(a);
-  ul.appendChild(li);
+  $(a).text("Ubicación");
+  $(a).attr("href", "javascript:;");
+  $(a).click(geolocationPopulate);
+  $(li).append(a);
+  $(ul).append(li);
 
   liP.appendChild(ul);
 }
@@ -406,8 +424,7 @@ function shopsMenusPopulate(nameShop) {
   console.log("shopsMenusPopulate");
 
   //Creamos los elementos header, nav y ul
-  var contenedor = document.getElementById("menuPrincipal").firstElementChild;
-  //var ul = document.createElement("ul");
+  var contenedor = $("#menuPrincipal").children(0)[0];
   var li, a;
 
   //Cogemos las tiendas
@@ -420,20 +437,20 @@ function shopsMenusPopulate(nameShop) {
 
     //Creamos el enlace
     a = document.createElement("a");
-    a.innerHTML = objectShop.name;
-    a.setAttribute("href", "javascript:;");
+    $(a).text(objectShop.name);
+    $(a).attr("href", "javascript:;");
     //Creamos un evento onclick
-    a.addEventListener("click", callShopPopulate(objectShop));
+    $(a).click(callShopPopulate(objectShop));
 
     //Creamos el li
     li = document.createElement("li");
     if (objectShop.name == nameShop) {
-      li.setAttribute("class", "active");
+      $(li).attr("class", "active");
     }
 
     //Añadimos el enlace al li y el li al contenedor
-    li.appendChild(a);
-    contenedor.appendChild(li);
+    $(li).append(a);
+    $(contenedor).append(li);
 
     shop = shops.next();
   }
@@ -443,62 +460,51 @@ function shopsMenusPopulate(nameShop) {
  * Esta función dibuja los productos de una tienda.
  * Tambien se utiliza al filtrar los productos de una categoria.
  * El parametro que recibe varía en función desde donde sea llamada
- * @param data Puede ser de dos tipos: objeto tienda o un objeto categoria
+ * @param shop Puede ser de dos tipos: objeto tienda o un objeto categoria
  */
-function shopPopulate(data) {
+function shopPopulate(shop) {
   console.log("shopPopulate");
+  console.log(shop);
   //Cerramos las ventanas de productos que haya abiertas
   closeAllWindows();
 
-  var main = document.getElementById("main"); //Cogemos el main
+  var main = $("#main")[0]; //Cogemos el main
   var divProducts = document.createElement("section");  //Contenedor donde agruparemos los productos
   var row; //Div con la clase row para agrupar los productos y necesaria para bootstrap
 
-  //Si data es un objeto Shop trabajamos con un iterador
-  if (data instanceof Shop) {
-    removeCategoriesMenu(); //Borramos el menu de las categorias si existe
-    clearMain(); //Borramos el contenedor principal si existe
-    removeShopsMenu();
+  removeCategoriesMenu(); //Borramos el menu de las categorias si existe
+  clearMain(); //Borramos el contenedor principal si existe
+  removeShopsMenu();
 
-    var products = StoreHouse.getInstance().getShopProducts(data); //Cogemos los productos
-    var product = products.next();
-    var i = 0;
+  var products = StoreHouse.getInstance().getShopProducts(shop); //Cogemos los productos
+  var product = products.next();
+  var i = 0;
 
-    while (product.done !== true) {
-      //Creamos una fila cada 3 productos
-      if (i % 3 == 0) {
-        row = document.createElement("div");
-        row.className = "row";
-        divProducts.appendChild(row);
-      }
-
-      //Creamos el producto y lo añadimos a la fila
-      row.appendChild(createProduct(product.value.product, i));
-      product = products.next();
-      i++;
+  while (product.done !== true) {
+    //Creamos una fila cada 3 productos
+    if (i % 3 == 0) {
+      row = document.createElement("div");
+      $(row).addClass = "row";
+      $(divProducts).append(row);
     }
 
-    //Volvemos a crear los menus
-    shopsMenusPopulate(data.name);
-    menuCategoryShopPopulate(data, "");
+    //Creamos el producto y lo añadimos a la fila
+    $(row).append(createProduct(product.value.product, i));
+    product = products.next();
+    i++;
   }
-  else { //Si el parametro es un objeto categoria trabajamos sobre un array
-    for (let i = 0; i < data.products.length; i++) {
-      //Creamos una fila cada 3 productos
-      if (i % 3 == 0) {
-        row = document.createElement("div");
-        row.className = "row";
-        divProducts.appendChild(row);
-      }
 
-      //Creamos el producto y lo añadimos a la fila
-      row.appendChild(createProduct(data.products[i], i));
-    }
-  }
+  //Volvemos a crear los menus
+  shopsMenusPopulate(shop.name);
+  menuCategoryShopPopulate(shop, "");
 
   //Añadimos la seccion al contenedor principal
-  divProducts.id = "tiendas";
-  divProducts.class = "panel-body";
+  $(divProducts).attr({
+    "id": "tiendas",
+    "class": "panel-body row"
+  });
+
+  $(main).attr("class", "col-sm-10");
   main.appendChild(divProducts);
 
   //Si estamos logueados mostramos las funciones ocultas
@@ -519,8 +525,6 @@ function menuCategoryShopPopulate(shop, nameCategory) {
   var categories = getCategories(shop);
 
   //Creamos los elementos para el menu
-  var main = document.getElementById("main");
-  var contenedor = document.getElementById("contain");
   var aside = document.createElement("aside");
   var nav = document.createElement("nav");
   var ul = document.createElement("ul");
@@ -528,32 +532,33 @@ function menuCategoryShopPopulate(shop, nameCategory) {
 
   for (let i = 0; i < categories.length; i++) {
     a = document.createElement("a");
-    a.innerHTML = categories[i].category.title;
-    a.setAttribute("href", "javascript:;");
+    $(a).text(categories[i].category.title);
+    $(a).attr("href", "javascript:;");
     //Creamos un evento onclick
-    a.addEventListener("click", callProductsCategoryShopPopulate(categories[i]));
+    $(a).click(callProductsCategoryShopPopulate(categories[i], shop));
 
     //Añadimos la clase active, en función de la categoria en la que nos encontramos
     li = document.createElement("li");
     if (categories[i].title == nameCategory) {
-      li.className = " active";
+      $(li).addClass(" active");
     }
 
-    li.appendChild(a)
-    ul.appendChild(li);
+    $(li).append(a);
+    $(ul).append(li);
   }
 
   //Asignamos las clases y añadimos el menu a la pagina
-  ul.className = "nav nav-pills nav-stacked";
-  nav.appendChild(ul);
+  $(ul).attr("class", "nav nav-pills nav-stacked");
+  $(nav).append(ul);
 
-  nav.id = "menuCategorias";
-  nav.setAttribute("class", "sidebar-nav");
+  $(nav).attr({
+    "id": "menuCategorias",
+    "class": "sidebar-nav"
+  });
   aside.appendChild(nav);
 
-  main.setAttribute("class", "col-md-10");//Cambiamos la clase del main para hacerlo mas estrecho
-  aside.setAttribute("class", "col-md-2");
-  contenedor.insertBefore(aside, main);
+  $(aside).attr("class", "col-md-2");
+  $("#main").before(aside);
 }
 
 /**
@@ -561,11 +566,65 @@ function menuCategoryShopPopulate(shop, nameCategory) {
  * en una tienda. Reutiliza la función shopPopulate
  * @param category Objeto Category
  */
-function productCategoryShopPopulate(category) {
+function productCategoryShopPopulate(category, shop) {
   clearMain(); //Borramos el main
   changeActive(category.category.title); //Cambiamos la clase active
 
-  shopPopulate(category);
+  //shopPopulateByCategory(shop, category);
+  //Cerramos las ventanas de productos que haya abiertas
+  closeAllWindows();
+
+  var main = $("#main")[0]; //Cogemos el main
+  var divProducts = document.createElement("section");  //Contenedor donde agruparemos los productos
+  var row; //Div con la clase row para agrupar los productos y necesaria para bootstrap
+
+  removeCategoriesMenu(); //Borramos el menu de las categorias si existe
+  clearMain(); //Borramos el contenedor principal si existe
+  removeShopsMenu();
+
+  var products = StoreHouse.getInstance().getShopProducts(shop); //Cogemos los productos
+  var product = products.next();
+  var i = 0;
+  var index;
+
+  while (product.done !== true) {
+    //Creamos una fila cada 3 productos
+    if (i % 3 == 0) {
+      row = document.createElement("div");
+      $(row).addClass = "row";
+      $(divProducts).append(row);
+    }
+
+    index = category.products.findIndex(function (a) {
+      return a.serialNumber == product.value.product.serialNumber;
+    });
+
+    if(index != -1){
+      //Creamos el producto y lo añadimos a la fila
+      $(row).append(createProduct(product.value.product, i));
+      i++;
+    }
+
+    product = products.next();
+  }
+
+  //Volvemos a crear los menus
+  shopsMenusPopulate(shop.name);
+  menuCategoryShopPopulate(shop, category.category.title);
+
+  //Añadimos la seccion al contenedor principal
+  $(divProducts).attr({
+    "id": "tiendas",
+    "class": "panel-body row"
+  });
+
+  $(main).attr("class", "col-sm-10");
+  main.appendChild(divProducts);
+
+  //Si estamos logueados mostramos las funciones ocultas
+  if (checkCookie()) {
+    showButtons();
+  }
 }
 
 /**
@@ -575,15 +634,11 @@ function productCategoryShopPopulate(category) {
  */
 function productShopPopulate(index, product) {
   console.log("productShopPopulate");
-
-  //Cogemos los botones
-  var button = document.getElementById("btnShow" + index);
-  var button2 = document.getElementById("btnHide" + index);
   var i, description, divProduct;
 
   //Cambiamos los displays para cambiar los botones
-  button.style.display = "none";
-  button2.style.display = "block";
+  $("#btnShow" + index).css("display", "none");
+  $("#btnHide" + index).css("display", "block");
 
   //Creamos la nueva ventana y la añadimos al array
   ventanas.push(window.open("producto.html", product.name, "toolbar=no,scrollbars=no,resizable=no,top=200,left=500,width=500,height=500"));
@@ -591,15 +646,15 @@ function productShopPopulate(index, product) {
   //Escribimos la información en la ventana
   i = ventanas.length - 1;
   ventanas[i].onload = function () {
-    var main = ventanas[i].document.body.getElementsByTagName("main")[0];
-    main.appendChild(productCarousel(product));
-    main.appendChild(getProductInfo(product));
+    var main = ventanas[i].$("main")[0];
+    $(main).append(productCarousel(product));
+    $(main).append(getProductInfo(product));
   }
 
   //Añadimos un evento que se ejecuta justo antes de cerrar la ventana
   ventanas[i].addEventListener("beforeunload", callHideProductShopPopulate(index, product.name));
 
-  document.getElementById("cerrarTodo").style.display = "block";
+  $("#cerrarTodo").css("display", "block");
 }
 
 /**
@@ -608,16 +663,12 @@ function productShopPopulate(index, product) {
  */
 function hideProductShopPopulate(index, name) {
   console.log("hideProductShopPopulate");
-
-  //Cogemos los botones
-  var button = document.getElementById("btnShow" + index);
-  var button2 = document.getElementById("btnHide" + index);
   var cont = 0;
   var position;
 
   //Cambiamos los displays para mostrar un boton y ocultar otro
-  button.style.display = "block";
-  button2.style.display = "none";
+  $("#btnShow" + index).css("display", "block");
+  $("#btnHide" + index).css("display", "none");
 
   //Borramos la referencia de la ventana
   position = ventanas.findIndex(function (a) {
@@ -633,7 +684,7 @@ function hideProductShopPopulate(index, name) {
   }
 
   if (cont <= 1) {
-    document.getElementById("cerrarTodo").style.display = "none";
+    $("#cerrarTodo").css("display", "none");
   }
 }
 
@@ -651,7 +702,7 @@ function globalProductPopulate() {
   principalMenuPopulate("Productos");
 
   //Elementos html necesarios para mostrar la información
-  var main = document.getElementById("main");
+  var main = $("#main")[0];
   var section = document.createElement("section");
   var div, h4, text, strong, button, divButtons;
 
@@ -660,55 +711,57 @@ function globalProductPopulate() {
   var category = categories.next();
 
   button = document.createElement("button");
-  button.setAttribute("type", "buttom");
-  button.setAttribute("class", "btn btn-lg center-block new private");
-  button.setAttribute("data-toggle", "modal");
-  button.setAttribute("data-target", "#insertProduct");
-  button.addEventListener("click", modalInsertProduct);
-  button.innerHTML = "Insertar producto";
-  section.appendChild(button);
+  $(button).attr({
+    "type": "button",
+    "class": "btn btn-lg center-block new private",
+    "data-toggle": "modal",
+    "data-target": "#insertProduct"
+  });
+  $(button).click(modalInsertProduct);
+  $(button).text("Insertar producto");
+  $(section).append(button);
 
   while (category.done !== true) {
     div = document.createElement("div");
     h4 = document.createElement("h4");
-    h4.innerHTML = category.value.category.title;
-    h4.setAttribute("class", "category");
-    div.appendChild(h4);
+    $(h4).text(category.value.category.title);
+    $(h4).attr("class", "category");
+    $(div).append(h4);
 
     //Recorremos los productos de la categoria
     for (let i = 0; i < category.value.products.length; i++) {
       text = document.createElement("p");
-      strong = document.createElement("strong");
-      strong.innerHTML = ("Stock: " + storeHouse.getGlobalStock(category.value.products[i].serialNumber));//Cogemos el stock
-      text.appendChild(strong);
-      div.appendChild(getProductInfo(category.value.products[i]));
-      div.lastElementChild.appendChild(text);
+      $(text).append("<strong>Stock:</strong> " + storeHouse.getGlobalStock(category.value.products[i].serialNumber));
+      $(div).append(getProductInfo(category.value.products[i]));
+      $(div).children().last().append(text);
 
       divButtons = document.createElement("div");
-      divButtons.setAttribute("class", "btns");
-      div.lastElementChild.appendChild(divButtons);
+      $(divButtons).attr("class", "btns");
+      $(div).children("div").append(divButtons);
 
       button = document.createElement("button");
-      button.setAttribute("class", "btn remove private");
-      button.innerHTML = "Eliminar";
-      button.addEventListener("click", callRemoveProduct(category.value.products[i], category.value.category));
-      divButtons.appendChild(button);
+      $(button).attr("class", "btn remove private");
+      $(button).text("Eliminar");
+      $(button).click(callRemoveProduct(category.value.products[i], category.value.category));
+      $(divButtons).append(button);
 
       button = document.createElement("button");
-      button.setAttribute("class", "btn set private");
-      button.setAttribute("data-toggle", "modal");
-      button.setAttribute("data-target", "#setProduct");
-      button.innerHTML = "Modificar";
-      button.addEventListener("click", callModalEditProduct(category.value.products[i], category.value.category));
-      divButtons.appendChild(button);
+      $(button).attr({
+        "class": "btn set private",
+        "data-toggle": "modal",
+        "data-target": "#setProduct"
+      });
+      $(button).text("Modificar");
+      $(button).click(callModalEditProduct(category.value.products[i], category.value.category));
+      $(divButtons).append(button);
     }
-    div.setAttribute("class", "infoGlobal");
+    $(div).attr("class", "infoGlobal");
     section.appendChild(div);
 
     category = categories.next();
   }
 
-  main.appendChild(section);
+  $(main).append(section);
 
   //Si estamos logueados mostramos las funciones ocultas
   if (checkCookie()) {
@@ -729,7 +782,7 @@ function categoriesPopulate() {
   principalMenuPopulate("Categorias");
 
   //Elementos html necesarios para mostrar la información
-  var main = document.getElementById("main");
+  var main = $("#main")[0];
   var section = document.createElement("section");
   var divMargen, divCategory, divButtons, divPanel, row, h3, p, button;
   var i = 0;
@@ -737,75 +790,81 @@ function categoriesPopulate() {
   var categories = StoreHouse.getInstance().categories;
   var category = categories.next();
 
-  main.className = "col-md-12"; //Cambiamos la clase del main para hacerlo mas ancho";
+  $(main).attr("class", "col-sm-12"); //Cambiamos la clase del main para hacerlo mas ancho";
 
   button = document.createElement("button");
-  button.setAttribute("type", "button");
-  button.setAttribute("class", "btn btn-lg center-block new private");
-  button.setAttribute("data-toggle", "modal");
-  button.setAttribute("data-target", "#insertCategory");
-  button.addEventListener("click", modalInsertCategory);
-  button.innerHTML = "Insertar categoria";
-  section.appendChild(button);
+  $(button).attr({
+    "type": "button",
+    "class": "btn btn-lg center-block new private",
+    "data-toggle": "modal",
+    "data-target": "#insertCategory"
+  });
+  $(button).click(modalInsertCategory);
+  $(button).text("Insertar categoria");
+  $(section).append(button);
 
   while (category.done !== true) {
     //Creamos una fila cada 3 categorias
     if (i % 3 == 0) {
       row = document.createElement("div");
-      row.className = "row";
-      section.appendChild(row);
+      $(row).attr("class","row");
+      $(section).append(row);
     }
 
     divMargen = document.createElement("div");
-    divMargen.className = "col-sm-3 col-md-4  margen";
-    row.appendChild(divMargen);
+    $(divMargen).attr("class", "col-sm-3 col-md-4  margen");
+    $(row).append(divMargen);
 
     divPanel = document.createElement("div");
-    divPanel.setAttribute("class", "panel panel-default");
-    divMargen.appendChild(divPanel);
+    $(divPanel).attr("class", "panel panel-default");
+    $(divMargen).append(divPanel);
 
     divCategory = document.createElement("div");
-    divCategory.id = "c" + (i + 1);
-    divCategory.className = " category";
-    divPanel.appendChild(divCategory);
+    $(divCategory).attr({
+      "id": "c" + (i + 1),
+      "class": "category"
+    });
+    $(divPanel).append(divCategory);
 
     //Creamos y añadimos un titulo
     h3 = document.createElement("h3");
-    h3.className = "text-center";
-    h3.innerHTML = category.value.category.title;
-    divCategory.appendChild(h3);
+    $(h3).attr("class", "text-center");
+    $(h3).text(category.value.category.title);
+    $(divCategory).append(h3);
 
     //Creamos y añadimos una descripcion
     p = document.createElement("p");
-    p.innerHTML = category.value.category.description;
-    divCategory.appendChild(p);
+    $(p).text(category.value.category.description);
+    $(divCategory).append(p);
 
     if (i != 0) { //Si la categoria no es la de por defecto
       //Creamos los botones de modificar y eliminar
       divButtons = document.createElement("div");
-      divButtons.setAttribute("class", "buttons");
-      divPanel.appendChild(divButtons);
+      $(divButtons).attr("class", "buttons");
+      $(divPanel).append(divButtons);
 
       button = document.createElement("button");
-      button.setAttribute("class", "btn remove private");
-      button.innerHTML = "Eliminar";
-      button.addEventListener("click", callRemoveCategory(category.value.category));
+      $(button).attr("class", "btn remove private");
+      $(button).text("Eliminar");
+      $(button).click(callRemoveCategory(category.value.category));
       divButtons.appendChild(button);
 
       button = document.createElement("button");
-      button.setAttribute("class", "btn set private");
-      button.setAttribute("data-toggle", "modal");
-      button.setAttribute("data-target", "#setCategory");
-      button.innerHTML = "Modificar";
-      button.addEventListener("click", callModalEditCategory(category.value.category));
-      divButtons.appendChild(button);
+      $(button).attr({
+        "class": "btn set private",
+        "data-toggle": "modal",
+        "data-target": "#setCategory"
+      });
+      $(button).text("Modificar");
+      $(button).click(callModalEditCategory(category.value.category));
+      $(divButtons).append(button);
     }
 
     category = categories.next();
     i++;
   }
 
-  main.appendChild(section);
+  $(main).append(section);
 
   //Si estamos logueados mostramos las funciones ocultas
   if (checkCookie()) {
@@ -813,26 +872,27 @@ function categoriesPopulate() {
   }
 }
 
+/**
+ * Esta función muestra un mapa con la ubicación de las tiendas
+ */
 function geolocationPopulate() {
   removeCategoriesMenu(); //Borramos el menu de las categorias si existe
   clearMain(); //Borramos el contenedor principal si existe
   removeMenu(); //Borramos las tiendas del menu
 
-  principalMenuPopulate("Categorias");
+  principalMenuPopulate("Ubicación");
 
   //Elementos html necesarios para mostrar la información
-  var main = document.getElementById("main");
+  var main = $("#main")[0];
   var section = document.createElement("section");
   var div = document.createElement("div");
 
-  div.id = "principalMap";
-  section.appendChild(div);
-  section.setAttribute("class", "container");
-  main.appendChild(section);
+  $(div).attr("id", "principalMap");
+  $(section).append(div);
+  $(section).attr("class", "container");
+  $(main).append(section);
 
-  //principalMap(div);
-
-  getLocation("principalMap");
+  getLocation("principalMap"); //Llamamos a la funcion que dibuja el mapa
 }
 
 /*Funciones privadas*/
@@ -852,9 +912,9 @@ function callShopPopulate(shop) {
  * @param category Objeto Category
  * @returns {Function} Funcion productsCategoryShopPopulate
  */
-function callProductsCategoryShopPopulate(category) {
+function callProductsCategoryShopPopulate(category, shop) {
   return function () {
-    productCategoryShopPopulate(category);
+    productCategoryShopPopulate(category, shop);
   }
 }
 
@@ -884,21 +944,14 @@ function callHideProductShopPopulate(index, name) {
  * Esta funcion borra el contenido del main si existe
  */
 function clearMain() {
-  var main = document.getElementById("main"); //Cogemos el div principal
-
-  while (main.hasChildNodes()) {
-    main.removeChild(main.firstChild);
-  }
+  $("#main").empty();
 }
 
 /**
  * Esta funcion elimina el menu principal
  */
 function removeMenu() {
-  var nav = document.getElementById("menu1");
-  var menu = nav.firstElementChild;
-
-  menu.removeChild(menu.lastElementChild);
+  $("#menuPrincipal").remove();
 }
 
 /**
@@ -906,27 +959,18 @@ function removeMenu() {
  */
 function removeShopsMenu() {
   console.log("removeShopsMenu");
-
-  var menu = document.getElementById("menuPrincipal").firstElementChild;
-  var item = menu.firstElementChild;
-  var sibling = item.nextElementSibling;
-
-  while (sibling instanceof Node) {
-    menu.removeChild(sibling);
-    sibling = item.nextElementSibling;
-  }
+  $("#menuPrincipal li.dropdown").nextAll().remove();
 }
 
 /**
  * Esta funcion elimina el menu de categorias si existe
  */
 function removeCategoriesMenu() {
-  var contenedor = document.getElementById("contain");
-  var aside = document.getElementsByTagName("aside")[0];
-
+  var aside = $("aside")[0];
   if (aside instanceof Node) {   //Comprobamos si ya existia
-    contenedor.removeChild(aside);    //Si existe lo borramos
+    $(aside).remove();    //Si existe lo borramos
   }
+
 }
 
 /**
@@ -959,21 +1003,13 @@ function getCategories(shop) {
  * @param nameCategory Nombre de la categoria
  */
 function changeActive(nameCategory) {
-  var ul = document.getElementsByTagName("aside")[0].firstChild.firstChild; //ul del menu
-  var items = ul.children; //Elementos li
-  var classValue;
+  var items = $("#menuCategorias").find("a");
+  $("#menuCategorias").find("li").removeClass("active"); //Eliminamos la clase active del elemento anterior
 
-  //Añadimos la clase active
+  //Añadimos la clase active al li
   for (let i = 0; i < items.length; i++) {
-    classValue = items[i].className;
-
-    //Quitamos la clase active si existe
-    if (/[active]/.test(classValue)) {
-      items[i].className = classValue.replace(" active", "");
-    }
-
-    if (items[i].firstChild.innerHTML == nameCategory) {
-      items[i].className += " active";
+    if ($(items[i]).text() == nameCategory) {
+      $(items[i]).parent().addClass(" active");
     }
   }
 }
@@ -991,81 +1027,81 @@ function getProductInfo(product) {
 
   text = document.createElement("p");
   strong = document.createElement("strong");
-  strong.innerHTML = "Nombre: ";
-  text.appendChild(strong);
-  text.appendChild(document.createTextNode(product.name));
-  text.setAttribute("class", "panel-heading");
-  div.appendChild(text);
+  $(strong).text("Nombre: ");
+  $(text).append(strong);
+  $(text).append(product.name);
+  $(text).attr("class", "panel-heading");
+  $(div).append(text);
 
   text = document.createElement("p");
   strong = document.createElement("strong");
-  strong.innerHTML = "Descripcion: ";
-  text.appendChild(strong);
-  text.appendChild(document.createTextNode(product.description));
-  div.appendChild(text);
+  $(strong).text("Descripción: ");
+  $(text).append(strong);
+  $(text).append(product.description);
+  $(div).append(text);
 
   //Dependiendo del tipo de producto recogemos una informacion u otra
   if (product instanceof Bass) {
     text = document.createElement("p");
     strong = document.createElement("strong");
-    strong.innerHTML = "Cuerdas: ";
-    text.appendChild(strong);
-    text.appendChild(document.createTextNode(product.strings));
-    div.appendChild(text);
+    $(strong).text("Cuerdas: ");
+    $(text).append(strong);
+    $(text).append(product.strings);
+    $(div).append(text);
 
     text = document.createElement("p");
     strong = document.createElement("strong");
-    strong.innerHTML = "Electrónica: ";
-    text.appendChild(strong);
-    text.appendChild(document.createTextNode(product.electronic));
-    div.appendChild(text);
+    $(strong).text("Electrónica: ");
+    $(text).append(strong);
+    $(text).append(product.electronic);
+    $(div).append(text);
   }
   else if (product instanceof Drums) {
     text = document.createElement("p");
     strong = document.createElement("strong");
-    strong.innerHTML = "Tipo: ";
-    text.appendChild(strong);
-    text.appendChild(document.createTextNode(product.type));
-    div.appendChild(text);
+    $(strong).text("Tipo: ");
+    $(text).append(strong);
+    $(text).append(product.type);
+    $(div).append(text);
 
     text = document.createElement("p");
     strong = document.createElement("strong");
-    strong.innerHTML = "Medidas de los toms: ";
-    text.appendChild(strong);
-    text.appendChild(document.createTextNode(product.toms.toString()));
-    div.appendChild(text);
+    $(strong).text("Medidas de los toms: ");
+    $(text).append(strong);
+    $(text).append(product.toms.toString());
+    $(div).append(text);
   }
   else {
     text = document.createElement("p");
     strong = document.createElement("strong");
-    strong.innerHTML = "Potencia: ";
-    text.appendChild(strong);
-    text.appendChild(document.createTextNode(product.watts + " watts."));
-    div.appendChild(text);
+    $(strong).text("Potencia: ");
+    $(text).append(strong);
+    $(text).append(product.watts + " watts.");
+    $(div).append(text);
 
     text = document.createElement("p");
     strong = document.createElement("strong");
-    strong.innerHTML = "Tipo: ";
-    text.appendChild(strong);
-    text.appendChild(document.createTextNode(product.type));
-    div.appendChild(text);
+    $(strong).text("Tipo: ");
+    $(text).append(strong);
+    $(text).append(product.type);
+    $(div).append(text);
   }
 
   text = document.createElement("p");
   strong = document.createElement("strong");
-  strong.innerHTML = "Precio: ";
-  text.appendChild(strong);
-  text.appendChild(document.createTextNode(product.price + "€"));
-  div.appendChild(text);
+  $(strong).text("Precio: ");
+  $(text).append(strong);
+  $(text).append(product.price + "€.");
+  $(div).append(text);
 
   text = document.createElement("p");
   strong = document.createElement("strong");
-  strong.innerHTML = "IVA: ";
-  text.appendChild(strong);
-  text.appendChild(document.createTextNode(product.tax + "%"));
-  div.appendChild(text);
+  $(strong).text("IVA: ");
+  $(text).append(strong);
+  $(text).append(product.tax + "%.");
+  $(div).append(text);
 
-  div.className = "panel panel-default productInfo";
+  $(div).attr("class", "panel panel-default productInfo");
   return div;
 }
 
@@ -1079,44 +1115,52 @@ function createProduct(product, cont) {
   var divProduct, divMargen, divImg, img, src, h3, description, button, button2;
 
   divMargen = document.createElement("div");
-  divMargen.className = "col-sm-3 col-md-4  margen";
+  $(divMargen).attr("class", "col-sm-3 col-md-4  margen");
 
   //Creamos el div para el producto
   divProduct = document.createElement("div");
-  divProduct.id = "p" + cont;
-  divProduct.className = "panel panel-default producto";
-  divMargen.appendChild(divProduct);
+  $(divProduct).attr({
+    "id": "p" + cont,
+    "class": "panel panel-default producto"
+  });
+  $(divMargen).append(divProduct);
 
   //Creamos y añadimos un titulo
   h3 = document.createElement("h3");
-  h3.className = "text-center";
-  h3.innerHTML = product.name;
-  divProduct.appendChild(h3);
+  $(h3).attr("class", "text-center");
+  $(h3).text(product.name);
+  $(divProduct).append(h3);
 
   //Creamos y añadimos la imagen
   divImg = document.createElement("div");
   img = document.createElement("img");
-  img.setAttribute("src", product.images[0]);
-  img.className = "center-block img-responsive imgProducto";
-  divImg.appendChild(img);
-  divImg.className = "divImg";
-  divProduct.appendChild(divImg);
+  $(img).attr({
+    "src": product.images[0],
+    "class": "center-block img-responsive imgProducto"
+  });
+  $(divImg).append(img);
+  $(divImg).attr("class","divImg");
+  $(divProduct).append(divImg);
 
   //Creamos y añadimos un boton
   button = document.createElement("button");
-  button.innerHTML = "Mostrar información";
-  button.id = "btnShow" + cont;
-  button.className = "btn center-block";
-  button.addEventListener("click", callProductShopPopulate(cont, product));
-  divProduct.appendChild(button);
+  $(button).text("Mostrar información");
+  $(button).attr({
+    "id": "btnShow" + cont,
+    "class": "btn center-block"
+  });
+  $(button).click(callProductShopPopulate(cont, product));
+  $(divProduct).append(button);
 
   //Creamos y añadimos un segundo boton
   button2 = document.createElement("button");
-  button2.innerHTML = "Ocultar información";
-  button2.id = "btnHide" + cont;
-  button2.className = "btn center-block hideBtn";
-  button2.addEventListener("click", callCloseWindow(product.name));
-  divProduct.appendChild(button2);
+  $(button2).text("Ocultar información");
+  $(button2).attr({
+    "id": "btnHide" + cont,
+    "class": "btn center-block hideBtn"
+  });
+  $(button2).click(callCloseWindow(product.name));
+  $(divProduct).append(button2);
 
   return divMargen;
 }
@@ -1136,54 +1180,65 @@ function productCarousel(product) {
   //Creamos una lista con tantos items como imagenes haya
   for (let i = 0; i < items; i++) {
     li = document.createElement("li");
-    li.setAttribute("data-target", "#myCarousel");
-    li.setAttribute("data-slide-to", i);
-    ol.appendChild(li);
+    $(li).attr({
+      "data-target": "#myCarousel",
+      "data-slide-to": i
+    });
+    $(ol).append(li);
 
     //Creamos un div que contendra a la imagen
     div = document.createElement("div");
     if (i == 0) { //Al primero le añadimos la clase active
-      div.setAttribute("class", "item active");
-      li.setAttribute("class", "active");
+      $(div).attr("class", "item active");
+      $(li).attr("class", "active");
     }
     else {
-      div.setAttribute("class", "item");
+      $(div).attr("class", "item");
     }
-    img = document.createElement("img");
-    img.setAttribute("src", product.images[i]);
-    img.setAttribute("style", "width:100%;");
 
-    div.appendChild(img);
-    carousel.appendChild(div);
+    img = document.createElement("img");
+    $(img).attr({
+      "src": product.images[i],
+      "style": "width:100%;"
+    });
+
+    $(div).append(img);
+    $(carousel).append(div);
   }
 
-  carousel.setAttribute("class", "carousel-inner");
-  container.appendChild(carousel);
+  $(carousel).attr("class", "carousel-inner");
+  $(container).append(carousel);
 
   //Creamos los enlaces para navegar por las imágenes
   a = document.createElement("a");
-  a.setAttribute("class", "left carousel-control");
-  a.setAttribute("href", "#myCarousel");
-  a.setAttribute("data-slide", "prev");
+  $(a).attr({
+    "class": "left carousel-control",
+    "href": "#myCarousel",
+    "data-slide": "prev"
+  });
 
   span = document.createElement("span");
-  span.setAttribute("class", "glyphicon glyphicon-chevron-left");
-  a.appendChild(span);
-  container.appendChild(a);
+  $(span).attr("class", "glyphicon glyphicon-chevron-left");
+  $(a).append(span);
+  $(container).append(a);
 
   a = document.createElement("a");
-  a.setAttribute("class", "right carousel-control");
-  a.setAttribute("href", "#myCarousel");
-  a.setAttribute("data-slide", "next");
+  $(a).attr({
+    "class": "right carousel-control",
+    "href": "#myCarousel",
+    "data-slide": "next"
+  });
 
   span = document.createElement("span");
-  span.setAttribute("class", "glyphicon glyphicon-chevron-right");
-  a.appendChild(span);
-  container.appendChild(a);
+  $(span).attr("class", "glyphicon glyphicon-chevron-right");
+  $(a).append(span);
+  $(container).append(a);
 
-  container.setAttribute("class", "carousel slide");
-  container.setAttribute("data-ride", "carousel");
-  container.id = "myCarousel";
+  $(container).attr({
+    "id": "myCarousel",
+    "class": "carousel slide",
+    "data-ride": "carousel"
+  });
   return container;
 }
 
@@ -1198,8 +1253,7 @@ function closeAllWindows() {
     ventanas[0].close();
   }
 
-  document.getElementById("cerrarTodo").style.display = "none";
-
+  $("#cerrarTodo").css("display", "none");
 }
 
 /**

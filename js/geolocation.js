@@ -15,7 +15,7 @@ function principalMap(position) {
 
   var map = new google.maps.Map(document.getElementById("principalMap"), mapProp); //Creamos el mapa
   //Añadimos un marcador de nuestra posicion
-  var marker = new google.maps.Marker({position:myCenter});
+  var marker = new google.maps.Marker({position: myCenter});
   marker.setMap(map);
 
   var shops = StoreHouse.getInstance().shops;
@@ -27,11 +27,11 @@ function principalMap(position) {
   while (shop.done !== true) {
     objectShop = shop.value.shop;
     position = new google.maps.LatLng(objectShop.coords.latitude, objectShop.coords.longitude); //Posicion de la tienda actual
-    shopMarker = new google.maps.Marker({position:position, icon: 'img/flecha.png'});
+    shopMarker = new google.maps.Marker({position: position, icon: 'img/flecha.png'});
     shopMarker.setMap(map);
 
     //Evento que al hacer click en el marcador muestra el nombre de la tienda
-    google.maps.event.addListener(shopMarker,'click', callAddInfo(objectShop, map, shopMarker));
+    google.maps.event.addListener(shopMarker, 'click', callAddInfo(objectShop, map, shopMarker));
 
     shop = shops.next();
   }
@@ -47,7 +47,7 @@ function addInfo(shop, map, marker) {
   var infowindow = new google.maps.InfoWindow({
     content: shop.name
   });
-  infowindow.open(map,marker);
+  infowindow.open(map, marker);
 }
 
 /**
@@ -64,7 +64,7 @@ function addShopMap(position) {
 
   var map = new google.maps.Map(document.getElementById("addShopMap"), mapProp);
 
-  google.maps.event.addListener(map, 'click', function(event) { //Evento on click que nos permite obtener las coordenas donde hemos hecho el click
+  google.maps.event.addListener(map, 'click', function (event) { //Evento on click que nos permite obtener las coordenas donde hemos hecho el click
     placeMarker(map, event.latLng);
   });
 }
@@ -92,8 +92,8 @@ function placeMarker(map, location) {
  */
 function setShopMap(position) {
   console.log("setShopMap");
-  var coords = document.getElementsByName("setCoords")[0].value.split(","); //Obtenemos las coordenadas de la tienda
-  var myCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude); //Centro del mapa
+  var coords = $("#setShop").find("[name=setCoords]").val().split(","); //Obtenemos las coordenadas de la tienda
+  var myCenter = new google.maps.LatLng(coords[0], coords[1]); //Centro del mapa
   var mapProp = { //Opciones del mapa
     center: myCenter,
     zoom: 14,
@@ -101,11 +101,10 @@ function setShopMap(position) {
   //Creamos el mapa
   var map = new google.maps.Map(document.getElementById("setShopMap"), mapProp);
   //Añadimos un marcador con la posicion de la tienda
-  var shopPosition = new google.maps.LatLng(coords[0], coords[1]);
-  var marker = new google.maps.Marker({position:shopPosition, icon: 'img/flecha.png'});
+  var marker = new google.maps.Marker({position: myCenter, icon: 'img/flecha.png'});
   marker.setMap(map);
 
-  google.maps.event.addListener(map, 'click', function(event) {//Evento onclick para obtener la coordenadas del click
+  google.maps.event.addListener(map, 'click', function (event) {//Evento onclick para obtener la coordenadas del click
     setPlaceShop(map, event.latLng);
   });
 }
@@ -121,7 +120,8 @@ function setPlaceShop(map, location) {
     position: location,
     map: map
   });
-  document.getElementsByName("setCoords")[0].value = location.lat() + "," + location.lng();
+
+  $("#setShop").find("[name=setCoords]").val(location.lat() + "," + location.lng());
 }
 
 /**
@@ -130,12 +130,12 @@ function setPlaceShop(map, location) {
  * @param map
  */
 function getLocation(map) {
-  switch (map){
+  switch (map) {
     case "principalMap":
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(principalMap);
       }
-      else{
+      else {
         document.getElementById("principalMap").innerHTML = "Su navegador no soporta geolocalización";
       }
       break;
@@ -143,7 +143,7 @@ function getLocation(map) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(addShopMap);
       }
-      else{
+      else {
         document.getElementById("addShopMap").innerHTML = "Su navegador no soporta geolocalización";
       }
       break;
@@ -151,7 +151,7 @@ function getLocation(map) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(setShopMap);
       }
-      else{
+      else {
         document.getElementById("setShopMap").innerHTML = "Su navegador no soporta geolocalización";
       }
       break;
